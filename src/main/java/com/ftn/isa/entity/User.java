@@ -1,5 +1,6 @@
 package com.ftn.isa.entity;
 
+import com.ftn.isa.utils.enums.DeletedStatus;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -7,6 +8,8 @@ import lombok.Setter;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 
 @Entity
 @NoArgsConstructor
@@ -36,4 +39,6 @@ public class User extends BaseEntity {
     @Column(unique = true)
     private String ssn;
 
+    @Enumerated(EnumType.STRING)
+    private DeletedStatus deletedStatus;
 }
