@@ -63,7 +63,7 @@ public class PatientService implements IPatientService {
     }
 
     @Override
-    public PatientResponse updatePatient(UUID id, UpdatePatientRequest request) throws Exception {
+    public PatientResponse updatePatient(Long id, UpdatePatientRequest request) throws Exception {
         Patient patient = _patientRepository.findOneById(id);
 
         if (patient == null) {
@@ -74,7 +74,7 @@ public class PatientService implements IPatientService {
     }
 
     @Override
-    public PatientResponse getPatient(UUID id) throws Exception {
+    public PatientResponse getPatient(Long id) throws Exception {
         Patient patient = _patientRepository.findOneById(id);
 
         if (patient == null) {

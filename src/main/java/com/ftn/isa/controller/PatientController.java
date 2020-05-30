@@ -19,13 +19,8 @@ public class PatientController {
         _patientService = patientService;
     }
 
-    @PostMapping
-    public PatientResponse createPatient(@RequestBody CreatePatientRequest request) throws Exception {
-        return _patientService.createPatient(request);
-    }
-
     @PutMapping("/{id}")
-    public PatientResponse updatePatient(@PathVariable UUID id, @RequestBody UpdatePatientRequest request) {
+    public PatientResponse updatePatient(@PathVariable Long id, @RequestBody UpdatePatientRequest request) {
         try {
             return _patientService.updatePatient(id, request);
         } catch (Exception ex) {
@@ -34,7 +29,7 @@ public class PatientController {
     }
 
     @GetMapping("/{id}")
-    public PatientResponse getPatient(@PathVariable UUID id) {
+    public PatientResponse getPatient(@PathVariable Long id) {
         try {
             return _patientService.getPatient(id);
         } catch (Exception ex) {

@@ -10,9 +10,9 @@ public interface IClinicService {
 
     ClinicResponse createClinic(ClinicRequest request) throws Exception;
 
-    ClinicResponse updateClinic(UUID id, ClinicRequest request) throws Exception;
+    ClinicResponse updateClinic(Long id, ClinicRequest request) throws Exception;
 
-    ClinicResponse getClinic(UUID id) throws Exception;
+    ClinicResponse getClinic(Long id) throws Exception;
 
     List<ClinicResponse> getClinics();
 }

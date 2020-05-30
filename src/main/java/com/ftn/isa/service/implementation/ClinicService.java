@@ -33,12 +33,12 @@ public class ClinicService implements IClinicService {
     }
 
     @Override
-    public ClinicResponse updateClinic(UUID id, ClinicRequest request) throws Exception {
+    public ClinicResponse updateClinic(Long id, ClinicRequest request) throws Exception {
         return null;
     }
 
     @Override
-    public ClinicResponse getClinic(UUID id) throws Exception {
+    public ClinicResponse getClinic(Long id) throws Exception {
         Clinic clinic = _clinicRepository.findOneById(id);
 
         if (clinic == null) {

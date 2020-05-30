@@ -11,9 +11,9 @@ public interface IPatientService {
 
     PatientResponse createPatient(CreatePatientRequest request) throws Exception;
 
-    PatientResponse updatePatient(UUID id, UpdatePatientRequest request) throws Exception;
+    PatientResponse updatePatient(Long id, UpdatePatientRequest request) throws Exception;
 
-    PatientResponse getPatient(UUID id) throws Exception;
+    PatientResponse getPatient(Long id) throws Exception;
 
     List<PatientResponse> getPatients();
 

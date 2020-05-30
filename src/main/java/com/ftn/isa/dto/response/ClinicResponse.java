@@ -11,7 +11,7 @@ import java.util.UUID;
 @AllArgsConstructor
 public class ClinicResponse {
 
-    private UUID id;
+    private Long id;
 
     private String name;
 

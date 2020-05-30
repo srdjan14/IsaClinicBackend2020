@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 import java.util.UUID;
 
 @Repository
-public interface MedicalStaffRepository extends JpaRepository<MedicalStaff, UUID> {
+public interface MedicalStaffRepository extends JpaRepository<MedicalStaff, Long> {
 
-    MedicalStaff findOneById(UUID id);
+    MedicalStaff findOneById(Long id);
 }

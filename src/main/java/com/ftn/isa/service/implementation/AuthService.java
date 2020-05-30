@@ -74,7 +74,7 @@ public class AuthService implements IAuthService {
     }
 
     @Override
-    public LoginResponse changingDefaultPassword(UUID id, FirstLoginPasswordRequest request) throws Exception {
+    public LoginResponse changingDefaultPassword(Long id, FirstLoginPasswordRequest request) throws Exception {
         if (!request.getPassword().equals(request.getRePassword())) {
             throw new Exception("Password must match");
         }
@@ -98,8 +98,8 @@ public class AuthService implements IAuthService {
     private UserResponse mapUserToUserResponse(User user) throws Exception {
         UserResponse userResponse = new UserResponse();
         userResponse.setEmail(user.getEmail());
-        UUID id = null;
-        UUID clinicId = null;
+        Long id = null;
+        Long clinicId = null;
         if (user.getUserType().equals(UserType.PATIENT)) {
             id = user.getPatient().getId();
         } else if (user.getUserType().equals(UserType.MEDICAL)) {

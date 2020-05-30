@@ -9,9 +9,9 @@ import java.util.List;
 import java.util.UUID;
 
 @Repository
-public interface PatientRepository extends JpaRepository<Patient, UUID> {
+public interface PatientRepository extends JpaRepository<Patient, Long> {
 
-    Patient findOneById(UUID id);
+    Patient findOneById(Long id);
 
     List<Patient> findAllByClinics(Clinic clinic);
 

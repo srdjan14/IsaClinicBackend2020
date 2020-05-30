@@ -15,7 +15,7 @@ import java.util.UUID;
 @Data
 public class UserResponse {
 
-    private UUID id;
+    private Long id;
 
     private String firstName;
 
@@ -39,7 +39,7 @@ public class UserResponse {
 
     private ClinicResponse myClinic;
 
-    private UUID userId;
+    private Long userId;
 
     private AdminType adminType;
 
