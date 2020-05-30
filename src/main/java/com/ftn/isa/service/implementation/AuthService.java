@@ -61,9 +61,9 @@ public class AuthService implements IAuthService {
             _userRepository.save(user);
         }
 
-        if (user.getUserType().equals(UserType.PATIENT) && !user.getPatient().getActive()) {
-            throw new Exception("Your account is not active");
-        }
+//        if (user.getUserType().equals(UserType.PATIENT) && !user.getPatient().getActive()) {
+//            throw new Exception("Your account is not active");
+//        }
 
         UserResponse userResponse = mapUserToUserResponse(user);
 

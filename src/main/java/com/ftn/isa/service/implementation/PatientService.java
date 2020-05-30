@@ -70,7 +70,18 @@ public class PatientService implements IPatientService {
             throw new Exception(String.format("Patient with %s id is not found", id));
         }
 
-        return mapPatientToPatientResponse(patient);
+        User user = patient.getUser();
+        user.setAddress(request.getAddress());
+        user.setCity(request.getCity());
+        user.setCountry(request.getCountry());
+        user.setFirstName(request.getFirstName());
+        user.setLastName(request.getLastName());
+        user.setPhone(request.getPhone());
+//        user.setSsn(request.getSsn());
+
+        Patient savedPatient = _patientRepository.save(patient);
+
+        return mapPatientToPatientResponse(savedPatient);
     }
 
     @Override
