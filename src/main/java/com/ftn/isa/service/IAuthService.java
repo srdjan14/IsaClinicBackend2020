@@ -10,6 +10,6 @@ public interface IAuthService {
 
     LoginResponse login(LoginRequest request) throws Exception;
 
-    LoginResponse setNewPasswordOnFirstLogin(UUID id, FirstLoginPasswordRequest request) throws Exception;
+    LoginResponse changingDefaultPassword(UUID id, FirstLoginPasswordRequest request) throws Exception;
 
 }

@@ -50,4 +50,6 @@ public class User extends BaseEntity {
 
     @Enumerated(EnumType.STRING)
     private DeletedStatus deletedStatus;
+
+    private Boolean firstLogin;
 }
