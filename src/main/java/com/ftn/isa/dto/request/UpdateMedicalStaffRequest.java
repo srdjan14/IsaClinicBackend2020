@@ -1,21 +1,20 @@
 package com.ftn.isa.dto.request;
 
-import com.ftn.isa.utils.enums.DeletedStatus;
-import com.ftn.isa.utils.enums.UserType;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalTime;
+
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class CreateUserRequest {
+public class UpdateMedicalStaffRequest {
 
     private String firstName;
 
     private String lastName;
-
-    private String email;
 
     private String country;
 
@@ -27,9 +26,10 @@ public class CreateUserRequest {
 
     private String ssn;
 
-    private String password;
+    @JsonFormat(pattern = "HH:mm:ss")
+    private LocalTime startAt;
 
-    private String rePassword;
+    @JsonFormat(pattern = "HH:mm:ss")
+    private LocalTime endAt;
 
-    private UserType userType;
 }

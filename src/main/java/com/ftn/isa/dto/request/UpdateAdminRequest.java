@@ -1,7 +1,5 @@
 package com.ftn.isa.dto.request;
 
-import com.ftn.isa.utils.enums.DeletedStatus;
-import com.ftn.isa.utils.enums.UserType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -9,13 +7,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class CreateUserRequest {
+public class UpdateAdminRequest {
 
     private String firstName;
 
     private String lastName;
-
-    private String email;
 
     private String country;
 
@@ -26,10 +22,4 @@ public class CreateUserRequest {
     private String phone;
 
     private String ssn;
-
-    private String password;
-
-    private String rePassword;
-
-    private UserType userType;
 }
