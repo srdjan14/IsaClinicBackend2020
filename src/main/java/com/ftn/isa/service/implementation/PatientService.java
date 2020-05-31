@@ -11,6 +11,7 @@ import com.ftn.isa.repository.PatientRepository;
 import com.ftn.isa.repository.UserRepository;
 import com.ftn.isa.service.IPatientService;
 import com.ftn.isa.service.IUserService;
+import com.ftn.isa.utils.enums.DeletedStatus;
 import com.ftn.isa.utils.enums.UserType;
 import org.springframework.stereotype.Service;
 
@@ -101,6 +102,13 @@ public class PatientService implements IPatientService {
                 .stream()
                 .map(patient -> mapPatientToPatientResponse(patient))
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public void deletePatient(Long id) {
+        Patient patient = _patientRepository.findOneById(id);
+        patient.getUser().setDeletedStatus(DeletedStatus.IS_DELETED);
+        _patientRepository.save(patient);
     }
 
     private PatientResponse mapPatientToPatientResponse(Patient patient) {

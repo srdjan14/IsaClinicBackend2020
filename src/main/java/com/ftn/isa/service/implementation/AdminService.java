@@ -11,6 +11,7 @@ import com.ftn.isa.repository.AdminRepository;
 import com.ftn.isa.repository.UserRepository;
 import com.ftn.isa.service.IAdminService;
 import com.ftn.isa.service.IUserService;
+import com.ftn.isa.utils.enums.DeletedStatus;
 import com.ftn.isa.utils.enums.UserType;
 import org.springframework.stereotype.Service;
 
@@ -100,8 +101,15 @@ public class AdminService implements IAdminService {
 
         return admins
                 .stream()
-                .map(patient -> mapAdminToAdminResponse(patient))
+                .map(admin -> mapAdminToAdminResponse(admin))
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public void deleteAdmin(Long id) {
+        Admin admin = _adminRepository.findOneById(id);
+        admin.getUser().setDeletedStatus(DeletedStatus.IS_DELETED);
+        _adminRepository.save(admin);
     }
 
 

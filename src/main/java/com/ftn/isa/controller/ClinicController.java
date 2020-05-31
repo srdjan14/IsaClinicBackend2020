@@ -2,7 +2,9 @@ package com.ftn.isa.controller;
 
 import com.ftn.isa.dto.request.ClinicRequest;
 import com.ftn.isa.dto.response.ClinicResponse;
+import com.ftn.isa.dto.response.MedicalStaffResponse;
 import com.ftn.isa.service.IClinicService;
+import com.ftn.isa.service.IMedicalStaffService;
 import com.ftn.isa.service.IPatientService;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,9 +18,13 @@ public class ClinicController {
 
     private final IPatientService _patientService;
 
-    public ClinicController(IClinicService clinicService, IPatientService patientService) {
+    private final IMedicalStaffService _medicalStaffService;
+
+
+    public ClinicController(IClinicService clinicService, IPatientService patientService, IMedicalStaffService medicalStaffService) {
         _clinicService = clinicService;
         _patientService = patientService;
+        _medicalStaffService = medicalStaffService;
     }
 
     @GetMapping
@@ -38,5 +44,10 @@ public class ClinicController {
         } catch (Exception ex) {
             return null;
         }
+    }
+
+    @GetMapping("/{id}/medical")
+    public List<MedicalStaffResponse> getAllMedicalByClinic(@PathVariable Long id) throws Exception {
+        return _medicalStaffService.getAllMedicalByClinic(id);
     }
 }

@@ -18,4 +18,5 @@ public interface IMedicalStaffService {
 
     List<MedicalStaffResponse> getAllMedicalByClinic(Long id) throws Exception;
 
+    void deleteMedicalStaff(Long id);
 }

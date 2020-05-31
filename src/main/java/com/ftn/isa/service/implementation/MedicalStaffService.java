@@ -13,6 +13,7 @@ import com.ftn.isa.repository.MedicalStaffRepository;
 import com.ftn.isa.repository.UserRepository;
 import com.ftn.isa.service.IMedicalStaffService;
 import com.ftn.isa.service.IUserService;
+import com.ftn.isa.utils.enums.DeletedStatus;
 import com.ftn.isa.utils.enums.UserType;
 import org.springframework.stereotype.Service;
 
@@ -129,6 +130,13 @@ public class MedicalStaffService implements IMedicalStaffService {
                 .stream()
                 .map(medicalStaff -> mapMedicalToMedicalResponse(medicalStaff))
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public void deleteMedicalStaff(Long id) {
+        MedicalStaff medicalStaff = _medicalStaffRepository.findOneById(id);
+        medicalStaff.getUser().setDeletedStatus(DeletedStatus.IS_DELETED);
+        _medicalStaffRepository.save(medicalStaff);
     }
 
     private MedicalStaffResponse mapMedicalToMedicalResponse(MedicalStaff medicalStaff) {

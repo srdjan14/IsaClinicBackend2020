@@ -51,4 +51,8 @@ public class MedicalStaffController {
         return _medicalStaffService.getMedicalStaff();
     }
 
+    @PutMapping("/delete/{id}")
+    public void deleteMedicalStaff(@PathVariable Long id) {
+        _medicalStaffService.deleteMedicalStaff(id);
+    }
 }

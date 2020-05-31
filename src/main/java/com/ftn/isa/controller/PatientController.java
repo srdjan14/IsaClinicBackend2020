@@ -42,4 +42,8 @@ public class PatientController {
         return _patientService.getPatients();
     }
 
+    @PutMapping("/delete/{id}")
+    public void deletePatient(@PathVariable Long id) {
+        _patientService.deletePatient(id);
+    }
 }

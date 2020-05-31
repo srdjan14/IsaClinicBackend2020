@@ -15,4 +15,6 @@ public interface IAdminService {
     AdminResponse updateAdmin(Long id, UpdateAdminRequest request) throws Exception;
 
     List<AdminResponse> getAdmins();
+
+    void deleteAdmin(Long id);
 }
