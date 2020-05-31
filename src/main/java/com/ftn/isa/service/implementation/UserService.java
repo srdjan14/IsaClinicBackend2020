@@ -37,6 +37,7 @@ public class UserService implements IUserService {
         user.setPhone(request.getPhone());
         user.setSsn(request.getSsn());
         user.setUserType(request.getUserType());
+        user.setFirstLogin(false);
         user.setDeletedStatus(DeletedStatus.NOT_DELETED);
 
         user.setPassword(_passwordEncoder.encode(request.getPassword()));

@@ -17,7 +17,6 @@ import com.ftn.isa.utils.enums.UserType;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.UUID;
 
 @Service
 public class AuthService implements IAuthService {
@@ -127,7 +126,7 @@ public class AuthService implements IAuthService {
         userResponse.setDeletedStatus(DeletedStatus.NOT_DELETED);
 
         // only on login
-        userResponse.setSetNewPassword(user.getFirstLogin() == false);
+        userResponse.setSetNewPassword(user.getFirstLogin() == null);
 
         return userResponse;
     }

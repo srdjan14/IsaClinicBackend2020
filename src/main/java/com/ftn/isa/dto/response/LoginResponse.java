@@ -11,7 +11,7 @@ public class LoginResponse {
 
     private UserResponse user;
 
-    private String token;
+//    private String token;
 
     //TODO: Add jwt once security is added
 }
