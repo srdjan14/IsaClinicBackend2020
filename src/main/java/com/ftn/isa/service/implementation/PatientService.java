@@ -15,7 +15,6 @@ import com.ftn.isa.utils.enums.UserType;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -77,7 +76,6 @@ public class PatientService implements IPatientService {
         user.setFirstName(request.getFirstName());
         user.setLastName(request.getLastName());
         user.setPhone(request.getPhone());
-//        user.setSsn(request.getSsn());
 
         Patient savedPatient = _patientRepository.save(patient);
 

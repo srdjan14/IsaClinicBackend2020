@@ -9,7 +9,6 @@ import com.ftn.isa.service.IPatientService;
 import com.ftn.isa.service.implementation.AuthService;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.UUID;
 
 @RestController
 @RequestMapping("/auth")
