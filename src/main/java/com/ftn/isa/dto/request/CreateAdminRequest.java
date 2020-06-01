@@ -31,4 +31,6 @@ public class CreateAdminRequest {
     private String rePassword;
 
     private AdminType adminType;
+
+    private Long clinicId;
 }

@@ -5,7 +5,6 @@ import com.ftn.isa.dto.request.UpdatePatientRequest;
 import com.ftn.isa.dto.response.PatientResponse;
 
 import java.util.List;
-import java.util.UUID;
 
 public interface IPatientService {
 

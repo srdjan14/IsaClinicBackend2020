@@ -6,8 +6,10 @@ import com.ftn.isa.dto.request.UpdateAdminRequest;
 import com.ftn.isa.dto.response.AdminResponse;
 import com.ftn.isa.dto.response.UserResponse;
 import com.ftn.isa.entity.Admin;
+import com.ftn.isa.entity.Clinic;
 import com.ftn.isa.entity.User;
 import com.ftn.isa.repository.AdminRepository;
+import com.ftn.isa.repository.ClinicRepository;
 import com.ftn.isa.repository.UserRepository;
 import com.ftn.isa.service.IAdminService;
 import com.ftn.isa.service.IUserService;
@@ -27,10 +29,13 @@ public class AdminService implements IAdminService {
 
     private final UserRepository _userRepository;
 
-    public AdminService(AdminRepository adminRepository, IUserService userService, UserRepository userRepository) {
+    private final ClinicRepository _clinicRepository;
+
+    public AdminService(AdminRepository adminRepository, IUserService userService, UserRepository userRepository, ClinicRepository clinicRepository) {
         _adminRepository = adminRepository;
         _userService = userService;
         _userRepository = userRepository;
+        _clinicRepository = clinicRepository;
     }
 
     @Override
@@ -55,6 +60,13 @@ public class AdminService implements IAdminService {
 
         Admin admin = new Admin();
         admin.setUser(user);
+        Clinic clinic = _clinicRepository.findOneById(genericRequest.getClinicId());
+
+        if(clinic == null) {
+            throw new Exception("This clinic does not exist");
+        }
+
+        admin.setClinic(clinic);
         admin.setAdminType(genericRequest.getAdminType());
 
         Admin savedAdmin = _adminRepository.save(admin);
