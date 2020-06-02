@@ -6,12 +6,12 @@ import com.ftn.isa.entity.Patient;
 import com.ftn.isa.entity.RegistrationRequest;
 import com.ftn.isa.repository.RegistrationRequestRepository;
 import com.ftn.isa.repository.PatientRepository;
+import com.ftn.isa.service.IEmailService;
 import com.ftn.isa.service.IRegistrationRequestService;
 import com.ftn.isa.utils.enums.RequestStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -21,9 +21,13 @@ public class RegistrationRequestService implements IRegistrationRequestService {
 
     private final PatientRepository _patientRepository;
 
-    public RegistrationRequestService(RegistrationRequestRepository registrationRequestRepository, PatientRepository patientRepository) {
+    private final IEmailService _emailService;
+
+
+    public RegistrationRequestService(RegistrationRequestRepository registrationRequestRepository, PatientRepository patientRepository, IEmailService emailService) {
         _registrationRequestRepository = registrationRequestRepository;
         _patientRepository = patientRepository;
+        _emailService = emailService;
     }
     
     @Override
@@ -48,6 +52,8 @@ public class RegistrationRequestService implements IRegistrationRequestService {
         patient.setActive(true);
         _patientRepository.save(patient);
 
+        _emailService.sendAcceptedMailToPatient(patient.getUser());
+
     }
 
     @Override
@@ -64,6 +70,8 @@ public class RegistrationRequestService implements IRegistrationRequestService {
         Patient patient = _patientRepository.findOneByUser_Email(request.getEmail());
         patient.setActive(false);
         _patientRepository.save(patient);
+
+        _emailService.sendDeniedMailToPatient(patient.getUser());
 
     }
 

@@ -126,7 +126,7 @@ public class AuthService implements IAuthService {
         userResponse.setDeletedStatus(DeletedStatus.NOT_DELETED);
 
         // only on login
-        userResponse.setSetNewPassword(user.getFirstLogin() == null);
+        userResponse.setSetNewPassword(user.getFirstLogin() == false);
 
         return userResponse;
     }
