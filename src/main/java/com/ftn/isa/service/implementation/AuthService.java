@@ -10,10 +10,16 @@ import com.ftn.isa.entity.User;
 import com.ftn.isa.repository.AdminRepository;
 import com.ftn.isa.repository.MedicalStaffRepository;
 import com.ftn.isa.repository.UserRepository;
+import com.ftn.isa.security.DomainUserDetailsService;
 import com.ftn.isa.service.IClinicService;
 import com.ftn.isa.service.IAuthService;
+import com.ftn.isa.service.ITokenProvider;
 import com.ftn.isa.utils.enums.DeletedStatus;
 import com.ftn.isa.utils.enums.UserType;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -31,18 +37,31 @@ public class AuthService implements IAuthService {
 
     private final AdminRepository _adminRepository;
 
-    public AuthService(PasswordEncoder passwordEncoder, UserRepository userRepository, MedicalStaffRepository medicalStaffRepository, IClinicService IClinicService, AdminRepository adminRepository) {
+    private final DomainUserDetailsService _domainUserDetailsService;
+
+    private final AuthenticationManager _authenticationManager;
+
+    private final ITokenProvider _tokenProvider;
+
+    public AuthService(PasswordEncoder passwordEncoder, UserRepository userRepository, MedicalStaffRepository medicalStaffRepository, IClinicService IClinicService, AdminRepository adminRepository, DomainUserDetailsService domainUserDetailsService, AuthenticationManager authenticationManager, ITokenProvider tokenProvider) {
         _passwordEncoder = passwordEncoder;
         _userRepository = userRepository;
         _medicalStaffRepository = medicalStaffRepository;
         _clinicService = IClinicService;
         _adminRepository = adminRepository;
+        _domainUserDetailsService = domainUserDetailsService;
+        _authenticationManager = authenticationManager;
+        _tokenProvider = tokenProvider;
     }
 
     @Override
     public LoginResponse login(LoginRequest request) throws Exception {
+        _domainUserDetailsService.loadUserByUsername(request.getEmail());
+        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
+                request.getEmail(), request.getPassword());
+        Authentication authentication = _authenticationManager.authenticate(authenticationToken);
+        SecurityContextHolder.getContext().setAuthentication(authentication);
         User user = _userRepository.findOneByEmail(request.getEmail());
-
         if (user == null) {
             throw new Exception("This email doesn't exist!");
         }
@@ -66,8 +85,11 @@ public class AuthService implements IAuthService {
 
         UserResponse userResponse = mapUserToUserResponse(user);
 
+        String token = _tokenProvider.generateToken(user);
+
         LoginResponse loginResponse = new LoginResponse();
         loginResponse.setUser(userResponse);
+        loginResponse.setToken(token);
 
         return loginResponse;
     }
