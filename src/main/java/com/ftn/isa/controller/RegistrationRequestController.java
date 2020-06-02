@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/registration-requests")
+@RequestMapping("/registration-requests")
 public class RegistrationRequestController {
 
     private IRegistrationRequestService _registrationRequestService;
