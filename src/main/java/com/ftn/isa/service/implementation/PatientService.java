@@ -10,6 +10,7 @@ import com.ftn.isa.entity.User;
 import com.ftn.isa.repository.PatientRepository;
 import com.ftn.isa.repository.UserRepository;
 import com.ftn.isa.service.IPatientService;
+import com.ftn.isa.service.IRegistrationRequestService;
 import com.ftn.isa.service.IUserService;
 import com.ftn.isa.utils.enums.DeletedStatus;
 import com.ftn.isa.utils.enums.UserType;
@@ -27,10 +28,13 @@ public class PatientService implements IPatientService {
 
     private final UserRepository _userRepository;
 
-    public PatientService(PatientRepository patientRepository, IUserService userService, UserRepository userRepository) {
+    private final IRegistrationRequestService _registrationRequestService;
+
+    public PatientService(PatientRepository patientRepository, IUserService userService, UserRepository userRepository, IRegistrationRequestService registrationRequestService) {
         _patientRepository = patientRepository;
         _userService = userService;
         _userRepository = userRepository;
+        _registrationRequestService = registrationRequestService;
     }
 
     @Override
@@ -58,7 +62,7 @@ public class PatientService implements IPatientService {
 
         Patient savedPatient = _patientRepository.save(patient);
 
-//        _registrationRequestService.createRegistrationRequest(request);
+        _registrationRequestService.createRegistrationRequest(request);
         return mapPatientToPatientResponse(savedPatient);
     }
 
