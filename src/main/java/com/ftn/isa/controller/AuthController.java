@@ -1,5 +1,6 @@
 package com.ftn.isa.controller;
 
+import com.ftn.isa.dto.request.ChangePasswordRequest;
 import com.ftn.isa.dto.request.CreatePatientRequest;
 import com.ftn.isa.dto.request.FirstLoginPasswordRequest;
 import com.ftn.isa.dto.request.LoginRequest;
@@ -8,6 +9,8 @@ import com.ftn.isa.dto.response.PatientResponse;
 import com.ftn.isa.service.IPatientService;
 import com.ftn.isa.service.implementation.AuthService;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.UUID;
 
 
 @RestController
@@ -35,6 +38,11 @@ public class AuthController {
         } catch (Exception ex) {
             return null;
         }
+    }
+
+    @PutMapping("/{id}/change-password")
+    public void changePasswordMedicalStaff(@PathVariable Long id, @RequestBody ChangePasswordRequest request) throws Exception {
+        _authService.changePassword(id, request);
     }
 
     @PostMapping("/patients")

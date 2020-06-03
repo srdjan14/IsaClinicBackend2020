@@ -1,5 +1,6 @@
 package com.ftn.isa.service.implementation;
 
+import com.ftn.isa.dto.request.ChangePasswordRequest;
 import com.ftn.isa.dto.request.FirstLoginPasswordRequest;
 import com.ftn.isa.dto.request.LoginRequest;
 import com.ftn.isa.dto.response.ClinicResponse;
@@ -113,6 +114,27 @@ public class AuthService implements IAuthService {
 
             return loginResponse;
         }
+    }
+
+    @Override
+    public void changePassword(Long id, ChangePasswordRequest request) throws Exception {
+
+        if(!request.getPassword().equals(request.getRePassword())) {
+            throw new Exception("Password must match");
+        }
+
+        MedicalStaff medicalStaff = _medicalStaffRepository.findOneById(id);
+        if(!(medicalStaff == null)) {
+            User user = medicalStaff.getUser();
+            user.setPassword(_passwordEncoder.encode(request.getPassword()));
+            _medicalStaffRepository.save(medicalStaff);
+        } else {
+            Admin admin = _adminRepository.findOneById(id);
+            User user = admin.getUser();
+            user.setPassword(_passwordEncoder.encode(request.getPassword()));
+            _adminRepository.save(admin);
+        }
+
     }
 
     private UserResponse mapUserToUserResponse(User user) throws Exception {
