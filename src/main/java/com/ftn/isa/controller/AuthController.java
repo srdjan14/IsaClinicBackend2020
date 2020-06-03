@@ -28,7 +28,7 @@ public class AuthController {
         return _authService.login(request);
     }
 
-    @PostMapping("/medical/{id}/first-password")
+    @PostMapping("/{id}/first-password")
     public LoginResponse loginFirstPassword(@PathVariable Long id, @RequestBody FirstLoginPasswordRequest request) {
         try {
             return _authService.changingDefaultPassword(id, request);
