@@ -6,27 +6,18 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.util.Set;
 
+@Entity
 @Getter
 @Setter
-@Entity
 @NoArgsConstructor
 @AllArgsConstructor
-public class Patient extends BaseEntity {
+public class HealthCard extends BaseEntity {
 
     @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "user_id", referencedColumnName = "id")
-    private User user;
-
-    @ManyToMany(mappedBy = "patients")
-    private Set<Clinic> clinics;
-
-    @ManyToMany(mappedBy = "patients")
-    private Set<MedicalStaff> medicalStaffs;
+    @JoinColumn(name = "patient_id", referencedColumnName = "id")
+    private Patient patient;
 
     @OneToOne(mappedBy = "patient", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private HealthCard healthCard;
-
-    private Boolean active;
 }

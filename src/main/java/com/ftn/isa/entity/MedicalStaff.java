@@ -35,6 +35,10 @@ public class MedicalStaff extends BaseEntity{
     )
     private Set<Patient> patients;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "doctors_speciality_id")
+    private DoctorsSpeciality doctorsSpeciality;
+
     private LocalTime startWorkAt;
 
     private LocalTime endWorkAt;

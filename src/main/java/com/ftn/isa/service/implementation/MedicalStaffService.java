@@ -9,6 +9,7 @@ import com.ftn.isa.entity.Clinic;
 import com.ftn.isa.entity.MedicalStaff;
 import com.ftn.isa.entity.User;
 import com.ftn.isa.repository.ClinicRepository;
+import com.ftn.isa.repository.DoctorsSpecialityRepository;
 import com.ftn.isa.repository.MedicalStaffRepository;
 import com.ftn.isa.repository.UserRepository;
 import com.ftn.isa.service.IMedicalStaffService;
@@ -31,12 +32,15 @@ public class MedicalStaffService implements IMedicalStaffService {
 
     private final ClinicRepository _clinicRepository;
 
+    private final DoctorsSpecialityRepository _doctorsSpecialityRepository;
+
     public MedicalStaffService(MedicalStaffRepository medicalStaffRepository, IUserService userService,
-                               UserRepository userRepository, ClinicRepository clinicRepository) {
+                               UserRepository userRepository, ClinicRepository clinicRepository, DoctorsSpecialityRepository doctorsSpecialityRepository) {
         _medicalStaffRepository = medicalStaffRepository;
         _userService = userService;
         _userRepository = userRepository;
         _clinicRepository = clinicRepository;
+        _doctorsSpecialityRepository = doctorsSpecialityRepository;
     }
 
     @Override
@@ -68,6 +72,8 @@ public class MedicalStaffService implements IMedicalStaffService {
 
         medicalStaff.setStartWorkAt(request.getStartAt());
         medicalStaff.setEndWorkAt(request.getEndAt());
+
+        medicalStaff.setDoctorsSpeciality(_doctorsSpecialityRepository.findOneById(request.getSpeciality()));
 
         MedicalStaff savedMedicalStaff = _medicalStaffRepository.save(medicalStaff);
 
@@ -156,6 +162,7 @@ public class MedicalStaffService implements IMedicalStaffService {
         medicalStaffResponse.setMedicalType(medicalStaff.getMedicalType());
         medicalStaffResponse.setStartAt(medicalStaff.getStartWorkAt());
         medicalStaffResponse.setEndAt(medicalStaff.getEndWorkAt());
+        medicalStaffResponse.setSpeciality(medicalStaff.getDoctorsSpeciality().getSpeciality());
 
         return medicalStaffResponse;
 
