@@ -5,7 +5,11 @@ import com.ftn.isa.dto.response.DoctorsSpecialityResponse;
 import com.ftn.isa.entity.DoctorsSpeciality;
 import com.ftn.isa.repository.DoctorsSpecialityRepository;
 import com.ftn.isa.service.IDoctorsSpecialityService;
+import com.ftn.isa.utils.enums.DeletedStatus;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class DoctorsSpecialityService implements IDoctorsSpecialityService {
@@ -45,6 +49,23 @@ public class DoctorsSpecialityService implements IDoctorsSpecialityService {
         }
 
         return mapDoctorsSpecialityToDoctorsSpecialityResponse(speciality);
+    }
+
+    @Override
+    public List<DoctorsSpecialityResponse> getSpecialities() {
+        List<DoctorsSpeciality> specialities = _doctorsSpecialityRepository.findAll();
+
+        return specialities
+                .stream()
+                .map(speciality -> mapDoctorsSpecialityToDoctorsSpecialityResponse(speciality))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public void deleteSpeciality(Long id) {
+        DoctorsSpeciality doctorsSpeciality = _doctorsSpecialityRepository.findOneById(id);
+        doctorsSpeciality.setDeletedStatus(DeletedStatus.IS_DELETED);
+        _doctorsSpecialityRepository.save(doctorsSpeciality);
     }
 
     public DoctorsSpecialityResponse mapDoctorsSpecialityToDoctorsSpecialityResponse(DoctorsSpeciality doctorsSpeciality){

@@ -12,4 +12,8 @@ public interface IDoctorsSpecialityService {
     DoctorsSpecialityResponse updateSpeciality(DoctorsSpecialityRequest request, Long id) throws Exception;
 
     DoctorsSpecialityResponse getSpeciality(Long id) throws Exception;
+
+    List<DoctorsSpecialityResponse> getSpecialities();
+
+    void deleteSpeciality(Long id);
 }

@@ -6,6 +6,8 @@ import com.ftn.isa.repository.DoctorsSpecialityRepository;
 import com.ftn.isa.service.IDoctorsSpecialityService;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/speciality")
 public class DoctorsSpecialityController {
@@ -35,4 +37,13 @@ public class DoctorsSpecialityController {
         return _doctorsSpecialityService.updateSpeciality(request, id);
     }
 
+    @GetMapping
+    public List<DoctorsSpecialityResponse> getSpecialities() {
+        return _doctorsSpecialityService.getSpecialities();
+    }
+
+    @PutMapping("/delete/{id}")
+    public void deleteDoctorSpeciality(@PathVariable Long id) {
+        _doctorsSpecialityService.deleteSpeciality(id);
+    }
 }
