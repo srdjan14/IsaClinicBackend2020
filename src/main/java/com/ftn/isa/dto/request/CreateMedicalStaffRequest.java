@@ -36,7 +36,7 @@ public class CreateMedicalStaffRequest {
 
     private MedicalType medicalType;
 
-    private Long speciality;
+    private Long examinationTypeId;
 
     @JsonFormat(pattern = "HH:mm:ss")
     private LocalTime startAt;

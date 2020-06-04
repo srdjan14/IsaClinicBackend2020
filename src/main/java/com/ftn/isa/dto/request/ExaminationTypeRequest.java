@@ -7,9 +7,9 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class DoctorsSpecialityRequest {
+public class ExaminationTypeRequest {
 
-    private String speciality;
+    private String name;
 
-    private String price;
+    private float price;
 }

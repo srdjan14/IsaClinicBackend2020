@@ -35,7 +35,7 @@ public class MedicalStaffResponse {
 
     private Long clinicId;
 
-    private String speciality;
+    private String examinationType;
 
     @JsonFormat(pattern = "HH:mm:ss")
     private LocalTime startAt;

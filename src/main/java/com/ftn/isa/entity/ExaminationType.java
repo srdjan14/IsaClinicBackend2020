@@ -15,14 +15,14 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class DoctorsSpeciality extends BaseEntity {
+public class ExaminationType extends BaseEntity {
 
-    @OneToMany(mappedBy = "doctorsSpeciality", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "examinationType", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<MedicalStaff> medicalStaff = new ArrayList<>();
 
-    private String speciality;
+    private String name;
 
-    private String price;
+    private float price;
 
     @Enumerated(EnumType.STRING)
     private DeletedStatus deletedStatus;

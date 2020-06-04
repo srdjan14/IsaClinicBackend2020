@@ -7,11 +7,11 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class DoctorsSpecialityResponse {
+public class ExaminationTypeResponse {
 
-    private String speciality;
+    private String name;
 
-    private String price;
+    private float price;
 
     private Long id;
 }
