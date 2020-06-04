@@ -20,18 +20,18 @@ public class DoctorsSpecialityController {
     }
 
     @PostMapping
-    public DoctorsSpecialityResponse createExaminationType(@RequestBody DoctorsSpecialityRequest request) throws Exception {
+    public DoctorsSpecialityResponse createSpeciality(@RequestBody DoctorsSpecialityRequest request) throws Exception {
 
         return _doctorsSpecialityService.createSpeciality(request);
     }
 
     @GetMapping("/{id}")
-    public DoctorsSpecialityResponse getExaminationType(@PathVariable Long id) throws Exception {
+    public DoctorsSpecialityResponse getSpeciality(@PathVariable Long id) throws Exception {
         return _doctorsSpecialityService.getSpeciality(id);
     }
 
     @PutMapping("/{id}")
-    public DoctorsSpecialityResponse updateExaminationType(@RequestBody DoctorsSpecialityRequest request, @PathVariable Long id) throws Exception {
+    public DoctorsSpecialityResponse updateSpeciality(@RequestBody DoctorsSpecialityRequest request, @PathVariable Long id) throws Exception {
         return _doctorsSpecialityService.updateSpeciality(request, id);
     }
 
