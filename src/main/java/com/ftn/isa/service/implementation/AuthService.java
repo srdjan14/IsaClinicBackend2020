@@ -1,14 +1,18 @@
 package com.ftn.isa.service.implementation;
 
+import com.ftn.isa.dto.request.ChangePasswordRequest;
 import com.ftn.isa.dto.request.FirstLoginPasswordRequest;
 import com.ftn.isa.dto.request.LoginRequest;
 import com.ftn.isa.dto.response.ClinicResponse;
 import com.ftn.isa.dto.response.LoginResponse;
 import com.ftn.isa.dto.response.UserResponse;
+import com.ftn.isa.entity.Admin;
 import com.ftn.isa.entity.MedicalStaff;
+import com.ftn.isa.entity.Patient;
 import com.ftn.isa.entity.User;
 import com.ftn.isa.repository.AdminRepository;
 import com.ftn.isa.repository.MedicalStaffRepository;
+import com.ftn.isa.repository.PatientRepository;
 import com.ftn.isa.repository.UserRepository;
 import com.ftn.isa.service.IClinicService;
 import com.ftn.isa.service.IAuthService;
@@ -30,6 +34,7 @@ public class AuthService implements IAuthService {
     private final IClinicService _clinicService;
 
     private final AdminRepository _adminRepository;
+
 
     public AuthService(PasswordEncoder passwordEncoder, UserRepository userRepository, MedicalStaffRepository medicalStaffRepository, IClinicService IClinicService, AdminRepository adminRepository) {
         _passwordEncoder = passwordEncoder;
@@ -79,19 +84,57 @@ public class AuthService implements IAuthService {
         }
 
         MedicalStaff medicalStaff = _medicalStaffRepository.findOneById(id);
-        User user = medicalStaff.getUser();
+        if(!(medicalStaff == null)) {
+            User user = medicalStaff.getUser();
 
-        user.setPassword(_passwordEncoder.encode(request.getPassword()));
-        user.setFirstLogin(true);
+            user.setPassword(_passwordEncoder.encode(request.getPassword()));
+            user.setFirstLogin(true);
 
-        _medicalStaffRepository.save(medicalStaff);
+            _medicalStaffRepository.save(medicalStaff);
 
-        UserResponse userResponse = mapUserToUserResponse(user);
+            UserResponse userResponse = mapUserToUserResponse(user);
 
-        LoginResponse loginResponse = new LoginResponse();
-        loginResponse.setUser(userResponse);
+            LoginResponse loginResponse = new LoginResponse();
+            loginResponse.setUser(userResponse);
 
-        return loginResponse;
+            return loginResponse;
+        } else {
+            Admin admin = _adminRepository.findOneById(id);
+            User user = admin.getUser();
+
+            user.setPassword(_passwordEncoder.encode(request.getPassword()));
+            user.setFirstLogin(true);
+
+            _adminRepository.save(admin);
+
+            UserResponse userResponse = mapUserToUserResponse(user);
+
+            LoginResponse loginResponse = new LoginResponse();
+            loginResponse.setUser(userResponse);
+
+            return loginResponse;
+        }
+    }
+
+    @Override
+    public void changePassword(Long id, ChangePasswordRequest request) throws Exception {
+
+        if(!request.getPassword().equals(request.getRePassword())) {
+            throw new Exception("Password must match");
+        }
+
+        MedicalStaff medicalStaff = _medicalStaffRepository.findOneById(id);
+        if(!(medicalStaff == null)) {
+            User user = medicalStaff.getUser();
+            user.setPassword(_passwordEncoder.encode(request.getPassword()));
+            _medicalStaffRepository.save(medicalStaff);
+        } else {
+            Admin admin = _adminRepository.findOneById(id);
+            User user = admin.getUser();
+            user.setPassword(_passwordEncoder.encode(request.getPassword()));
+            _adminRepository.save(admin);
+        }
+
     }
 
     private UserResponse mapUserToUserResponse(User user) throws Exception {
