@@ -20,6 +20,7 @@ public class ExaminationType extends BaseEntity {
     @OneToMany(mappedBy = "examinationType", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<MedicalStaff> medicalStaff = new ArrayList<>();
 
+    @Column(unique = true)
     private String name;
 
     private float price;
