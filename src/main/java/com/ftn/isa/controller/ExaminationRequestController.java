@@ -1,5 +1,6 @@
 package com.ftn.isa.controller;
 
+import com.ftn.isa.dto.request.CreateExaminationRequest;
 import com.ftn.isa.dto.response.ExaminationRequestResponse;
 import com.ftn.isa.service.IExaminationRequestService;
 import org.springframework.web.bind.annotation.*;
@@ -16,6 +17,11 @@ public class ExaminationRequestController {
         _examinationRequestService = examinationRequestService;
     }
 
+    @PostMapping("/create")
+    public ExaminationRequestResponse createPredefinedExamination(@RequestBody CreateExaminationRequest examinationRequest) {
+        return _examinationRequestService.createPredefinedExaminationRequest(examinationRequest);
+    }
+
     @PostMapping("/predefined-booking")
     public void bookingExamination(@RequestParam Long patientId, Long clinicId) {
         _examinationRequestService.bookingPredefinedExamination(patientId, clinicId);
@@ -29,5 +35,10 @@ public class ExaminationRequestController {
     @GetMapping("/{id}/patient-examination")
     public List<ExaminationRequestResponse> getPatientsExaminations(@PathVariable Long patientId) {
         return _examinationRequestService.findAllExaminationOfPatient(patientId);
+    }
+
+    @GetMapping("/{id}/doctor-examination")
+    public List<ExaminationRequestResponse> getMedicalExaminations(@PathVariable Long medicalStaffId) {
+        return _examinationRequestService.getAllExaminationsByMedical(medicalStaffId);
     }
 }

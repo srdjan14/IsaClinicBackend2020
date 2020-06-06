@@ -7,7 +7,6 @@ import com.ftn.isa.service.IPatientService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.UUID;
 
 @RestController
 @RequestMapping("/patients")

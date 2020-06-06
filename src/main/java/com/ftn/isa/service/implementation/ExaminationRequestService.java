@@ -2,6 +2,7 @@ package com.ftn.isa.service.implementation;
 
 import com.ftn.isa.dto.request.CreateExaminationRequest;
 import com.ftn.isa.dto.response.ExaminationRequestResponse;
+import com.ftn.isa.dto.response.MedicalStaffResponse;
 import com.ftn.isa.entity.*;
 import com.ftn.isa.repository.*;
 import com.ftn.isa.service.IExaminationRequestService;
@@ -70,6 +71,16 @@ public class ExaminationRequestService implements IExaminationRequestService {
     @Override
     public List<ExaminationRequestResponse> findAllExaminationOfPatient(Long id) {
         List<ExaminationRequest> examinationRequests = _examinationRequestRepository.findAllByPatient_Id(id);
+
+        return examinationRequests
+                .stream()
+                .map(request -> mapExaminationRequestToExaminationResponse(request))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<ExaminationRequestResponse> getAllExaminationsByMedical(Long id) {
+        List<ExaminationRequest> examinationRequests = _examinationRequestRepository.findAllByMedicalStaff_Id(id);
 
         return examinationRequests
                 .stream()
