@@ -38,10 +38,10 @@ public class CreateMedicalStaffRequest {
 
     private Long examinationTypeId;
 
-    @JsonFormat(pattern = "HH:mm:ss")
+    @JsonFormat(pattern = "HH:mm")
     private LocalTime startAt;
 
-    @JsonFormat(pattern = "HH:mm:ss")
+    @JsonFormat(pattern = "HH:mm")
     private LocalTime endAt;
 
 }

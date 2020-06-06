@@ -22,15 +22,14 @@ public class ExaminationRequestResponse {
 
     private RequestStatus requestStatus;
 
-    @JsonFormat(pattern = "HH:mm:ss")
+    @JsonFormat(pattern = "HH:mm")
     private LocalTime startAt;
 
-    @JsonFormat(pattern = "HH:mm:ss")
+    @JsonFormat(pattern = "HH:mm")
     private LocalTime endAt;
 
     private String examinationTypeName;
 
     private Long examinationTypeId;
 
-    private float price;
 }

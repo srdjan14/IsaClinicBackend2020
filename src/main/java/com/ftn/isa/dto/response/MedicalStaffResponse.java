@@ -37,10 +37,10 @@ public class MedicalStaffResponse {
 
     private String examinationType;
 
-    @JsonFormat(pattern = "HH:mm:ss")
+    @JsonFormat(pattern = "HH:mm")
     private LocalTime startAt;
 
-    @JsonFormat(pattern = "HH:mm:ss")
+    @JsonFormat(pattern = "HH:mm")
     private LocalTime endAt;
 
 }
