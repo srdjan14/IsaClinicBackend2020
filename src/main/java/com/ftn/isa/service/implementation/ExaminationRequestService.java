@@ -35,7 +35,12 @@ public class ExaminationRequestService implements IExaminationRequestService {
 
     @Override
     public List<ExaminationRequestResponse> getAllExaminationRequest() {
-        return null;
+        List<ExaminationRequest> examinationRequests = _examinationRequestRepository.findAll();
+
+        return examinationRequests
+                .stream()
+                .map(examinationRequest -> mapExaminationRequestToExaminationResponse(examinationRequest))
+                .collect(Collectors.toList());
     }
 
     @Override

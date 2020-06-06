@@ -23,8 +23,8 @@ public class ExaminationRequestController {
     }
 
     @PostMapping("/predefined-booking")
-    public void bookingExamination(@RequestParam Long patientId, Long clinicId) {
-        _examinationRequestService.bookingPredefinedExamination(patientId, clinicId);
+    public void bookingExamination(@RequestParam Long patientId, Long examinationId) {
+        _examinationRequestService.bookingPredefinedExamination(patientId, examinationId);
     }
 
     @GetMapping
