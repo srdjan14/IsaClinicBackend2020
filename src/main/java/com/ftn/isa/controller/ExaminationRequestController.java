@@ -27,7 +27,7 @@ public class ExaminationRequestController {
     }
 
     @GetMapping("/{id}/patient-examination")
-    public List<ExaminationRequestResponse> getPatientesExaminations(@PathVariable Long patientId) {
+    public List<ExaminationRequestResponse> getPatientsExaminations(@PathVariable Long patientId) {
         return _examinationRequestService.findAllExaminationOfPatient(patientId);
     }
 }
