@@ -20,13 +20,13 @@ public class ReviewController {
         _reviewService = reviewService;
     }
 
-    @PostMapping("/doctor-review")
+    @PostMapping("/doctor")
     public DoctorReviewResponse reviewDoctor(@RequestBody DoctorReviewRequest request) {
         return _reviewService.reviewingDoctor(request);
     }
 
-    @PostMapping("/clinic-review")
-    public ClinicReviewResponse reviewDoctor(@RequestBody ClinicReviewRequest request) {
+    @PostMapping("/clinic")
+    public ClinicReviewResponse reviewClinic(@RequestBody ClinicReviewRequest request) {
         return _reviewService.reviewingClinic(request);
     }
 }
