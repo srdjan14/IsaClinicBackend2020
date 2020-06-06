@@ -8,6 +8,8 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -42,4 +44,7 @@ public class MedicalStaff extends BaseEntity{
     private LocalTime startWorkAt;
 
     private LocalTime endWorkAt;
+
+    @OneToMany(mappedBy = "medicalStaff", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<DoctorReview> grades = new ArrayList<>();
 }

@@ -39,4 +39,7 @@ public class Clinic extends BaseEntity {
     private String address;
 
     private String description;
+
+    @OneToMany(mappedBy = "clinic", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ClinicReview> grades = new ArrayList<>();
 }
