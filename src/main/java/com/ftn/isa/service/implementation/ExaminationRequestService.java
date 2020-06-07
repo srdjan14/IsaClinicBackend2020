@@ -2,7 +2,6 @@ package com.ftn.isa.service.implementation;
 
 import com.ftn.isa.dto.request.CreateExaminationRequest;
 import com.ftn.isa.dto.response.ExaminationRequestResponse;
-import com.ftn.isa.dto.response.MedicalStaffResponse;
 import com.ftn.isa.entity.*;
 import com.ftn.isa.repository.*;
 import com.ftn.isa.service.IExaminationRequestService;
@@ -25,12 +24,15 @@ public class ExaminationRequestService implements IExaminationRequestService {
 
     private final PatientRepository _patientRepository;
 
-    public ExaminationRequestService(ClinicRepository clinicRepository, MedicalStaffRepository medicalStaffRepository, ExaminationRequestRepository examinationRequestRepository, ExaminationTypeRepository examinationTypeRepository, PatientRepository patientRepository) {
+    private final OperationRoomRepository _operationRoomRepository;
+
+    public ExaminationRequestService(ClinicRepository clinicRepository, MedicalStaffRepository medicalStaffRepository, ExaminationRequestRepository examinationRequestRepository, ExaminationTypeRepository examinationTypeRepository, PatientRepository patientRepository, OperationRoomRepository operationRoomRepository) {
         _clinicRepository = clinicRepository;
         _medicalStaffRepository = medicalStaffRepository;
         _examinationRequestRepository = examinationRequestRepository;
         _examinationTypeRepository = examinationTypeRepository;
         _patientRepository = patientRepository;
+        _operationRoomRepository = operationRoomRepository;
     }
 
     @Override
@@ -60,6 +62,9 @@ public class ExaminationRequestService implements IExaminationRequestService {
         ExaminationType examinationType = _examinationTypeRepository.findOneById(request.getExaminationTypeId());
         examinationRequest.setExaminationType(examinationType);
 
+        OperationRoom operationRoom = _operationRoomRepository.findOneById(request.getOperationRoomId());
+        examinationRequest.setOperationRoom(operationRoom);
+
         ExaminationRequest savedExaminationRequest = _examinationRequestRepository.save(examinationRequest);
 
         return mapExaminationRequestToExaminationResponse(savedExaminationRequest);
@@ -71,6 +76,10 @@ public class ExaminationRequestService implements IExaminationRequestService {
 
         Patient patient = _patientRepository.findOneById(patientId);
         examinationRequest.setPatient(patient);
+
+      _examinationRequestRepository.save(examinationRequest);
+
+
     }
 
     @Override

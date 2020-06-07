@@ -17,7 +17,7 @@ public class ExaminationRequestResponse {
 
     private Long id;
 
-    @JsonFormat(pattern = "yyyy/MM/dd")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private Date examinationDate;
 
     private RequestStatus requestStatus;

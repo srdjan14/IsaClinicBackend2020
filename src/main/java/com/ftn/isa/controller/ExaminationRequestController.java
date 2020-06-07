@@ -23,8 +23,8 @@ public class ExaminationRequestController {
     }
 
     @PostMapping("/predefined-booking")
-    public void bookingExamination(@RequestParam Long patientId, Long examinationId) {
-        _examinationRequestService.bookingPredefinedExamination(patientId, examinationId);
+    public void bookingExamination(@RequestParam Long patientId, Long examinationRequestId) {
+        _examinationRequestService.bookingPredefinedExamination(patientId, examinationRequestId);
     }
 
     @GetMapping
@@ -33,12 +33,12 @@ public class ExaminationRequestController {
     }
 
     @GetMapping("/{id}/patient-examination")
-    public List<ExaminationRequestResponse> getPatientsExaminations(@PathVariable Long patientId) {
+    public List<ExaminationRequestResponse> getPatientsExaminations(@PathVariable("id") Long patientId) {
         return _examinationRequestService.findAllExaminationOfPatient(patientId);
     }
 
     @GetMapping("/{id}/doctor-examination")
-    public List<ExaminationRequestResponse> getMedicalExaminations(@PathVariable Long medicalStaffId) {
+    public List<ExaminationRequestResponse> getMedicalExaminations(@PathVariable("id") Long medicalStaffId) {
         return _examinationRequestService.getAllExaminationsByMedical(medicalStaffId);
     }
 }

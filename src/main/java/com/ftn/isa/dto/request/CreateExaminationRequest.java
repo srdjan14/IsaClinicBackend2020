@@ -13,12 +13,12 @@ import java.util.Date;
 @Data
 public class CreateExaminationRequest {
 
-    @JsonFormat(pattern = "yyyy/MM/dd")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private Date examinationDate;
 
     private Long doctorId;
 
-    private Long patientId;
+//    private Long patientId;
 
     private Long examinationTypeId;
 
