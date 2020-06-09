@@ -21,20 +21,20 @@ public class ExaminationRequest extends BaseEntity {
     @JoinColumn(name = "examinationType_id", referencedColumnName = "id")
     private ExaminationType examinationType;
 
-    @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "operationRoom_id", referencedColumnName = "id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "operationRoom_id")
     private OperationRoom operationRoom;
 
-    @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "medicalStaff_id", referencedColumnName = "id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "medicalStaff_id")
     private MedicalStaff medicalStaff;
 
-    @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "patient_id", referencedColumnName = "id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "patient_id")
     private Patient patient;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "clinic_id", referencedColumnName = "id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "clinic_id")
     private Clinic clinic;
 
     @Enumerated(EnumType.STRING)

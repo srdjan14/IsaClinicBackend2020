@@ -33,9 +33,9 @@ public class ReviewService implements IReviewService {
     @Override
     public DoctorReviewResponse reviewingDoctor(DoctorReviewRequest request) {
         Patient patient = _patientRepository.findOneById(request.getPatientId());
-        patient.getDoctorReviewList().stream().forEach(doctorReview -> {
+        patient.getDoctorReviewList().forEach(doctorReview -> {
             if (doctorReview.getMedicalStaff() != null) {
-                if(request.getMedicalStaffId() == doctorReview.getMedicalStaff().getId()) {
+                if(request.getMedicalStaffId().equals(doctorReview.getMedicalStaff().getId())) {
                     try {
                         throw new Exception("Doctor is already rated");
                     } catch (Exception e) {
@@ -61,9 +61,9 @@ public class ReviewService implements IReviewService {
     @Override
     public ClinicReviewResponse reviewingClinic(ClinicReviewRequest request) {
         Patient patient = _patientRepository.findOneById(request.getPatientId());
-        patient.getClinicReviewList().stream().forEach(clinicReview -> {
+        patient.getClinicReviewList().forEach(clinicReview -> {
             if (clinicReview.getClinic() != null) {
-                if(request.getClinicId() == clinicReview.getClinic().getId()) {
+                if(request.getClinicId().equals(clinicReview.getClinic().getId())) {
                     try {
                         throw new Exception("Clinic is already rated");
                     } catch (Exception e) {

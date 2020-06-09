@@ -46,6 +46,15 @@ public class ClinicController {
         }
     }
 
+    @PutMapping("/{id}")
+    public ClinicResponse updateClinic(@PathVariable Long id, @RequestBody ClinicRequest request) {
+        try {
+            return _clinicService.updateClinic(id, request);
+        } catch (Exception ex) {
+            return null;
+        }
+    }
+
     @GetMapping("/{id}/medical")
     public List<MedicalStaffResponse> getAllMedicalByClinic(@PathVariable Long id) throws Exception {
         return _medicalStaffService.getAllMedicalByClinic(id);

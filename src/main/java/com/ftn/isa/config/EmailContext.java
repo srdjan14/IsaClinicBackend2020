@@ -7,7 +7,9 @@ import org.springframework.stereotype.Component;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 
+import javax.mail.Session;
 import javax.mail.internet.MimeMessage;
+import java.util.Properties;
 
 @Component
 public class EmailContext {
@@ -37,7 +39,7 @@ public class EmailContext {
             javaMailSender.send(mail);
 
         } catch (Exception e) {
-
+            System.out.println(e);
         }
     }
 }

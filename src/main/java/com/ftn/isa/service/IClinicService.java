@@ -14,4 +14,6 @@ public interface IClinicService {
     ClinicResponse getClinic(Long id) throws Exception;
 
     List<ClinicResponse> getClinics();
+
+    List<ClinicResponse> searchClinic(ClinicRequest request);
 }

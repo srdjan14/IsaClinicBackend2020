@@ -33,7 +33,18 @@ public class ClinicService implements IClinicService {
 
     @Override
     public ClinicResponse updateClinic(Long id, ClinicRequest request) throws Exception {
-        return null;
+        Clinic clinic = _clinicRepository.findOneById(id);
+
+        if (clinic == null) {
+            throw new Exception(String.format("Clinic with %s id is not found", id));
+        }
+
+        clinic.setAddress(request.getAddress());
+        clinic.setDescription(request.getDescription());
+        clinic.setName(request.getName());
+
+        Clinic savedClinic = _clinicRepository.save(clinic);
+        return mapClinicToClinicResponse(savedClinic);
     }
 
     @Override
@@ -55,6 +66,11 @@ public class ClinicService implements IClinicService {
                 .stream()
                 .map(clinic -> mapClinicToClinicResponse(clinic))
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<ClinicResponse> searchClinic(ClinicRequest request) {
+        return null;
     }
 
     private ClinicResponse mapClinicToClinicResponse(Clinic clinic) {
