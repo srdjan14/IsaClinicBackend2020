@@ -155,7 +155,7 @@ public class MedicalStaffService implements IMedicalStaffService {
     }
 
     @Override
-    public List<MedicalStaffResponse> searchMedicalStaff(SearchMedicalStaffRequest searchMedicalStaffRequest, Long id) throws Exception {
+    public List<MedicalStaffResponse> searchMedicalStaff(SearchMedicalStaffRequest searchMedicalStaffRequest) throws Exception {
 
         JPAQuery query = new JPAQuery(entityManager);
 

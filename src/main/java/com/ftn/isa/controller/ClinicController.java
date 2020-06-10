@@ -59,4 +59,9 @@ public class ClinicController {
     public List<MedicalStaffResponse> getAllMedicalByClinic(@PathVariable Long id) throws Exception {
         return _medicalStaffService.getAllMedicalByClinic(id);
     }
+
+    @GetMapping("/search")
+    public List<ClinicResponse> searchClinic(ClinicRequest request) {
+        return _clinicService.searchClinic(request);
+    }
 }

@@ -2,6 +2,7 @@ package com.ftn.isa.controller;
 
 import com.ftn.isa.dto.request.CreateMedicalStaffRequest;
 
+import com.ftn.isa.dto.request.SearchMedicalStaffRequest;
 import com.ftn.isa.dto.request.UpdateMedicalStaffRequest;
 import com.ftn.isa.dto.response.MedicalStaffResponse;
 import com.ftn.isa.service.IMedicalStaffService;
@@ -54,5 +55,10 @@ public class MedicalStaffController {
     @PutMapping("/delete/{id}")
     public void deleteMedicalStaff(@PathVariable Long id) {
         _medicalStaffService.deleteMedicalStaff(id);
+    }
+
+    @GetMapping("/search")
+    public List<MedicalStaffResponse> searchMedicallStaff(SearchMedicalStaffRequest request) throws Exception {
+        return _medicalStaffService.searchMedicalStaff(request);
     }
 }
