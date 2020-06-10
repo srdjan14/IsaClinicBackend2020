@@ -61,6 +61,7 @@ public class ExaminationRequestService implements IExaminationRequestService {
 
         ExaminationType examinationType = _examinationTypeRepository.findOneById(request.getExaminationTypeId());
         examinationRequest.setExaminationType(examinationType);
+        examinationRequest.setPrice(examinationType.getPrice());
 
         OperationRoom operationRoom = _operationRoomRepository.findOneById(request.getOperationRoomId());
         examinationRequest.setOperationRoom(operationRoom);
@@ -111,6 +112,7 @@ public class ExaminationRequestService implements IExaminationRequestService {
         examinationRequestResponse.setExaminationTypeName(examinationRequest.getExaminationType().getName());
         examinationRequestResponse.setRequestStatus(examinationRequest.getStatus());
         examinationRequestResponse.setId(examinationRequest.getId());
+        examinationRequestResponse.setPrice(examinationRequest.getExaminationType().getPrice());
         return examinationRequestResponse;
     }
 }

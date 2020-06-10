@@ -32,7 +32,24 @@ public class EmailService implements IEmailService {
         String subject = "You have been denied!";
         Context context = new Context();
         context.setVariable("username", String.format("Dear, %s %s", user.getFirstName(), user.getLastName()));
-        _emailContext.send(to, subject, "deniedPatient", context);
+        _emailContext.send(to, subject, "declinePatient", context);
     }
 
+    @Override
+    public void sendAcceptedVacation(User user) {
+        String to = user.getEmail();
+        String subject = "Your vacation been approved!";
+        Context context = new Context();
+        context.setVariable("username", String.format("Dear, %s %s", user.getFirstName(), user.getLastName()));
+        _emailContext.send(to, subject, "approveVacation", context);
+    }
+
+    @Override
+    public void sendDeniedVacation(User user) {
+        String to = user.getEmail();
+        String subject = "You have been denied!";
+        Context context = new Context();
+        context.setVariable("username", String.format("Dear, %s %s", user.getFirstName(), user.getLastName()));
+        _emailContext.send(to, subject, "declineVacation", context);
+    }
 }

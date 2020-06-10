@@ -32,4 +32,6 @@ public class ExaminationRequestResponse {
 
     private Long examinationTypeId;
 
+    private float price;
+
 }

@@ -9,4 +9,8 @@ public interface IEmailService {
     void sendAcceptedMailToPatient(User user);
 
     void sendDeniedMailToPatient(User user);
+
+    void sendAcceptedVacation(User user);
+
+    void sendDeniedVacation(User user);
 }
