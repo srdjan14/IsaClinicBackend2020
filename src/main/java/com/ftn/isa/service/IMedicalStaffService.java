@@ -1,6 +1,7 @@
 package com.ftn.isa.service;
 
 import com.ftn.isa.dto.request.CreateMedicalStaffRequest;
+import com.ftn.isa.dto.request.SearchMedicalStaffRequest;
 import com.ftn.isa.dto.request.UpdateMedicalStaffRequest;
 import com.ftn.isa.dto.response.MedicalStaffResponse;
 
@@ -19,4 +20,6 @@ public interface IMedicalStaffService {
     List<MedicalStaffResponse> getAllMedicalByClinic(Long id) throws Exception;
 
     void deleteMedicalStaff(Long id);
+
+    List<MedicalStaffResponse> searchMedicalStaff(SearchMedicalStaffRequest searchMedicalStaffRequest, Long id) throws Exception;
 }

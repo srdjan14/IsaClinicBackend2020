@@ -2,12 +2,11 @@ package com.ftn.isa.service.implementation;
 
 import com.ftn.isa.dto.request.CreateMedicalStaffRequest;
 import com.ftn.isa.dto.request.CreateUserRequest;
+import com.ftn.isa.dto.request.SearchMedicalStaffRequest;
 import com.ftn.isa.dto.request.UpdateMedicalStaffRequest;
 import com.ftn.isa.dto.response.MedicalStaffResponse;
 import com.ftn.isa.dto.response.UserResponse;
-import com.ftn.isa.entity.Clinic;
-import com.ftn.isa.entity.MedicalStaff;
-import com.ftn.isa.entity.User;
+import com.ftn.isa.entity.*;
 import com.ftn.isa.repository.ClinicRepository;
 import com.ftn.isa.repository.ExaminationTypeRepository;
 import com.ftn.isa.repository.MedicalStaffRepository;
@@ -16,13 +15,23 @@ import com.ftn.isa.service.IMedicalStaffService;
 import com.ftn.isa.service.IUserService;
 import com.ftn.isa.utils.enums.DeletedStatus;
 import com.ftn.isa.utils.enums.UserType;
+import com.querydsl.jpa.impl.JPAQuery;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
 public class MedicalStaffService implements IMedicalStaffService {
+
+    @PersistenceContext
+    private EntityManager entityManager;
+
+    private final QClinic qClinic = QClinic.clinic;
+
+    private final QMedicalStaff qMedicalStaff = QMedicalStaff.medicalStaff;
 
     private final MedicalStaffRepository _medicalStaffRepository;
 
@@ -143,6 +152,33 @@ public class MedicalStaffService implements IMedicalStaffService {
         MedicalStaff medicalStaff = _medicalStaffRepository.findOneById(id);
         medicalStaff.getUser().setDeletedStatus(DeletedStatus.IS_DELETED);
         _medicalStaffRepository.save(medicalStaff);
+    }
+
+    @Override
+    public List<MedicalStaffResponse> searchMedicalStaff(SearchMedicalStaffRequest searchMedicalStaffRequest, Long id) throws Exception {
+
+        JPAQuery query = new JPAQuery(entityManager);
+
+        if(searchMedicalStaffRequest.getFirstName() != null) {
+            query.select(qMedicalStaff).where(qClinic.id.eq(qMedicalStaff.clinic.id)
+                    .and(qMedicalStaff.user.firstName.containsIgnoreCase(searchMedicalStaffRequest.getFirstName())));
+        }
+
+        if(searchMedicalStaffRequest.getLastName() != null) {
+            query.select(qMedicalStaff).where(qClinic.id.eq(qMedicalStaff.clinic.id)
+                    .and(qMedicalStaff.user.lastName.containsIgnoreCase(searchMedicalStaffRequest.getLastName())));
+        }
+
+        if(searchMedicalStaffRequest.getExaminationType() != null) {
+            query.select(qMedicalStaff).where(qClinic.id.eq(qMedicalStaff.clinic.id)
+                    .and(qMedicalStaff.examinationType.name.containsIgnoreCase(searchMedicalStaffRequest.getExaminationType())));
+        }
+
+        List<MedicalStaff> medicalStaffs = query.fetch();
+        return medicalStaffs
+                .stream()
+                .map(medicalStaff -> mapMedicalToMedicalResponse(medicalStaff))
+                .collect(Collectors.toList());
     }
 
     private MedicalStaffResponse mapMedicalToMedicalResponse(MedicalStaff medicalStaff) {

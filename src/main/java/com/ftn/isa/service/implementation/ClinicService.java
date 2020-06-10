@@ -86,7 +86,20 @@ public class ClinicService implements IClinicService {
             query.where(qClinic.name.containsIgnoreCase(request.getName()));
         }
 
-        return null;
+        if(request.getAddress() != null) {
+            query.where(qClinic.address.containsIgnoreCase(request.getAddress()));
+        }
+
+        if(request.getDescription() != null) {
+            query.where(qClinic.description.containsIgnoreCase(request.getDescription()));
+        }
+
+        List<Clinic> clinics = query.fetch();
+
+        return clinics
+                .stream()
+                .map(clinic -> mapClinicToClinicResponse(clinic))
+                .collect(Collectors.toList());
     }
 
     private ClinicResponse mapClinicToClinicResponse(Clinic clinic) {
