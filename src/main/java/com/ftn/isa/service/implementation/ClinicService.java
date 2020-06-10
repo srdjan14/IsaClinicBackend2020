@@ -3,10 +3,15 @@ package com.ftn.isa.service.implementation;
 import com.ftn.isa.dto.request.ClinicRequest;
 import com.ftn.isa.dto.response.ClinicResponse;
 import com.ftn.isa.entity.Clinic;
+import com.ftn.isa.entity.QClinic;
 import com.ftn.isa.repository.ClinicRepository;
 import com.ftn.isa.service.IClinicService;
+import com.querydsl.jpa.impl.JPAQuery;
 import org.springframework.stereotype.Service;
+import org.thymeleaf.util.StringUtils;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -14,6 +19,11 @@ import java.util.stream.Collectors;
 public class ClinicService implements IClinicService {
 
     private final ClinicRepository _clinicRepository;
+
+    @PersistenceContext
+    private EntityManager entityManager;
+
+    private final QClinic qClinic = QClinic.clinic;
 
     public ClinicService(ClinicRepository clinicRepository) {
         _clinicRepository = clinicRepository;
@@ -70,6 +80,12 @@ public class ClinicService implements IClinicService {
 
     @Override
     public List<ClinicResponse> searchClinic(ClinicRequest request) {
+        JPAQuery query = new JPAQuery(entityManager);
+
+        if(request.getName() != null) {
+            query.where(qClinic.name.containsIgnoreCase(request.getName()));
+        }
+
         return null;
     }
 

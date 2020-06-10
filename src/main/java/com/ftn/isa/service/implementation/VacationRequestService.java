@@ -14,6 +14,7 @@ import com.querydsl.jpa.impl.JPAQuery;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -22,7 +23,8 @@ import java.util.stream.Collectors;
 @Service
 public class VacationRequestService implements IVacationRequestService {
 
-    private final EntityManager entityManager;
+    @PersistenceContext
+    private EntityManager entityManager;
 
     private final QVacationRequest qVacationRequest = QVacationRequest.vacationRequest;
 
@@ -38,8 +40,7 @@ public class VacationRequestService implements IVacationRequestService {
 
     private final IMedicalStaffService _medicalStaffService;
 
-    public VacationRequestService(EntityManager entityManager, MedicalStaffRepository medicalStaffRepository, VacationRequestRepository vacationRequestRepository, IEmailService emailService, ClinicRepository clinicRepository, IMedicalStaffService medicalStaffService) {
-        this.entityManager = entityManager;
+    public VacationRequestService(MedicalStaffRepository medicalStaffRepository, VacationRequestRepository vacationRequestRepository, IEmailService emailService, ClinicRepository clinicRepository, IMedicalStaffService medicalStaffService) {
         _medicalStaffRepository = medicalStaffRepository;
         _vacationRequestRepository = vacationRequestRepository;
         _emailService = emailService;
@@ -50,7 +51,6 @@ public class VacationRequestService implements IVacationRequestService {
     @Override
     public VacationRequestResponse createVacationRequest(CreateVacationRequest request) {
         VacationRequest vacationRequest = new VacationRequest();
-
 
         JPAQuery query = new JPAQuery(entityManager);
 
