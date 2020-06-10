@@ -82,6 +82,8 @@ public class ClinicService implements IClinicService {
     public List<ClinicResponse> searchClinic(ClinicRequest request) {
         JPAQuery query = new JPAQuery(entityManager);
 
+        query = query.select(qClinic);
+
         if(request.getName() != null) {
             query.where(qClinic.name.containsIgnoreCase(request.getName()));
         }

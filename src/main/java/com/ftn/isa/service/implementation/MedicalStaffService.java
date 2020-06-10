@@ -159,19 +159,19 @@ public class MedicalStaffService implements IMedicalStaffService {
 
         JPAQuery query = new JPAQuery(entityManager);
 
+        query = (JPAQuery) query.select(qMedicalStaff).leftJoin(qClinic);
+
+
         if(searchMedicalStaffRequest.getFirstName() != null) {
-            query.select(qMedicalStaff).where(qClinic.id.eq(qMedicalStaff.clinic.id)
-                    .and(qMedicalStaff.user.firstName.containsIgnoreCase(searchMedicalStaffRequest.getFirstName())));
+            query.where(qMedicalStaff.user.firstName.containsIgnoreCase(searchMedicalStaffRequest.getFirstName()));
         }
 
         if(searchMedicalStaffRequest.getLastName() != null) {
-            query.select(qMedicalStaff).where(qClinic.id.eq(qMedicalStaff.clinic.id)
-                    .and(qMedicalStaff.user.lastName.containsIgnoreCase(searchMedicalStaffRequest.getLastName())));
+            query.where(qMedicalStaff.user.lastName.containsIgnoreCase(searchMedicalStaffRequest.getLastName()));
         }
 
         if(searchMedicalStaffRequest.getExaminationType() != null) {
-            query.select(qMedicalStaff).where(qClinic.id.eq(qMedicalStaff.clinic.id)
-                    .and(qMedicalStaff.examinationType.name.containsIgnoreCase(searchMedicalStaffRequest.getExaminationType())));
+            query.where(qMedicalStaff.examinationType.name.containsIgnoreCase(searchMedicalStaffRequest.getExaminationType()));
         }
 
         List<MedicalStaff> medicalStaffs = query.fetch();
