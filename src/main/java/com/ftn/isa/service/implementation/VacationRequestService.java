@@ -57,7 +57,7 @@ public class VacationRequestService implements IVacationRequestService {
                 .leftJoin(qExaminationRequest).on(qMedicalStaff.id.eq(qExaminationRequest.medicalStaff.id));
         query.where(qExaminationRequest.examinationDate.between(request.getStartAt(), request.getEndAt()));
         List<ExaminationRequest> list = query.fetch();
-        if(list.isEmpty()) {
+        if(!list.isEmpty()) {
             throw new Exception("Date not available because there is upcoming examination");
         }
 
