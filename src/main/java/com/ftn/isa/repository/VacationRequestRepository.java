@@ -1,6 +1,5 @@
 package com.ftn.isa.repository;
 
-import com.ftn.isa.entity.Clinic;
 import com.ftn.isa.entity.MedicalStaff;
 import com.ftn.isa.entity.VacationRequest;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -15,4 +14,6 @@ public interface VacationRequestRepository extends JpaRepository<VacationRequest
     VacationRequest findOneById(Long id);
 
     List<VacationRequest> findAllByMedicalStaff(MedicalStaff medicalStaff);
+
+    List<VacationRequest> findAllByClinic(Long id);
 }

@@ -1,7 +1,6 @@
 package com.ftn.isa.service.implementation;
 
 import com.ftn.isa.dto.request.CreateVacationRequest;
-import com.ftn.isa.dto.response.MedicalStaffResponse;
 import com.ftn.isa.dto.response.VacationRequestResponse;
 import com.ftn.isa.entity.*;
 import com.ftn.isa.repository.ClinicRepository;
@@ -12,10 +11,11 @@ import com.ftn.isa.service.IMedicalStaffService;
 import com.ftn.isa.service.IVacationRequestService;
 import com.querydsl.jpa.impl.JPAQuery;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -26,9 +26,9 @@ public class VacationRequestService implements IVacationRequestService {
     @PersistenceContext
     private EntityManager entityManager;
 
-    private final QVacationRequest qVacationRequest = QVacationRequest.vacationRequest;
+    private QVacationRequest qVacationRequest = QVacationRequest.vacationRequest;
 
-    private final QExaminationRequest qExaminationRequest = QExaminationRequest.examinationRequest;
+    private QExaminationRequest qExaminationRequest = QExaminationRequest.examinationRequest;
 
     private final MedicalStaffRepository _medicalStaffRepository;
 
@@ -54,7 +54,9 @@ public class VacationRequestService implements IVacationRequestService {
 
         JPAQuery query = new JPAQuery(entityManager);
 
-        if(query.where(qExaminationRequest.examinationDate.between(qVacationRequest.startAt, qVacationRequest.endAt)) != null) {
+        query.select(qExaminationRequest);
+
+        if(query.where(qExaminationRequest.examinationDate.between(request.getStartAt(), request.getEndAt())) != null) {
             try {
                 throw new Exception("Date not available because there is upcoming examination");
             } catch (Exception e) {
@@ -95,6 +97,7 @@ public class VacationRequestService implements IVacationRequestService {
                 .collect(Collectors.toList());
     }
 
+    @Transactional(readOnly = false, propagation = Propagation.REQUIRED)
     @Override
     public void approveVacationRequest(Long id) throws Exception {
         VacationRequest vacationRequest = _vacationRequestRepository.findOneById(id);
@@ -110,6 +113,7 @@ public class VacationRequestService implements IVacationRequestService {
         _emailService.sendAcceptedVacation(medicalStaff.getUser());
     }
 
+    @Transactional(readOnly = false, propagation = Propagation.REQUIRED)
     @Override
     public void declineVacationRequest(Long id) throws Exception {
         VacationRequest vacationRequest = _vacationRequestRepository.findOneById(id);
@@ -127,16 +131,15 @@ public class VacationRequestService implements IVacationRequestService {
 
     @Override
     public List<VacationRequestResponse> getAllVacationRequestsByClinic(Long id) throws Exception {
-        List<MedicalStaffResponse>  medicalStaff = _medicalStaffService.getAllMedicalByClinic(id);
-        if (medicalStaff == null) {
-            throw new Exception(String.format("Doctor with % id not found", id.toString()));
+        Clinic clinic = _clinicRepository.findOneById(id);
+        if (clinic == null) {
+            throw new Exception(String.format("Clinic with % id not found", id.toString()));
         }
 
-        List<VacationRequest> vacationRequests = _vacationRequestRepository.findAll();
+        List<VacationRequest> vacationRequests = _vacationRequestRepository.findAllByClinic(id);
 
         return vacationRequests
                 .stream()
-                .filter(vacationRequest -> vacationRequests.contains(medicalStaff))
                 .map(vacationRequest -> mapVacationRequestToVacationRequestResponse(vacationRequest))
                 .collect(Collectors.toList());
     }

@@ -26,4 +26,7 @@ public class OperationRoom extends BaseEntity {
 
     @Enumerated(EnumType.STRING)
     private DeletedStatus deletedStatus;
+
+    @Version
+    private Long version;
 }

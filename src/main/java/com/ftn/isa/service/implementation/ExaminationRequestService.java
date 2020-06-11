@@ -7,6 +7,8 @@ import com.ftn.isa.repository.*;
 import com.ftn.isa.service.IExaminationRequestService;
 import com.ftn.isa.utils.enums.RequestStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -45,6 +47,7 @@ public class ExaminationRequestService implements IExaminationRequestService {
                 .collect(Collectors.toList());
     }
 
+    @Transactional(readOnly = false, propagation = Propagation.REQUIRED)
     @Override
     public ExaminationRequestResponse createPredefinedExaminationRequest(CreateExaminationRequest request) {
         ExaminationRequest examinationRequest = new ExaminationRequest();
@@ -71,6 +74,7 @@ public class ExaminationRequestService implements IExaminationRequestService {
         return mapExaminationRequestToExaminationResponse(savedExaminationRequest);
     }
 
+    @Transactional(readOnly = false)
     @Override
     public void bookingPredefinedExamination(Long patientId, Long examinationRequestId) {
         ExaminationRequest examinationRequest = _examinationRequestRepository.findOneById(examinationRequestId);

@@ -47,4 +47,7 @@ public class ExaminationRequest extends BaseEntity {
     private LocalTime endAt;
 
     private float price;
+
+    @Version
+    private Long version;
 }

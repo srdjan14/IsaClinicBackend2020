@@ -23,8 +23,6 @@ public class ClinicService implements IClinicService {
     @PersistenceContext
     private EntityManager entityManager;
 
-    private final QClinic qClinic = QClinic.clinic;
-
     public ClinicService(ClinicRepository clinicRepository) {
         _clinicRepository = clinicRepository;
     }
@@ -80,12 +78,14 @@ public class ClinicService implements IClinicService {
 
     @Override
     public List<ClinicResponse> searchClinic(ClinicRequest request) {
+        QClinic qClinic = QClinic.clinic;
+
         JPAQuery query = new JPAQuery(entityManager);
 
-        query = query.select(qClinic);
+        query.select(qClinic);
 
         if(request.getName() != null) {
-            query.where(qClinic.name.containsIgnoreCase(request.getName()));
+            query.where(qClinic.name.containsIgnoreCase(request.getName().toString()));
         }
 
         if(request.getAddress() != null) {
