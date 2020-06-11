@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface IVacationRequestService {
 
-    VacationRequestResponse createVacationRequest(CreateVacationRequest request);
+    VacationRequestResponse createVacationRequest(CreateVacationRequest request) throws Exception;
 
     VacationRequestResponse getVacationRequest(Long id) throws Exception;
 

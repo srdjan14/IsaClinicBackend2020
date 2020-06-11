@@ -45,23 +45,20 @@ public class VacationRequestService implements IVacationRequestService {
     }
 
     @Override
-    public VacationRequestResponse createVacationRequest(CreateVacationRequest request) {
+    public VacationRequestResponse createVacationRequest(CreateVacationRequest request) throws Exception {
         VacationRequest vacationRequest = new VacationRequest();
 
         QVacationRequest qVacationRequest = QVacationRequest.vacationRequest;
         QExaminationRequest qExaminationRequest = QExaminationRequest.examinationRequest;
-
+        QMedicalStaff qMedicalStaff = QMedicalStaff.medicalStaff;
         JPAQuery query = _vacationRequestRepository.getQuery();
 
-        query.select(qExaminationRequest);
+        query.select(qVacationRequest).leftJoin(qMedicalStaff).on(qVacationRequest.medicalStaff.id.eq(qMedicalStaff.id))
+                .leftJoin(qExaminationRequest).on(qMedicalStaff.id.eq(qExaminationRequest.medicalStaff.id));
         query.where(qExaminationRequest.examinationDate.between(request.getStartAt(), request.getEndAt()));
         List<ExaminationRequest> list = query.fetch();
         if(list.isEmpty()) {
-            try {
-                throw new Exception("Date not available because there is upcoming examination");
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            throw new Exception("Date not available because there is upcoming examination");
         }
 
         vacationRequest.setDescription(request.getDescription());
