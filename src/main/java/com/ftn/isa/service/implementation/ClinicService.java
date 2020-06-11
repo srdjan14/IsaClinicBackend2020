@@ -7,8 +7,11 @@ import com.ftn.isa.entity.QClinic;
 import com.ftn.isa.repository.ClinicRepository;
 import com.ftn.isa.service.IClinicService;
 import com.querydsl.jpa.impl.JPAQuery;
+import com.querydsl.jpa.impl.JPAQueryFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.util.StringUtils;
+import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -19,9 +22,6 @@ import java.util.stream.Collectors;
 public class ClinicService implements IClinicService {
 
     private final ClinicRepository _clinicRepository;
-
-    @PersistenceContext
-    private EntityManager entityManager;
 
     public ClinicService(ClinicRepository clinicRepository) {
         _clinicRepository = clinicRepository;
@@ -80,12 +80,12 @@ public class ClinicService implements IClinicService {
     public List<ClinicResponse> searchClinic(ClinicRequest request) {
         QClinic qClinic = QClinic.clinic;
 
-        JPAQuery query = new JPAQuery(entityManager);
+        JPAQuery query = _clinicRepository.getQuery();
 
         query.select(qClinic);
 
         if(request.getName() != null) {
-            query.where(qClinic.name.containsIgnoreCase(request.getName().toString()));
+            query.where(qClinic.name.containsIgnoreCase(request.getName()));
         }
 
         if(request.getAddress() != null) {
@@ -112,4 +112,6 @@ public class ClinicService implements IClinicService {
         clinicResponse.setId(clinic.getId());
         return clinicResponse;
     }
+
+
 }

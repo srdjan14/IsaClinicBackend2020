@@ -26,10 +26,6 @@ public class VacationRequestService implements IVacationRequestService {
     @PersistenceContext
     private EntityManager entityManager;
 
-    private QVacationRequest qVacationRequest = QVacationRequest.vacationRequest;
-
-    private QExaminationRequest qExaminationRequest = QExaminationRequest.examinationRequest;
-
     private final MedicalStaffRepository _medicalStaffRepository;
 
     private final VacationRequestRepository _vacationRequestRepository;
@@ -52,11 +48,15 @@ public class VacationRequestService implements IVacationRequestService {
     public VacationRequestResponse createVacationRequest(CreateVacationRequest request) {
         VacationRequest vacationRequest = new VacationRequest();
 
-        JPAQuery query = new JPAQuery(entityManager);
+        QVacationRequest qVacationRequest = QVacationRequest.vacationRequest;
+        QExaminationRequest qExaminationRequest = QExaminationRequest.examinationRequest;
+
+        JPAQuery query = _vacationRequestRepository.getQuery();
 
         query.select(qExaminationRequest);
-
-        if(query.where(qExaminationRequest.examinationDate.between(request.getStartAt(), request.getEndAt())) != null) {
+        query.where(qExaminationRequest.examinationDate.between(request.getStartAt(), request.getEndAt()));
+        List<ExaminationRequest> list = query.fetch();
+        if(list.isEmpty()) {
             try {
                 throw new Exception("Date not available because there is upcoming examination");
             } catch (Exception e) {

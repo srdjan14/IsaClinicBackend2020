@@ -6,10 +6,12 @@ import com.ftn.isa.entity.*;
 import com.ftn.isa.repository.*;
 import com.ftn.isa.service.IExaminationRequestService;
 import com.ftn.isa.utils.enums.RequestStatus;
+import org.springframework.data.jpa.repository.Lock;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.LockModeType;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -75,6 +77,7 @@ public class ExaminationRequestService implements IExaminationRequestService {
     }
 
     @Transactional(readOnly = false)
+    @Lock(LockModeType.PESSIMISTIC_WRITE)
     @Override
     public void bookingPredefinedExamination(Long patientId, Long examinationRequestId) {
         ExaminationRequest examinationRequest = _examinationRequestRepository.findOneById(examinationRequestId);

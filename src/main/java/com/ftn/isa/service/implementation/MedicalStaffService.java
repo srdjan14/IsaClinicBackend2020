@@ -29,10 +29,6 @@ public class MedicalStaffService implements IMedicalStaffService {
     @PersistenceContext
     private EntityManager entityManager;
 
-    private QClinic qClinic = QClinic.clinic;
-
-    private QMedicalStaff qMedicalStaff = QMedicalStaff.medicalStaff;
-
     private final MedicalStaffRepository _medicalStaffRepository;
 
     private final IUserService _userService;
@@ -156,10 +152,11 @@ public class MedicalStaffService implements IMedicalStaffService {
 
     @Override
     public List<MedicalStaffResponse> searchMedicalStaff(SearchMedicalStaffRequest searchMedicalStaffRequest) throws Exception {
+        QMedicalStaff qMedicalStaff = QMedicalStaff.medicalStaff;
+        QClinic qClinic = QClinic.clinic;
+        JPAQuery query = _medicalStaffRepository.getQuery();
 
-        JPAQuery query = new JPAQuery(entityManager);
-
-        query = (JPAQuery) query.select(qMedicalStaff).leftJoin(qClinic).on(qMedicalStaff.clinic.id.isNotNull());
+        query.select(qMedicalStaff).leftJoin(qClinic).on(qMedicalStaff.clinic.id.eq(qClinic.id)).where(qClinic.id.isNotNull());
 
 
         if(searchMedicalStaffRequest.getFirstName() != null) {
