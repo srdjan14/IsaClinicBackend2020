@@ -34,6 +34,8 @@ public class ClinicService implements IClinicService {
         clinic.setAddress(request.getAddress());
         clinic.setDescription(request.getDescription());
         clinic.setName(request.getName());
+        clinic.setX(request.getX());
+        clinic.setY(request.getY());
 
         Clinic savedClinic = _clinicRepository.save(clinic);
         return mapClinicToClinicResponse(savedClinic);
@@ -110,6 +112,9 @@ public class ClinicService implements IClinicService {
         clinicResponse.setDescription(clinic.getDescription());
         clinicResponse.setName(clinic.getName());
         clinicResponse.setId(clinic.getId());
+        clinicResponse.setX(clinic.getX());
+        clinicResponse.setY(clinic.getY());
+
         return clinicResponse;
     }
 

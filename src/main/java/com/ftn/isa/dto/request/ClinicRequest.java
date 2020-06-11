@@ -14,4 +14,9 @@ public class ClinicRequest {
     private String address;
 
     private String description;
+
+    private float x;
+
+    private float y;
+
 }
