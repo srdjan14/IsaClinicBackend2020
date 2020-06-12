@@ -171,7 +171,7 @@ public class MedicalStaffService implements IMedicalStaffService {
         QClinic qClinic = QClinic.clinic;
         JPAQuery query = _medicalStaffRepository.getQuery();
 
-        query.select(qMedicalStaff).leftJoin(qClinic).on(qMedicalStaff.clinic.id.eq(qClinic.id)).where(qClinic.id.isNotNull());
+        query.select(qMedicalStaff).leftJoin(qClinic).on(qMedicalStaff.clinic.id.eq(clinicId)).where(qClinic.id.isNotNull());
 
         if(searchMedicalStaffRequest.getFirstName() != null) {
             query.where(qMedicalStaff.user.firstName.containsIgnoreCase(searchMedicalStaffRequest.getFirstName()));
@@ -186,7 +186,7 @@ public class MedicalStaffService implements IMedicalStaffService {
         }
 
         List<MedicalStaff> list = query.fetch();
-        if(!list.contains(clinicId)) {
+        if(list.isEmpty()) {
             throw new Exception("Doctor isn't in this clinic");
         }
         return list

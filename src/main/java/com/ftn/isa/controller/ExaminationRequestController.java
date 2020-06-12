@@ -1,6 +1,7 @@
 package com.ftn.isa.controller;
 
 import com.ftn.isa.dto.request.CreateExaminationRequest;
+import com.ftn.isa.dto.request.SearchExaminationRequest;
 import com.ftn.isa.dto.response.ExaminationRequestResponse;
 import com.ftn.isa.service.IExaminationRequestService;
 import org.springframework.web.bind.annotation.*;
@@ -40,5 +41,10 @@ public class ExaminationRequestController {
     @GetMapping("/{id}/doctor-examination")
     public List<ExaminationRequestResponse> getMedicalExaminations(@PathVariable("id") Long medicalStaffId) {
         return _examinationRequestService.getAllExaminationsByMedical(medicalStaffId);
+    }
+
+    @GetMapping("/search/")
+    public List<ExaminationRequestResponse> searchExaminations(SearchExaminationRequest request) throws Exception {
+        return _examinationRequestService.searchExaminationRequest(request);
     }
 }

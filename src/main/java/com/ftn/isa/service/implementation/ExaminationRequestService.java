@@ -1,11 +1,14 @@
 package com.ftn.isa.service.implementation;
 
 import com.ftn.isa.dto.request.CreateExaminationRequest;
+import com.ftn.isa.dto.request.SearchExaminationRequest;
 import com.ftn.isa.dto.response.ExaminationRequestResponse;
 import com.ftn.isa.entity.*;
 import com.ftn.isa.repository.*;
+import com.ftn.isa.service.IEmailService;
 import com.ftn.isa.service.IExaminationRequestService;
 import com.ftn.isa.utils.enums.RequestStatus;
+import com.querydsl.jpa.impl.JPAQuery;
 import org.springframework.data.jpa.repository.Lock;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -30,13 +33,17 @@ public class ExaminationRequestService implements IExaminationRequestService {
 
     private final OperationRoomRepository _operationRoomRepository;
 
-    public ExaminationRequestService(ClinicRepository clinicRepository, MedicalStaffRepository medicalStaffRepository, ExaminationRequestRepository examinationRequestRepository, ExaminationTypeRepository examinationTypeRepository, PatientRepository patientRepository, OperationRoomRepository operationRoomRepository) {
+    private final IEmailService _emailService;
+
+
+    public ExaminationRequestService(ClinicRepository clinicRepository, MedicalStaffRepository medicalStaffRepository, ExaminationRequestRepository examinationRequestRepository, ExaminationTypeRepository examinationTypeRepository, PatientRepository patientRepository, OperationRoomRepository operationRoomRepository, IEmailService emailService) {
         _clinicRepository = clinicRepository;
         _medicalStaffRepository = medicalStaffRepository;
         _examinationRequestRepository = examinationRequestRepository;
         _examinationTypeRepository = examinationTypeRepository;
         _patientRepository = patientRepository;
         _operationRoomRepository = operationRoomRepository;
+        _emailService = emailService;
     }
 
     @Override
@@ -87,7 +94,7 @@ public class ExaminationRequestService implements IExaminationRequestService {
 
       _examinationRequestRepository.save(examinationRequest);
 
-
+      _emailService.sendConfirmedExamination(patient.getUser());
     }
 
     @Override
@@ -107,6 +114,36 @@ public class ExaminationRequestService implements IExaminationRequestService {
         return examinationRequests
                 .stream()
                 .map(request -> mapExaminationRequestToExaminationResponse(request))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<ExaminationRequestResponse> searchExaminationRequest(SearchExaminationRequest request) throws Exception {
+       QExaminationRequest qExaminationRequest = QExaminationRequest.examinationRequest;
+       QClinic qClinic = QClinic.clinic;
+        JPAQuery query = _examinationRequestRepository.getQuery();
+
+        query.select(qExaminationRequest).leftJoin(qClinic).on(qExaminationRequest.clinic.id.eq(qClinic.id)).where(qClinic.id.isNotNull());
+
+        if(request.getExaminationTypeName() != null) {
+            query.where(qExaminationRequest.examinationType.name.containsIgnoreCase(request.getExaminationTypeName()));
+        }
+
+        if(request.getPrice() != 0) {
+            query.where(qExaminationRequest.price.in(request.getPrice()));
+        }
+
+        if(request.getExaminationDate() != null) {
+            query.where(qExaminationRequest.examinationDate.eq(request.getExaminationDate()));
+        }
+
+        List<ExaminationRequest> list = query.fetch();
+        if(list.isEmpty()) {
+            throw new Exception("Can't find examination");
+        }
+        return list
+                .stream()
+                .map(examinationRequest -> mapExaminationRequestToExaminationResponse(examinationRequest))
                 .collect(Collectors.toList());
     }
 

@@ -111,8 +111,8 @@ public class VacationRequestService implements IVacationRequestService {
         vacationRequest.setConfirmed(true);
         _vacationRequestRepository.save(vacationRequest);
 
-//        MedicalStaff medicalStaff = _medicalStaffRepository.findOneById(vacationRequest.getMedicalStaff().getId());
-//        _emailService.sendAcceptedVacation(medicalStaff.getUser());
+        MedicalStaff medicalStaff = _medicalStaffRepository.findOneById(vacationRequest.getMedicalStaff().getId());
+        _emailService.sendAcceptedVacation(medicalStaff.getUser());
     }
 
     @Transactional(readOnly = false, propagation = Propagation.REQUIRED)

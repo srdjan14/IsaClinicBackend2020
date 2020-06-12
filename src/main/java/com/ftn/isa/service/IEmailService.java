@@ -13,4 +13,6 @@ public interface IEmailService {
     void sendAcceptedVacation(User user);
 
     void sendDeniedVacation(User user);
+
+    void sendConfirmedExamination(User user);
 }

@@ -57,7 +57,7 @@ public class MedicalStaffController {
         _medicalStaffService.deleteMedicalStaff(id);
     }
 
-    @GetMapping("/search")
+    @GetMapping("/search/")
     public List<MedicalStaffResponse> searchMedicallStaff(SearchMedicalStaffRequest request, Long id) throws Exception {
         return _medicalStaffService.searchMedicalStaff(request, id);
     }
