@@ -28,6 +28,7 @@ public class ExaminationTypeService implements IExaminationTypeService {
         ExaminationType examinationType = new ExaminationType();
         examinationType.setPrice(request.getPrice());
         examinationType.setName(request.getName());
+        examinationType.setDeletedStatus(DeletedStatus.NOT_DELETED);
 
         ExaminationType savedExaminationType = _examinationTypeRepository.save(examinationType);
         return mapExaminationTypeToExaminationTypeResponse(savedExaminationType);
@@ -94,6 +95,8 @@ public class ExaminationTypeService implements IExaminationTypeService {
         examinationTypeResponse.setId(examinationType.getId());
         examinationTypeResponse.setName(examinationType.getName());
         examinationTypeResponse.setPrice(examinationType.getPrice());
+        examinationTypeResponse.setDeletedStatus(examinationType.getDeletedStatus());
+
         return examinationTypeResponse;
     }
 }

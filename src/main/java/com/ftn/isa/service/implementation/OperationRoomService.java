@@ -33,6 +33,7 @@ public class OperationRoomService implements IOperationRoomService {
         operationRoom.setClinic(clinic);
         operationRoom.setName(request.getName());
         operationRoom.setNumber(request.getNumber());
+        operationRoom.setDeletedStatus(DeletedStatus.NOT_DELETED);
 
         OperationRoom savedOperationRoom = _operationRoomRepository.save(operationRoom);
 
@@ -110,6 +111,7 @@ public class OperationRoomService implements IOperationRoomService {
         operationRoomResponse.setName(operationRoom.getName());
         operationRoomResponse.setNumber(operationRoom.getNumber());
         operationRoomResponse.setId(operationRoom.getId());
+        operationRoomResponse.setDeletedStatus(operationRoom.getDeletedStatus());
 
         return operationRoomResponse;
     }

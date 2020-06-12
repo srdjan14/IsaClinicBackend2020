@@ -43,7 +43,7 @@ public class ExaminationTypeController {
     }
 
     @PutMapping("/delete/{id}")
-    public void deleteExaminationType(@PathVariable Long id) {
+    public void deleteExaminationType(@PathVariable Long id) throws Exception {
         _examinationTypeService.deleteExaminationType(id);
     }
 }
