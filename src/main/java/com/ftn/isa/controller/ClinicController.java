@@ -28,7 +28,7 @@ public class ClinicController {
     }
 
     @GetMapping
-    public List<ClinicResponse> getClinics() {
+    public List<ClinicResponse> getClinicsD() {
         return _clinicService.getClinics();
     }
 
