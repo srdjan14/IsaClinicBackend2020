@@ -33,7 +33,7 @@ public class VacationRequestController {
     }
 
     @PostMapping
-    public VacationRequestResponse createVacationRequest(@RequestBody CreateVacationRequest request) {
+    public VacationRequestResponse createVacationRequest(@RequestBody CreateVacationRequest request) throws Exception {
         return _vacationRequestService.createVacationRequest(request);
     }
 }
