@@ -1,11 +1,13 @@
 package com.ftn.isa.service.implementation;
 
 import com.ftn.isa.dto.request.ClinicRequest;
+import com.ftn.isa.dto.request.SearchDoctorForExaminationRequest;
 import com.ftn.isa.dto.response.ClinicResponse;
-import com.ftn.isa.entity.Clinic;
-import com.ftn.isa.entity.QClinic;
+import com.ftn.isa.dto.response.ExaminationRequestResponse;
+import com.ftn.isa.entity.*;
 import com.ftn.isa.repository.ClinicRepository;
 import com.ftn.isa.service.IClinicService;
+import com.ftn.isa.utils.enums.RequestStatus;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -101,6 +103,33 @@ public class ClinicService implements IClinicService {
         List<Clinic> clinics = query.fetch();
 
         return clinics
+                .stream()
+                .map(clinic -> mapClinicToClinicResponse(clinic))
+                .collect(Collectors.toList());
+    }
+
+
+    @Override
+    public List<ClinicResponse> searchFreeDoctorInClinic(SearchDoctorForExaminationRequest request) throws Exception {
+        QExaminationRequest qExaminationRequest = QExaminationRequest.examinationRequest;
+        QClinic qClinic = QClinic.clinic;
+        QVacationRequest qVacationRequest = QVacationRequest.vacationRequest;
+        QMedicalStaff qMedicalStaff = QMedicalStaff.medicalStaff;
+
+        JPAQuery query = _clinicRepository.getQuery();
+
+        query.select(qClinic).leftJoin(qMedicalStaff).on(qClinic.id.eq(qMedicalStaff.clinic.id)).where(qMedicalStaff.clinic.id.isNotNull());
+        query.leftJoin(qExaminationRequest).on(qMedicalStaff.id.eq(qExaminationRequest.medicalStaff.id)).where(qExaminationRequest.medicalStaff.id.isNotNull());
+        query.leftJoin(qVacationRequest).on(qMedicalStaff.id.eq(qVacationRequest.medicalStaff.id)).where(qVacationRequest.medicalStaff.id.isNotNull());
+        query.where(qVacationRequest.requestStatus.isNull());
+        query.where(qVacationRequest.requestStatus.eq(RequestStatus.PENDING));
+
+        List<Clinic> list = query.fetch();
+        if(list.isEmpty()) {
+            throw new Exception("There aren't free doctors in any clinic at asked date.");
+        }
+
+        return list
                 .stream()
                 .map(clinic -> mapClinicToClinicResponse(clinic))
                 .collect(Collectors.toList());

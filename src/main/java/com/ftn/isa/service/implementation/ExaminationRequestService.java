@@ -1,6 +1,7 @@
 package com.ftn.isa.service.implementation;
 
 import com.ftn.isa.dto.request.CreateExaminationRequest;
+import com.ftn.isa.dto.request.SearchDoctorForExaminationRequest;
 import com.ftn.isa.dto.request.SearchExaminationRequest;
 import com.ftn.isa.dto.response.ExaminationRequestResponse;
 import com.ftn.isa.entity.*;
@@ -146,6 +147,7 @@ public class ExaminationRequestService implements IExaminationRequestService {
                 .map(examinationRequest -> mapExaminationRequestToExaminationResponse(examinationRequest))
                 .collect(Collectors.toList());
     }
+
 
     private ExaminationRequestResponse mapExaminationRequestToExaminationResponse(ExaminationRequest examinationRequest) {
         ExaminationRequestResponse examinationRequestResponse = new ExaminationRequestResponse();

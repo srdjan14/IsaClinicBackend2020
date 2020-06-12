@@ -3,8 +3,6 @@ package com.ftn.isa.service;
 import com.ftn.isa.dto.request.CreateExaminationRequest;
 import com.ftn.isa.dto.request.SearchExaminationRequest;
 import com.ftn.isa.dto.response.ExaminationRequestResponse;
-import com.ftn.isa.dto.response.MedicalStaffResponse;
-
 
 import java.util.List;
 
