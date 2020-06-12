@@ -40,6 +40,10 @@ public class Clinic extends BaseEntity {
 
     private String description;
 
+    private float x;
+
+    private float y;
+
     @OneToMany(mappedBy = "clinic", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ClinicReview> grades = new ArrayList<>();
 

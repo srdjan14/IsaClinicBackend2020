@@ -16,4 +16,9 @@ public class ClinicResponse {
     private String address;
 
     private String description;
+
+    private float x;
+
+    private float y;
+
 }
