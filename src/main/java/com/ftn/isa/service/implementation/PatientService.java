@@ -126,7 +126,7 @@ public class PatientService implements IPatientService {
         QExaminationRequest qExaminationRequest = QExaminationRequest.examinationRequest;
         JPAQuery query = _patientRepository.getQuery();
 
-        query.select(qPatient).leftJoin(qExaminationRequest).on(qPatient.id.eq(qExaminationRequest.patient.id)).where(qExaminationRequest.patient.id.isNotNull());
+        query.select(qPatient).leftJoin(qExaminationRequest).on(qPatient.id.eq(qExaminationRequest.patient.id)).where(qExaminationRequest.patient.id.isNotNull()).distinct();
         query.where(qExaminationRequest.clinic.id.eq(clinicId));
         List<Patient> list = query.fetch();
 

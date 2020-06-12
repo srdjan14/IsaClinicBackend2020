@@ -171,7 +171,7 @@ public class MedicalStaffService implements IMedicalStaffService {
         QClinic qClinic = QClinic.clinic;
         JPAQuery query = _medicalStaffRepository.getQuery();
 
-        query.select(qMedicalStaff).leftJoin(qClinic).on(qMedicalStaff.clinic.id.eq(clinicId)).where(qClinic.id.isNotNull());
+        query.select(qMedicalStaff).leftJoin(qClinic).on(qMedicalStaff.clinic.id.eq(clinicId)).where(qClinic.id.isNotNull()).distinct();
 
         if(searchMedicalStaffRequest.getFirstName() != null) {
             query.where(qMedicalStaff.user.firstName.containsIgnoreCase(searchMedicalStaffRequest.getFirstName()));

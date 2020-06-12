@@ -1,5 +1,6 @@
 package com.ftn.isa.dto.response;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.ftn.isa.utils.enums.RequestStatus;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -23,7 +24,8 @@ public class VacationRequestResponse {
 
     private Long medicalStaffId;
 
-    private boolean confirmed;
+    private RequestStatus requestStatus;
 
+    private Long clinicId;
 }
 

@@ -9,6 +9,7 @@ import com.ftn.isa.repository.VacationRequestRepository;
 import com.ftn.isa.service.IEmailService;
 import com.ftn.isa.service.IMedicalStaffService;
 import com.ftn.isa.service.IVacationRequestService;
+import com.ftn.isa.utils.enums.RequestStatus;
 import com.querydsl.jpa.impl.JPAQuery;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -63,12 +64,15 @@ public class VacationRequestService implements IVacationRequestService {
         }
 
         vacationRequest.setDescription(request.getDescription());
-        vacationRequest.setConfirmed(false);
+        vacationRequest.setRequestStatus(RequestStatus.PENDING);
         vacationRequest.setStartAt(request.getStartAt());
         vacationRequest.setEndAt(request.getEndAt());
 
         MedicalStaff medicalStaff = _medicalStaffRepository.findOneById(request.getMedicalStaffId());
         vacationRequest.setMedicalStaff(medicalStaff);
+
+        Clinic clinic = _clinicRepository.findOneById(medicalStaff.getClinic().getId());
+        vacationRequest.setClinic(clinic);
 
         VacationRequest savedVacationRequest = _vacationRequestRepository.save(vacationRequest);
         return mapVacationRequestToVacationRequestResponse(savedVacationRequest);
@@ -90,7 +94,7 @@ public class VacationRequestService implements IVacationRequestService {
         QVacationRequest qVacationRequest = QVacationRequest.vacationRequest;
         JPAQuery query = _vacationRequestRepository.getQuery();
 
-        query.select(qVacationRequest).where(qVacationRequest.confirmed.isFalse());
+        query.select(qVacationRequest).where(qVacationRequest.requestStatus.eq(RequestStatus.PENDING));
         List<VacationRequest> list = query.fetch();
 
         return list
@@ -108,7 +112,7 @@ public class VacationRequestService implements IVacationRequestService {
             throw new Exception("Request doesn't exist");
         }
 
-        vacationRequest.setConfirmed(true);
+        vacationRequest.setRequestStatus(RequestStatus.APPROVED);
         _vacationRequestRepository.save(vacationRequest);
 
         MedicalStaff medicalStaff = _medicalStaffRepository.findOneById(vacationRequest.getMedicalStaff().getId());
@@ -124,7 +128,7 @@ public class VacationRequestService implements IVacationRequestService {
             throw new Exception("Request doesn't exist");
         }
 
-        vacationRequest.setConfirmed(false);
+        vacationRequest.setRequestStatus(RequestStatus.DENIED);
         _vacationRequestRepository.save(vacationRequest);
 
         MedicalStaff medicalStaff = _medicalStaffRepository.findOneById(vacationRequest.getMedicalStaff().getId());
@@ -151,9 +155,10 @@ public class VacationRequestService implements IVacationRequestService {
         vacationRequestResponse.setDescription(vacationRequest.getDescription());
         vacationRequestResponse.setStartAt(vacationRequest.getStartAt());
         vacationRequestResponse.setEndAt(vacationRequest.getEndAt());
-        vacationRequestResponse.setConfirmed(vacationRequest.getConfirmed());
+        vacationRequestResponse.setRequestStatus(vacationRequest.getRequestStatus());
         vacationRequestResponse.setMedicalStaffId(vacationRequest.getMedicalStaff().getId());
         vacationRequestResponse.setId(vacationRequest.getId());
+        vacationRequestResponse.setClinicId(vacationRequest.getClinic().getId());
         return vacationRequestResponse;
     }
 }

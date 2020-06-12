@@ -1,5 +1,6 @@
 package com.ftn.isa.entity;
 
+import com.ftn.isa.utils.enums.RequestStatus;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -22,7 +23,8 @@ public class VacationRequest extends BaseEntity {
 
     private String description;
 
-    private Boolean confirmed;
+    @Enumerated(EnumType.STRING)
+    private RequestStatus requestStatus;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "medicalStaff_id")

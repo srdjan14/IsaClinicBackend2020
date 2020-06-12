@@ -23,8 +23,8 @@ public class ExaminationRequestController {
         return _examinationRequestService.createPredefinedExaminationRequest(examinationRequest);
     }
 
-    @PostMapping("/predefined-booking")
-    public void bookingExamination(@RequestParam Long patientId, Long examinationRequestId) {
+    @PostMapping("/predefined-booking/{patientId}/{examinationRequestId}")
+    public void bookingExamination(@PathVariable Long patientId, @PathVariable Long examinationRequestId) {
         _examinationRequestService.bookingPredefinedExamination(patientId, examinationRequestId);
     }
 
@@ -43,7 +43,7 @@ public class ExaminationRequestController {
         return _examinationRequestService.getAllExaminationsByMedical(medicalStaffId);
     }
 
-    @GetMapping("/search/")
+    @GetMapping("/search")
     public List<ExaminationRequestResponse> searchExaminations(SearchExaminationRequest request) throws Exception {
         return _examinationRequestService.searchExaminationRequest(request);
     }

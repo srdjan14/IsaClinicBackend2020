@@ -57,8 +57,8 @@ public class MedicalStaffController {
         _medicalStaffService.deleteMedicalStaff(id);
     }
 
-    @GetMapping("/search/")
-    public List<MedicalStaffResponse> searchMedicallStaff(SearchMedicalStaffRequest request, Long id) throws Exception {
+    @GetMapping("/search/{id}")
+    public List<MedicalStaffResponse> searchMedicallStaff(SearchMedicalStaffRequest request,@PathVariable Long id) throws Exception {
         return _medicalStaffService.searchMedicalStaff(request, id);
     }
 }
