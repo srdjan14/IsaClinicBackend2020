@@ -22,7 +22,7 @@ public class VacationRequest extends BaseEntity {
 
     private String description;
 
-    private boolean confirmed;
+    private Boolean confirmed;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "medicalStaff_id")

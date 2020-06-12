@@ -153,10 +153,10 @@ public class MedicalStaffService implements IMedicalStaffService {
         JPAQuery query = _medicalStaffRepository.getQuery();
 
         query.select(qMedicalStaff).leftJoin(qExaminationRequest).on(qMedicalStaff.id.eq(qExaminationRequest.medicalStaff.id)).where(qExaminationRequest.medicalStaff.id.isNotNull());
-        query.where(qExaminationRequest.patient.id.isNull());
+        query.where(qExaminationRequest.patient.id.isNotNull());
 
         List<MedicalStaff> list = query.fetch();
-        if(list.contains(id)) {
+        if(!list.isEmpty()) {
             throw new Exception("Doctor cannot be deleted because he has upcoming examination");
         }
 

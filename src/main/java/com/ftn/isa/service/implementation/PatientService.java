@@ -127,9 +127,10 @@ public class PatientService implements IPatientService {
         JPAQuery query = _patientRepository.getQuery();
 
         query.select(qPatient).leftJoin(qExaminationRequest).on(qPatient.id.eq(qExaminationRequest.patient.id)).where(qExaminationRequest.patient.id.isNotNull());
+        query.where(qExaminationRequest.clinic.id.eq(clinicId));
         List<Patient> list = query.fetch();
 
-        if(list.contains(clinicId)) {
+        if(list.isEmpty()) {
             throw new Exception("Patient cannot be found in this clinic");
         }
 

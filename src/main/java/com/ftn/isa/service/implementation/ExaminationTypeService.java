@@ -80,7 +80,9 @@ public class ExaminationTypeService implements IExaminationTypeService {
         JPAQuery query = _examinationTypeRepository.getQuery();
 
         query.select(qExaminationType).leftJoin(qExaminationRequest).on(qExaminationType.id.eq(qExaminationRequest.examinationType.id))
-                .where(qExaminationRequest.examinationType.id.isNotNull());
+                .where(qExaminationRequest.examinationType.id.isNotNull()).distinct();
+        query.where(qExaminationType.id.eq(id));
+
         List<ExaminationType> list = query.fetch();
         if(!list.isEmpty()) {
             throw new Exception("You can't delete examination type that is already scheduled");

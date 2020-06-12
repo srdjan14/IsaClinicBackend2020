@@ -111,8 +111,8 @@ public class VacationRequestService implements IVacationRequestService {
         vacationRequest.setConfirmed(true);
         _vacationRequestRepository.save(vacationRequest);
 
-        MedicalStaff medicalStaff = _medicalStaffRepository.findOneById(vacationRequest.getMedicalStaff().getId());
-        _emailService.sendAcceptedVacation(medicalStaff.getUser());
+//        MedicalStaff medicalStaff = _medicalStaffRepository.findOneById(vacationRequest.getMedicalStaff().getId());
+//        _emailService.sendAcceptedVacation(medicalStaff.getUser());
     }
 
     @Transactional(readOnly = false, propagation = Propagation.REQUIRED)
@@ -138,7 +138,7 @@ public class VacationRequestService implements IVacationRequestService {
             throw new Exception(String.format("Clinic with % id not found", id.toString()));
         }
 
-        List<VacationRequest> vacationRequests = _vacationRequestRepository.findAllByClinic(id);
+        List<VacationRequest> vacationRequests = _vacationRequestRepository.findAllByClinic(clinic);
 
         return vacationRequests
                 .stream()
@@ -151,7 +151,7 @@ public class VacationRequestService implements IVacationRequestService {
         vacationRequestResponse.setDescription(vacationRequest.getDescription());
         vacationRequestResponse.setStartAt(vacationRequest.getStartAt());
         vacationRequestResponse.setEndAt(vacationRequest.getEndAt());
-        vacationRequestResponse.setConfirmed(vacationRequest.isConfirmed());
+        vacationRequestResponse.setConfirmed(vacationRequest.getConfirmed());
         vacationRequestResponse.setMedicalStaffId(vacationRequest.getMedicalStaff().getId());
         vacationRequestResponse.setId(vacationRequest.getId());
         return vacationRequestResponse;

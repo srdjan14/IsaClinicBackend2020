@@ -96,9 +96,10 @@ public class OperationRoomService implements IOperationRoomService {
         QExaminationRequest qExaminationRequest = QExaminationRequest.examinationRequest;
         JPAQuery query = _operationRoomRepository.getQuery();
 
-        query.select(qOperationRoom).leftJoin(qExaminationRequest).on(qOperationRoom.id.eq(qExaminationRequest.operationRoom.id)).where(qExaminationRequest.operationRoom.id.isNotNull());
+        query.select(qOperationRoom).leftJoin(qExaminationRequest).on(qOperationRoom.id.eq(qExaminationRequest.operationRoom.id)).where(qExaminationRequest.operationRoom.id.isNotNull()).distinct();
+        query.where(qOperationRoom.id.eq(id));
         List<OperationRoom> list = query.fetch();
-        if(list.contains(id)) {
+        if(!list.isEmpty()) {
             throw new Exception("This operation room is booked for examination");
         }
 

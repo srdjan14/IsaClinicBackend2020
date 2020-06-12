@@ -36,4 +36,14 @@ public class VacationRequestController {
     public VacationRequestResponse createVacationRequest(@RequestBody CreateVacationRequest request) throws Exception {
         return _vacationRequestService.createVacationRequest(request);
     }
+
+    @PutMapping("/{id}/approve")
+    public void approveVacationRequest(@PathVariable Long id) throws Exception {
+        _vacationRequestService.approveVacationRequest(id);
+    }
+
+    @PutMapping("/{id}/decline")
+    public void declineVacationRequest(@PathVariable Long id) throws Exception {
+        _vacationRequestService.declineVacationRequest(id);
+    }
 }
