@@ -129,7 +129,7 @@ public class PatientService implements IPatientService {
         query.select(qPatient).leftJoin(qExaminationRequest).on(qPatient.id.eq(qExaminationRequest.patient.id)).where(qExaminationRequest.patient.id.isNotNull());
         List<Patient> list = query.fetch();
 
-        if(!list.contains(clinicId)) {
+        if(list.contains(clinicId)) {
             throw new Exception("Patient cannot be found in this clinic");
         }
 

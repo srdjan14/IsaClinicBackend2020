@@ -73,14 +73,15 @@ public class OperationRoomService implements IOperationRoomService {
 
     @Override
     public List<OperationRoomResponse> getAllOperationRoomsByClinic(Long id) throws Exception {
-        Clinic clinic = _clinicRepository.findOneById(id);
-        if (clinic == null) {
-            throw new Exception(String.format("Clinic with % id not found", id.toString()));
-        }
 
-        List<OperationRoom> operationRooms = _operationRoomRepository.findAllByClinic_Id(clinic.getId());
+        QOperationRoom qOperationRoom = QOperationRoom.operationRoom;
+        JPAQuery query = _operationRoomRepository.getQuery();
 
-        return operationRooms
+        query.select(qOperationRoom).where(qOperationRoom.clinic.id.eq(id)).where(qOperationRoom.deletedStatus.eq(DeletedStatus.NOT_DELETED));
+
+        List<OperationRoom> list = query.fetch();
+
+        return list
                 .stream()
                 .map(operationRoom -> mapOperationRoomToOperationRoomResponse(operationRoom))
                 .collect(Collectors.toList());
@@ -94,8 +95,8 @@ public class OperationRoomService implements IOperationRoomService {
         QExaminationRequest qExaminationRequest = QExaminationRequest.examinationRequest;
         JPAQuery query = _operationRoomRepository.getQuery();
 
-        query.select(qExaminationRequest).leftJoin(qOperationRoom).on(qExaminationRequest.operationRoom.id.eq(qOperationRoom.id)).where(qOperationRoom.id.isNotNull());
-        List<ExaminationRequest> list = query.fetch();
+        query.select(qOperationRoom).leftJoin(qExaminationRequest).on(qOperationRoom.id.eq(qExaminationRequest.operationRoom.id)).where(qExaminationRequest.operationRoom.id.isNotNull());
+        List<OperationRoom> list = query.fetch();
         if(list.contains(id)) {
             throw new Exception("This operation room is booked for examination");
         }

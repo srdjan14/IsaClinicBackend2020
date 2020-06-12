@@ -15,5 +15,5 @@ public interface IExaminationTypeService {
 
     List<ExaminationTypeResponse> getAllExaminationType();
 
-    void deleteExaminationType(Long id);
+    void deleteExaminationType(Long id) throws Exception;
 }
