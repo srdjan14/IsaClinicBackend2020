@@ -3,12 +3,14 @@ package com.ftn.isa.service.implementation;
 import com.ftn.isa.dto.request.CreatePatientRequest;
 import com.ftn.isa.dto.response.RegistartionRequestResponse;
 import com.ftn.isa.entity.Patient;
+import com.ftn.isa.entity.QRegistrationRequest;
 import com.ftn.isa.entity.RegistrationRequest;
 import com.ftn.isa.repository.RegistrationRequestRepository;
 import com.ftn.isa.repository.PatientRepository;
 import com.ftn.isa.service.IEmailService;
 import com.ftn.isa.service.IRegistrationRequestService;
 import com.ftn.isa.utils.enums.RequestStatus;
+import com.querydsl.jpa.impl.JPAQuery;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -32,9 +34,16 @@ public class RegistrationRequestService implements IRegistrationRequestService {
     
     @Override
     public List<RegistartionRequestResponse> getAll() {
-        List<RegistrationRequest> requests = _registrationRequestRepository.findAll();
+        QRegistrationRequest qRegistrationRequest = QRegistrationRequest.registrationRequest;
+        JPAQuery query = _registrationRequestRepository.getQuery();
 
-        return requests.stream().map(request -> mapToRegistrationResponse(request)).collect(Collectors.toList());
+        query.select(qRegistrationRequest).where(qRegistrationRequest.status.eq(RequestStatus.PENDING));
+        List<RegistrationRequest> list = query.fetch();
+
+        return list
+                .stream()
+                .map(request -> mapToRegistrationResponse(request))
+                .collect(Collectors.toList());
     }
 
     @Override
