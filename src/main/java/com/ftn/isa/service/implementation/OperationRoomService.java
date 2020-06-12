@@ -2,12 +2,12 @@ package com.ftn.isa.service.implementation;
 
 import com.ftn.isa.dto.request.OperationRoomRequest;
 import com.ftn.isa.dto.response.OperationRoomResponse;
-import com.ftn.isa.entity.Clinic;
-import com.ftn.isa.entity.OperationRoom;
+import com.ftn.isa.entity.*;
 import com.ftn.isa.repository.ClinicRepository;
 import com.ftn.isa.repository.OperationRoomRepository;
 import com.ftn.isa.service.IOperationRoomService;
 import com.ftn.isa.utils.enums.DeletedStatus;
+import com.querydsl.jpa.impl.JPAQuery;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -87,8 +87,19 @@ public class OperationRoomService implements IOperationRoomService {
     }
 
     @Override
-    public void deleteOperationRoom(Long id) {
+    public void deleteOperationRoom(Long id) throws Exception {
         OperationRoom operationRoom = _operationRoomRepository.findOneById(id);
+
+        QOperationRoom qOperationRoom = QOperationRoom.operationRoom;
+        QExaminationRequest qExaminationRequest = QExaminationRequest.examinationRequest;
+        JPAQuery query = _operationRoomRepository.getQuery();
+
+        query.select(qExaminationRequest).leftJoin(qOperationRoom).on(qExaminationRequest.operationRoom.id.eq(qOperationRoom.id)).where(qOperationRoom.id.isNotNull());
+        List<ExaminationRequest> list = query.fetch();
+        if(list.contains(id)) {
+            throw new Exception("This operation room is booked for examination");
+        }
+
         operationRoom.setDeletedStatus(DeletedStatus.IS_DELETED);
         _operationRoomRepository.save(operationRoom);
     }

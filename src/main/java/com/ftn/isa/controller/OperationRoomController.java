@@ -43,7 +43,7 @@ public class OperationRoomController {
     }
 
     @PutMapping("/delete/{id}")
-    public void deleteOperationRoom(@PathVariable Long id) {
+    public void deleteOperationRoom(@PathVariable Long id) throws Exception {
         _operationRoomService.deleteOperationRoom(id);
     }
 }

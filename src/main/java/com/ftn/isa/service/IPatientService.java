@@ -17,4 +17,6 @@ public interface IPatientService {
     List<PatientResponse> getPatients();
 
     void deletePatient(Long id);
+
+    List<PatientResponse> getPatientsByClinic(Long clinicId) throws Exception;
 }

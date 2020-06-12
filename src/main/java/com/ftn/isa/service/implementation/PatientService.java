@@ -5,8 +5,8 @@ import com.ftn.isa.dto.request.CreateUserRequest;
 import com.ftn.isa.dto.request.UpdatePatientRequest;
 import com.ftn.isa.dto.response.PatientResponse;
 import com.ftn.isa.dto.response.UserResponse;
-import com.ftn.isa.entity.Patient;
-import com.ftn.isa.entity.User;
+import com.ftn.isa.entity.*;
+import com.ftn.isa.repository.ExaminationRequestRepository;
 import com.ftn.isa.repository.PatientRepository;
 import com.ftn.isa.repository.UserRepository;
 import com.ftn.isa.service.IPatientService;
@@ -14,6 +14,7 @@ import com.ftn.isa.service.IRegistrationRequestService;
 import com.ftn.isa.service.IUserService;
 import com.ftn.isa.utils.enums.DeletedStatus;
 import com.ftn.isa.utils.enums.UserType;
+import com.querydsl.jpa.impl.JPAQuery;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -30,11 +31,14 @@ public class PatientService implements IPatientService {
 
     private final IRegistrationRequestService _registrationRequestService;
 
-    public PatientService(PatientRepository patientRepository, IUserService userService, UserRepository userRepository, IRegistrationRequestService registrationRequestService) {
+    private final ExaminationRequestRepository _examinationRequestRepository;
+
+    public PatientService(PatientRepository patientRepository, IUserService userService, UserRepository userRepository, IRegistrationRequestService registrationRequestService, ExaminationRequestRepository examinationRequestRepository) {
         _patientRepository = patientRepository;
         _userService = userService;
         _userRepository = userRepository;
         _registrationRequestService = registrationRequestService;
+        _examinationRequestRepository = examinationRequestRepository;
     }
 
     @Override
@@ -113,6 +117,26 @@ public class PatientService implements IPatientService {
         Patient patient = _patientRepository.findOneById(id);
         patient.getUser().setDeletedStatus(DeletedStatus.IS_DELETED);
         _patientRepository.save(patient);
+    }
+
+    @Override
+    public List<PatientResponse> getPatientsByClinic(Long clinicId) throws Exception {
+
+        QPatient qPatient = QPatient.patient;
+        QExaminationRequest qExaminationRequest = QExaminationRequest.examinationRequest;
+        JPAQuery query = _patientRepository.getQuery();
+
+        query.select(qPatient).leftJoin(qExaminationRequest).on(qPatient.id.eq(qExaminationRequest.patient.id)).where(qExaminationRequest.patient.id.isNotNull());
+        List<Patient> list = query.fetch();
+
+        if(!list.contains(clinicId)) {
+            throw new Exception("Patient cannot be found in this clinic");
+        }
+
+        return list
+                .stream()
+                .map(patient -> mapPatientToPatientResponse(patient))
+                .collect(Collectors.toList());
     }
 
     private PatientResponse mapPatientToPatientResponse(Patient patient) {

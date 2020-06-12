@@ -19,7 +19,7 @@ public interface IMedicalStaffService {
 
     List<MedicalStaffResponse> getAllMedicalByClinic(Long id) throws Exception;
 
-    void deleteMedicalStaff(Long id);
+    void deleteMedicalStaff(Long id) throws Exception;
 
-    List<MedicalStaffResponse> searchMedicalStaff(SearchMedicalStaffRequest searchMedicalStaffRequest) throws Exception;
+    List<MedicalStaffResponse> searchMedicalStaff(SearchMedicalStaffRequest searchMedicalStaffRequest, Long clinicId) throws Exception;
 }

@@ -7,10 +7,7 @@ import com.ftn.isa.dto.request.UpdateMedicalStaffRequest;
 import com.ftn.isa.dto.response.MedicalStaffResponse;
 import com.ftn.isa.dto.response.UserResponse;
 import com.ftn.isa.entity.*;
-import com.ftn.isa.repository.ClinicRepository;
-import com.ftn.isa.repository.ExaminationTypeRepository;
-import com.ftn.isa.repository.MedicalStaffRepository;
-import com.ftn.isa.repository.UserRepository;
+import com.ftn.isa.repository.*;
 import com.ftn.isa.service.IMedicalStaffService;
 import com.ftn.isa.service.IUserService;
 import com.ftn.isa.utils.enums.DeletedStatus;
@@ -39,13 +36,16 @@ public class MedicalStaffService implements IMedicalStaffService {
 
     private final ExaminationTypeRepository _examinationTypeRepository;
 
+    private final ExaminationRequestRepository _examinationRequestRepository;
+
     public MedicalStaffService(MedicalStaffRepository medicalStaffRepository, IUserService userService,
-                               UserRepository userRepository, ClinicRepository clinicRepository, ExaminationTypeRepository examinationTypeRepository) {
+                               UserRepository userRepository, ClinicRepository clinicRepository, ExaminationTypeRepository examinationTypeRepository, ExaminationRequestRepository examinationRequestRepository) {
         _medicalStaffRepository = medicalStaffRepository;
         _userService = userService;
         _userRepository = userRepository;
         _clinicRepository = clinicRepository;
         _examinationTypeRepository = examinationTypeRepository;
+        _examinationRequestRepository = examinationRequestRepository;
     }
 
     @Override
@@ -130,12 +130,17 @@ public class MedicalStaffService implements IMedicalStaffService {
 
     @Override
     public List<MedicalStaffResponse> getAllMedicalByClinic(Long id) throws Exception {
-        Clinic clinic = _clinicRepository.findOneById(id);
-        if (clinic == null) {
-            throw new Exception(String.format("Clinic with % id not found", id.toString()));
-        }
+//        Clinic clinic = _clinicRepository.findOneById(id);
+//        if (clinic == null) {
+//            throw new Exception(String.format("Clinic with % id not found", id.toString()));
+//        }
 
-        List<MedicalStaff> medicalStaffs = _medicalStaffRepository.findAllByClinic(clinic);
+        QMedicalStaff qMedicalStaff = QMedicalStaff.medicalStaff;
+        JPAQuery query = _medicalStaffRepository.getQuery();
+
+        query.select(qMedicalStaff).where(qMedicalStaff.clinic.id.eq(id)).where(qMedicalStaff.user.deletedStatus.eq(DeletedStatus.NOT_DELETED));
+
+        List<MedicalStaff> medicalStaffs = query.fetch();
 
         return medicalStaffs
                 .stream()
@@ -144,20 +149,31 @@ public class MedicalStaffService implements IMedicalStaffService {
     }
 
     @Override
-    public void deleteMedicalStaff(Long id) {
+    public void deleteMedicalStaff(Long id) throws Exception {
         MedicalStaff medicalStaff = _medicalStaffRepository.findOneById(id);
+
+        QMedicalStaff qMedicalStaff = QMedicalStaff.medicalStaff;
+        QExaminationRequest qExaminationRequest = QExaminationRequest.examinationRequest;
+        JPAQuery query = _examinationRequestRepository.getQuery();
+
+        query.select(qExaminationRequest).leftJoin(qMedicalStaff).on(qExaminationRequest.medicalStaff.id.eq(qMedicalStaff.id)).where(qMedicalStaff.isNotNull());
+        List<ExaminationRequest> list = query.fetch();
+        if(list.contains(id)) {
+            throw new Exception("Doctor cannot be deleted because he has upcoming examination");
+        }
+
         medicalStaff.getUser().setDeletedStatus(DeletedStatus.IS_DELETED);
+
         _medicalStaffRepository.save(medicalStaff);
     }
 
     @Override
-    public List<MedicalStaffResponse> searchMedicalStaff(SearchMedicalStaffRequest searchMedicalStaffRequest) throws Exception {
+    public List<MedicalStaffResponse> searchMedicalStaff(SearchMedicalStaffRequest searchMedicalStaffRequest, Long clinicId) throws Exception {
         QMedicalStaff qMedicalStaff = QMedicalStaff.medicalStaff;
         QClinic qClinic = QClinic.clinic;
         JPAQuery query = _medicalStaffRepository.getQuery();
 
         query.select(qMedicalStaff).leftJoin(qClinic).on(qMedicalStaff.clinic.id.eq(qClinic.id)).where(qClinic.id.isNotNull());
-
 
         if(searchMedicalStaffRequest.getFirstName() != null) {
             query.where(qMedicalStaff.user.firstName.containsIgnoreCase(searchMedicalStaffRequest.getFirstName()));
@@ -171,8 +187,11 @@ public class MedicalStaffService implements IMedicalStaffService {
             query.where(qMedicalStaff.examinationType.name.containsIgnoreCase(searchMedicalStaffRequest.getExaminationType()));
         }
 
-        List<MedicalStaff> medicalStaffs = query.fetch();
-        return medicalStaffs
+        List<MedicalStaff> list = query.fetch();
+        if(!list.contains(clinicId)) {
+            throw new Exception("Doctor isn't in this clinic");
+        }
+        return list
                 .stream()
                 .map(medicalStaff -> mapMedicalToMedicalResponse(medicalStaff))
                 .collect(Collectors.toList());

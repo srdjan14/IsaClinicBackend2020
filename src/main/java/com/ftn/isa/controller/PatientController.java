@@ -45,4 +45,9 @@ public class PatientController {
     public void deletePatient(@PathVariable Long id) {
         _patientService.deletePatient(id);
     }
+
+    @GetMapping("/{id}/clinic")
+    public List<PatientResponse> getAllMedicalByClinic(@PathVariable Long id) throws Exception {
+        return _patientService.getPatientsByClinic(id);
+    }
 }
