@@ -61,4 +61,13 @@ public class EmailService implements IEmailService {
         context.setVariable("username", String.format("Dear, %s %s", user.getFirstName(), user.getLastName()));
         _emailContext.send(to, subject, "confirmationExamination", context);
     }
+
+    @Override
+    public void sendDeniedExamination(User user) {
+        String to = user.getEmail();
+        String subject = "You have been denied!";
+        Context context = new Context();
+        context.setVariable("username", String.format("Dear, %s %s", user.getFirstName(), user.getLastName()));
+        _emailContext.send(to, subject, "declineExamination", context);
+    }
 }

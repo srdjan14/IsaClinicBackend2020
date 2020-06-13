@@ -292,7 +292,16 @@ public class ExaminationRequestService implements IExaminationRequestService {
         _examinationRequestRepository.save(examinationRequest);
     }
 
-    public void declineExaminationRequest(Long clinicId, )
+    @Override
+    public void declineExaminationRequest(Long clinicId) {
+        ExaminationRequest examinationRequest = _examinationRequestRepository.findOneById(clinicId);
+
+        examinationRequest.setStatus(RequestStatus.DENIED);
+        _examinationRequestRepository.save(examinationRequest);
+
+        Patient patient = _patientRepository.findOneById(examinationRequest.getPatient().getId());
+        _emailService.sendDeniedExamination(patient.getUser());
+    }
 
     private ExaminationRequestResponse mapExaminationRequestToExaminationResponse(ExaminationRequest examinationRequest) {
         ExaminationRequestResponse examinationRequestResponse = new ExaminationRequestResponse();

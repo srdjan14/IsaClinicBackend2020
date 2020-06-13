@@ -132,7 +132,7 @@ public class VacationRequestService implements IVacationRequestService {
         _vacationRequestRepository.save(vacationRequest);
 
         MedicalStaff medicalStaff = _medicalStaffRepository.findOneById(vacationRequest.getMedicalStaff().getId());
-        _emailService.sendAcceptedVacation(medicalStaff.getUser());
+        _emailService.sendDeniedVacation(medicalStaff.getUser());
     }
 
     @Override

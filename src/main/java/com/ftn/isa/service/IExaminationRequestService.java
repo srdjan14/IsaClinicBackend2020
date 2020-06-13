@@ -30,4 +30,6 @@ public interface IExaminationRequestService {
     List<ExaminationRequestResponse> getAvailableExaminationsOfDoctor(SearchDoctorForExaminationRequest request, Long id);
 
     void bookingAvailableExamination(Long patientId, Long examinationRequestId);
+
+    void declineExaminationRequest(Long clinicId);
 }

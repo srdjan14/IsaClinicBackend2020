@@ -70,4 +70,9 @@ public class ExaminationRequestController {
     public void bookingAvailableExamination(@PathVariable Long patientId, @PathVariable Long examinationRequestId) {
         _examinationRequestService.bookingAvailableExamination(patientId, examinationRequestId);
     }
+
+    @PutMapping("/{id}/decline")
+    public void declineExaminationRequest(@PathVariable Long id) {
+        _examinationRequestService.declineExaminationRequest(id);
+    }
 }
