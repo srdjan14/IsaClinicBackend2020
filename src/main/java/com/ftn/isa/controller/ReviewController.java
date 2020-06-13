@@ -5,10 +5,7 @@ import com.ftn.isa.dto.request.DoctorReviewRequest;
 import com.ftn.isa.dto.response.ClinicReviewResponse;
 import com.ftn.isa.dto.response.DoctorReviewResponse;
 import com.ftn.isa.service.IReviewService;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/review")
@@ -28,5 +25,15 @@ public class ReviewController {
     @PostMapping("/clinic")
     public ClinicReviewResponse reviewClinic(@RequestBody ClinicReviewRequest request) {
         return _reviewService.reviewingClinic(request);
+    }
+
+    @GetMapping("/clinic/{id}/average-rating")
+    public ClinicReviewResponse averageClinicReview(@PathVariable Long id) {
+        return _reviewService.averageClinicRating(id);
+    }
+
+    @GetMapping("/doctor/{id}/average-rating")
+    public DoctorReviewResponse averageDoctorReview(@PathVariable Long id) {
+        return _reviewService.averageDoctorRating(id);
     }
 }
