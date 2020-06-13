@@ -4,6 +4,7 @@ import com.ftn.isa.dto.request.CreateAvailableExaminationsRequest;
 import com.ftn.isa.dto.request.CreateExaminationRequest;
 import com.ftn.isa.dto.request.SearchExaminationRequest;
 import com.ftn.isa.dto.response.ExaminationRequestResponse;
+import com.ftn.isa.dto.response.MedicalStaffResponse;
 import com.ftn.isa.dto.response.PredefinedExaminationResponse;
 import com.ftn.isa.entity.*;
 import com.ftn.isa.repository.*;
@@ -258,6 +259,11 @@ public class ExaminationRequestService implements IExaminationRequestService {
                 .stream()
                 .map(examinationRequest -> mapExaminationRequestToExaminationResponse(examinationRequest))
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<MedicalStaffResponse> getAvailableExaminationsByDoctor(Long id) {
+        return null;
     }
 
     private ExaminationRequestResponse mapExaminationRequestToExaminationResponse(ExaminationRequest examinationRequest) {

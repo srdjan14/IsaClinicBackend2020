@@ -4,6 +4,7 @@ import com.ftn.isa.dto.request.CreateAvailableExaminationsRequest;
 import com.ftn.isa.dto.request.CreateExaminationRequest;
 import com.ftn.isa.dto.request.SearchExaminationRequest;
 import com.ftn.isa.dto.response.ExaminationRequestResponse;
+import com.ftn.isa.dto.response.MedicalStaffResponse;
 import com.ftn.isa.dto.response.PredefinedExaminationResponse;
 
 import java.util.List;
@@ -25,4 +26,6 @@ public interface IExaminationRequestService {
     ExaminationRequestResponse createAvailableExaminations(CreateAvailableExaminationsRequest request) throws Exception;
 
     List<ExaminationRequestResponse> getAllByClinic(Long id);
+
+    List<MedicalStaffResponse> getAvailableExaminationsByDoctor(Long id);
 }

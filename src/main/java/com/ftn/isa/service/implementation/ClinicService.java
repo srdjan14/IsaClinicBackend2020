@@ -4,6 +4,7 @@ import com.ftn.isa.dto.request.ClinicRequest;
 import com.ftn.isa.dto.request.SearchDoctorForExaminationRequest;
 import com.ftn.isa.dto.response.ClinicResponse;
 import com.ftn.isa.dto.response.ExaminationRequestResponse;
+import com.ftn.isa.dto.response.MedicalStaffResponse;
 import com.ftn.isa.entity.*;
 import com.ftn.isa.repository.ClinicRepository;
 import com.ftn.isa.service.IClinicService;
@@ -113,17 +114,12 @@ public class ClinicService implements IClinicService {
     public List<ClinicResponse> searchFreeDoctorInClinic(SearchDoctorForExaminationRequest request) throws Exception {
         QExaminationRequest qExaminationRequest = QExaminationRequest.examinationRequest;
         QClinic qClinic = QClinic.clinic;
-        QVacationRequest qVacationRequest = QVacationRequest.vacationRequest;
         QMedicalStaff qMedicalStaff = QMedicalStaff.medicalStaff;
 
         JPAQuery query = _clinicRepository.getQuery();
 
         query.select(qClinic).leftJoin(qMedicalStaff).on(qClinic.id.eq(qMedicalStaff.clinic.id)).where(qMedicalStaff.clinic.id.isNotNull());
-        query.where(qMedicalStaff.examinationType.id.eq(request.getExaminationType().getId()));
-        query.leftJoin(qExaminationRequest).on(qMedicalStaff.id.eq(qExaminationRequest.medicalStaff.id)).where(qExaminationRequest.patient.id.isNull());
-        query.where(qExaminationRequest.examinationDate.eq(request.getExaminationDate()));
-//        query.leftJoin(qVacationRequest).on(qMedicalStaff.id.eq(qVacationRequest.medicalStaff.id)).where(qVacationRequest.medicalStaff.id.isNull());
-//        query.where(qVacationRequest.requestStatus.eq(RequestStatus.PENDING));
+        query.leftJoin(qExaminationRequest).on(qMedicalStaff.id.eq(qExaminationRequest.medicalStaff.id)).where(qExaminationRequest.operationRoom.isNull());
 
         List<Clinic> list = query.fetch();
         if(list.isEmpty()) {

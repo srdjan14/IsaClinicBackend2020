@@ -3,6 +3,7 @@ package com.ftn.isa.service;
 import com.ftn.isa.dto.request.SearchDoctorForExaminationRequest;
 import com.ftn.isa.dto.response.ClinicResponse;
 import com.ftn.isa.dto.request.ClinicRequest;
+import com.ftn.isa.dto.response.MedicalStaffResponse;
 
 import java.util.List;
 
