@@ -217,6 +217,7 @@ public class MedicalStaffService implements IMedicalStaffService {
         query.select(qMedicalStaff).where(qMedicalStaff.clinic.id.eq(id));
         query.leftJoin(qExaminationRequest).on(qMedicalStaff.id.eq(qExaminationRequest.medicalStaff.id))
                 .where(qExaminationRequest.status.eq(RequestStatus.PENDING));
+        query.where(qExaminationRequest.patient.id.isNull());
         query.where(qExaminationRequest.examinationDate.eq(request.getExaminationDate()));
         query.where(qExaminationRequest.examinationType.eq(request.getExaminationType())).distinct();
 

@@ -270,6 +270,7 @@ public class ExaminationRequestService implements IExaminationRequestService {
         JPAQuery query = _examinationRequestRepository.getQuery();
 
         query.select(qExaminationRequest).where(qExaminationRequest.medicalStaff.id.eq(id)).where(qExaminationRequest.status.eq(RequestStatus.PENDING));
+        query.where(qExaminationRequest.patient.id.isNull());
         query.where(qExaminationRequest.examinationDate.eq(request.getExaminationDate()));
         query.where(qExaminationRequest.examinationType.eq(request.getExaminationType())).distinct();
 
