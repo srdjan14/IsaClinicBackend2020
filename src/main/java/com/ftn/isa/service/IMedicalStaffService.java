@@ -22,4 +22,6 @@ public interface IMedicalStaffService {
     void deleteMedicalStaff(Long id) throws Exception;
 
     List<MedicalStaffResponse> searchMedicalStaff(SearchMedicalStaffRequest searchMedicalStaffRequest, Long clinicId) throws Exception;
+
+    List<MedicalStaffResponse> searchMedicalByExaminationType(Long id);
 }

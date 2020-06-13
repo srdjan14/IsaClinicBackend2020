@@ -119,9 +119,11 @@ public class ClinicService implements IClinicService {
         JPAQuery query = _clinicRepository.getQuery();
 
         query.select(qClinic).leftJoin(qMedicalStaff).on(qClinic.id.eq(qMedicalStaff.clinic.id)).where(qMedicalStaff.clinic.id.isNotNull());
+        query.where(qMedicalStaff.examinationType.id.eq(request.getExaminationType().getId()));
         query.leftJoin(qExaminationRequest).on(qMedicalStaff.id.eq(qExaminationRequest.medicalStaff.id)).where(qExaminationRequest.patient.id.isNull());
-        query.leftJoin(qVacationRequest).on(qMedicalStaff.id.eq(qVacationRequest.medicalStaff.id)).where(qVacationRequest.medicalStaff.id.isNull());
-        query.where(qVacationRequest.requestStatus.eq(RequestStatus.PENDING));
+        query.where(qExaminationRequest.examinationDate.eq(request.getExaminationDate()));
+//        query.leftJoin(qVacationRequest).on(qMedicalStaff.id.eq(qVacationRequest.medicalStaff.id)).where(qVacationRequest.medicalStaff.id.isNull());
+//        query.where(qVacationRequest.requestStatus.eq(RequestStatus.PENDING));
 
         List<Clinic> list = query.fetch();
         if(list.isEmpty()) {

@@ -61,4 +61,9 @@ public class MedicalStaffController {
     public List<MedicalStaffResponse> searchMedicallStaff(SearchMedicalStaffRequest request,@PathVariable Long id) throws Exception {
         return _medicalStaffService.searchMedicalStaff(request, id);
     }
+
+    @GetMapping("/list/examination-type/{id}")
+    public List<MedicalStaffResponse> searchMedicalByExaminationType(@PathVariable Long id) {
+        return _medicalStaffService.searchMedicalByExaminationType(id);
+    }
 }

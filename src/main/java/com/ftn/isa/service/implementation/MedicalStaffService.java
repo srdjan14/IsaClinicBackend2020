@@ -195,6 +195,7 @@ public class MedicalStaffService implements IMedicalStaffService {
                 .collect(Collectors.toList());
     }
 
+    @Override
     public List<MedicalStaffResponse> searchMedicalByExaminationType(Long id) {
         QMedicalStaff qMedicalStaff = QMedicalStaff.medicalStaff;
         QExaminationType qExaminationType = QExaminationType.examinationType;
