@@ -28,12 +28,12 @@ public class ReviewController {
     }
 
     @GetMapping("/clinic/{id}/average-rating")
-    public ClinicReviewResponse averageClinicReview(@PathVariable Long id) {
+    public Double averageClinicReview(@PathVariable Long id) {
         return _reviewService.averageClinicRating(id);
     }
 
     @GetMapping("/doctor/{id}/average-rating")
-    public DoctorReviewResponse averageDoctorReview(@PathVariable Long id) {
+    public Double averageDoctorReview(@PathVariable Long id) {
         return _reviewService.averageDoctorRating(id);
     }
 }
