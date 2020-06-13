@@ -202,8 +202,8 @@ public class MedicalStaffService implements IMedicalStaffService {
         QClinic qClinic = QClinic.clinic;
         JPAQuery query = _medicalStaffRepository.getQuery();
 
-        query.select(qMedicalStaff).leftJoin(qClinic).on(qMedicalStaff.clinic.id.eq(clinicId));
-        query.leftJoin(qExaminationType).on(qMedicalStaff.examinationType.id.eq(id));
+        query.select(qMedicalStaff).where(qMedicalStaff.clinic.id.eq(clinicId));
+        query.leftJoin(qExaminationType).on(qMedicalStaff.examinationType.id.eq(id)).where(qMedicalStaff.id.isNotNull()).distinct();
 
         List<MedicalStaff> list = query.fetch();
         return list
