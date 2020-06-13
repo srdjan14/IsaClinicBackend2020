@@ -66,8 +66,8 @@ public class ClinicController {
         return _clinicService.searchClinic(request);
     }
 
-    @GetMapping("/search-doctor")
-    public List<ClinicResponse> searchFreeDoctorInClinic(SearchDoctorForExaminationRequest request) throws Exception {
+    @PostMapping("/search-doctor")
+    public List<ClinicResponse> searchFreeDoctorInClinic(@RequestBody SearchDoctorForExaminationRequest request) throws Exception {
         return _clinicService.searchFreeDoctorInClinic(request);
     }
 }

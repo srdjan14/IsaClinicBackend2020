@@ -195,6 +195,20 @@ public class MedicalStaffService implements IMedicalStaffService {
                 .collect(Collectors.toList());
     }
 
+    public List<MedicalStaffResponse> searchMedicalByExaminationType(Long id) {
+        QMedicalStaff qMedicalStaff = QMedicalStaff.medicalStaff;
+        QExaminationType qExaminationType = QExaminationType.examinationType;
+        JPAQuery query = _medicalStaffRepository.getQuery();
+
+        query.select(qMedicalStaff).leftJoin(qExaminationType).on(qMedicalStaff.examinationType.id.eq(id));
+
+        List<MedicalStaff> list = query.fetch();
+        return list
+                .stream()
+                .map(medicalStaff -> mapMedicalToMedicalResponse(medicalStaff))
+                .collect(Collectors.toList());
+    }
+
     private MedicalStaffResponse mapMedicalToMedicalResponse(MedicalStaff medicalStaff) {
 
         MedicalStaffResponse medicalStaffResponse = new MedicalStaffResponse();
