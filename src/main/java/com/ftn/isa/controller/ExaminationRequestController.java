@@ -2,6 +2,7 @@ package com.ftn.isa.controller;
 
 import com.ftn.isa.dto.request.CreateAvailableExaminationsRequest;
 import com.ftn.isa.dto.request.CreateExaminationRequest;
+import com.ftn.isa.dto.request.SearchDoctorForExaminationRequest;
 import com.ftn.isa.dto.request.SearchExaminationRequest;
 import com.ftn.isa.dto.response.ExaminationRequestResponse;
 import com.ftn.isa.dto.response.PredefinedExaminationResponse;
@@ -61,7 +62,7 @@ public class ExaminationRequestController {
     }
 
     @GetMapping("/available/{id}/doctor")
-    public List<ExaminationRequestResponse> getAvailableExaminationsOfDoctor(@PathVariable Long id) {
-        return _examinationRequestService.getAvailableExaminationsOfDoctor(id);
+    public List<ExaminationRequestResponse> getAvailableExaminationsOfDoctor(@RequestBody SearchDoctorForExaminationRequest request, @PathVariable Long id) {
+        return _examinationRequestService.getAvailableExaminationsOfDoctor(request, id);
     }
 }

@@ -2,6 +2,7 @@ package com.ftn.isa.controller;
 
 import com.ftn.isa.dto.request.CreateMedicalStaffRequest;
 
+import com.ftn.isa.dto.request.SearchDoctorForExaminationRequest;
 import com.ftn.isa.dto.request.SearchMedicalStaffRequest;
 import com.ftn.isa.dto.request.UpdateMedicalStaffRequest;
 import com.ftn.isa.dto.response.MedicalStaffResponse;
@@ -68,7 +69,7 @@ public class MedicalStaffController {
     }
 
     @GetMapping("/available-examination/{id}/clinic")
-    public List<MedicalStaffResponse> getDoctorsWithAvailableExaminations(@PathVariable Long id) {
-        return _medicalStaffService.getDoctorsWithAvailableExaminations(id);
+    public List<MedicalStaffResponse> getDoctorsWithAvailableExaminations(@RequestBody SearchDoctorForExaminationRequest request, @PathVariable Long id) {
+        return _medicalStaffService.getDoctorsWithAvailableExaminations(request, id);
     }
 }
