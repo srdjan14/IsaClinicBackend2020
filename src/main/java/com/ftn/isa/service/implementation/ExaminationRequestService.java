@@ -75,7 +75,7 @@ public class ExaminationRequestService implements IExaminationRequestService {
         MedicalStaff doctor = _medicalStaffRepository.findOneById(request.getDoctorId());
         examinationRequest.setMedicalStaff(doctor);
 
-        if(doctor.getStartWorkAt().isBefore(request.getStartAt()) && doctor.getStartWorkAt().plusHours(1).isAfter(doctor.getEndWorkAt())) {
+        if(doctor.getStartWorkAt().isBefore(request.getStartAt()) && doctor.getEndWorkAt().isAfter(request.getStartAt().plusHours(1))) {
             throw new Exception("Doctor doesn't work at that hours");
         }
 
@@ -200,7 +200,7 @@ public class ExaminationRequestService implements IExaminationRequestService {
         MedicalStaff doctor = _medicalStaffRepository.findOneById(request.getDoctorId());
         examinationRequest.setMedicalStaff(doctor);
 
-        if(doctor.getStartWorkAt().isBefore(request.getStartAt()) && doctor.getStartWorkAt().plusHours(1).isAfter(doctor.getEndWorkAt())) {
+        if(doctor.getStartWorkAt().isBefore(request.getStartAt()) && doctor.getEndWorkAt().isAfter(request.getStartAt().plusHours(1))) {
             throw new Exception("Doctor doesn't work at that hours");
         }
 
