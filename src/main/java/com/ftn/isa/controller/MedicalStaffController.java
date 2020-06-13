@@ -66,4 +66,9 @@ public class MedicalStaffController {
     public List<MedicalStaffResponse> searchMedicalByExaminationType(@PathVariable Long id, @PathVariable Long clinicId) {
         return _medicalStaffService.searchMedicalByExaminationType(id, clinicId);
     }
+
+    @GetMapping("/available-examination/{id}/clinic")
+    public List<MedicalStaffResponse> getDoctorsWithAvailableExaminations(@PathVariable Long id) {
+        return _medicalStaffService.getDoctorsWithAvailableExaminations(id);
+    }
 }

@@ -24,4 +24,6 @@ public interface IMedicalStaffService {
     List<MedicalStaffResponse> searchMedicalStaff(SearchMedicalStaffRequest searchMedicalStaffRequest, Long clinicId) throws Exception;
 
     List<MedicalStaffResponse> searchMedicalByExaminationType(Long id, Long clinicId);
+
+    List<MedicalStaffResponse> getDoctorsWithAvailableExaminations(Long id);
 }

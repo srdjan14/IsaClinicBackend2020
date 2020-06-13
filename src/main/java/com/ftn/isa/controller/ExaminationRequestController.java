@@ -5,6 +5,7 @@ import com.ftn.isa.dto.request.CreateExaminationRequest;
 import com.ftn.isa.dto.request.SearchExaminationRequest;
 import com.ftn.isa.dto.response.ExaminationRequestResponse;
 import com.ftn.isa.dto.response.PredefinedExaminationResponse;
+import com.ftn.isa.entity.ExaminationRequest;
 import com.ftn.isa.service.IExaminationRequestService;
 import org.springframework.web.bind.annotation.*;
 
@@ -58,5 +59,10 @@ public class ExaminationRequestController {
     @GetMapping("/{id}/clinic")
     public List<ExaminationRequestResponse> getAllByClinic(@PathVariable Long id) {
         return _examinationRequestService.getAllByClinic(id);
+    }
+
+    @GetMapping("/available/{id}/doctor")
+    public List<ExaminationRequestResponse> getAvailableExaminationsOfDoctor(@PathVariable Long id) {
+        return _examinationRequestService.getAvailableExaminationsOfDoctor(id);
     }
 }

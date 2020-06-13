@@ -11,6 +11,7 @@ import com.ftn.isa.repository.*;
 import com.ftn.isa.service.IMedicalStaffService;
 import com.ftn.isa.service.IUserService;
 import com.ftn.isa.utils.enums.DeletedStatus;
+import com.ftn.isa.utils.enums.RequestStatus;
 import com.ftn.isa.utils.enums.UserType;
 import com.querydsl.jpa.impl.JPAQuery;
 import org.springframework.stereotype.Service;
@@ -202,6 +203,23 @@ public class MedicalStaffService implements IMedicalStaffService {
 
         query.select(qMedicalStaff).where(qMedicalStaff.clinic.id.eq(clinicId));
         query.where(qMedicalStaff.examinationType.id.eq(id));
+
+        List<MedicalStaff> list = query.fetch();
+        return list
+                .stream()
+                .map(medicalStaff -> mapMedicalToMedicalResponse(medicalStaff))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<MedicalStaffResponse> getDoctorsWithAvailableExaminations(Long id) {
+        QMedicalStaff qMedicalStaff = QMedicalStaff.medicalStaff;
+        QExaminationRequest qExaminationRequest = QExaminationRequest.examinationRequest;
+        JPAQuery query = _medicalStaffRepository.getQuery();
+
+        query.select(qMedicalStaff).where(qMedicalStaff.clinic.id.eq(id));
+        query.leftJoin(qExaminationRequest).on(qMedicalStaff.id.eq(qExaminationRequest.medicalStaff.id))
+                .where(qExaminationRequest.status.eq(RequestStatus.PENDING));
 
         List<MedicalStaff> list = query.fetch();
         return list

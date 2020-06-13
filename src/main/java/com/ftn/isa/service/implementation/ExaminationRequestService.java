@@ -262,8 +262,18 @@ public class ExaminationRequestService implements IExaminationRequestService {
     }
 
     @Override
-    public List<MedicalStaffResponse> getAvailableExaminationsByDoctor(Long id) {
-        return null;
+    public List<ExaminationRequestResponse> getAvailableExaminationsOfDoctor(Long id) {
+        QExaminationRequest qExaminationRequest = QExaminationRequest.examinationRequest;
+        JPAQuery query = _examinationRequestRepository.getQuery();
+
+        query.select(qExaminationRequest).where(qExaminationRequest.medicalStaff.id.eq(id)).where(qExaminationRequest.status.eq(RequestStatus.PENDING));
+
+        List<ExaminationRequest> list = query.fetch();
+
+        return list
+                .stream()
+                .map(examinationRequest -> mapExaminationRequestToExaminationResponse(examinationRequest))
+                .collect(Collectors.toList());
     }
 
     private ExaminationRequestResponse mapExaminationRequestToExaminationResponse(ExaminationRequest examinationRequest) {
