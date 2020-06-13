@@ -1,8 +1,10 @@
 package com.ftn.isa.service;
 
+import com.ftn.isa.dto.request.CreateAvailableExaminationsRequest;
 import com.ftn.isa.dto.request.CreateExaminationRequest;
 import com.ftn.isa.dto.request.SearchExaminationRequest;
 import com.ftn.isa.dto.response.ExaminationRequestResponse;
+import com.ftn.isa.dto.response.PredefinedExaminationResponse;
 
 import java.util.List;
 
@@ -10,7 +12,7 @@ public interface IExaminationRequestService {
 
     List<ExaminationRequestResponse> getAllExaminationRequest();
 
-    ExaminationRequestResponse createPredefinedExaminationRequest(CreateExaminationRequest request);
+    PredefinedExaminationResponse createPredefinedExaminationRequest(CreateExaminationRequest request) throws Exception;
 
     void bookingPredefinedExamination(Long patientId, Long examinationRequestId);
 
@@ -19,4 +21,8 @@ public interface IExaminationRequestService {
     List<ExaminationRequestResponse> getAllExaminationsByMedical(Long id);
 
     List<ExaminationRequestResponse> searchExaminationRequest(SearchExaminationRequest request) throws Exception;
+
+    ExaminationRequestResponse createAvailableExaminations(CreateAvailableExaminationsRequest request) throws Exception;
+
+    List<ExaminationRequestResponse> getAllByClinic(Long id);
 }

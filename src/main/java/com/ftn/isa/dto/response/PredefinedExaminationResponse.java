@@ -9,11 +9,10 @@ import lombok.NoArgsConstructor;
 import java.time.LocalTime;
 import java.util.Date;
 
-
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ExaminationRequestResponse {
+public class PredefinedExaminationResponse {
 
     private Long id;
 
@@ -33,4 +32,7 @@ public class ExaminationRequestResponse {
     private Long examinationTypeId;
 
     private float price;
+
+    private Long operationRoomId;
+
 }

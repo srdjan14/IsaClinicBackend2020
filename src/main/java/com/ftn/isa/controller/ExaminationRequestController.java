@@ -1,8 +1,10 @@
 package com.ftn.isa.controller;
 
+import com.ftn.isa.dto.request.CreateAvailableExaminationsRequest;
 import com.ftn.isa.dto.request.CreateExaminationRequest;
 import com.ftn.isa.dto.request.SearchExaminationRequest;
 import com.ftn.isa.dto.response.ExaminationRequestResponse;
+import com.ftn.isa.dto.response.PredefinedExaminationResponse;
 import com.ftn.isa.service.IExaminationRequestService;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,7 +21,7 @@ public class ExaminationRequestController {
     }
 
     @PostMapping("/create")
-    public ExaminationRequestResponse createPredefinedExamination(@RequestBody CreateExaminationRequest examinationRequest) {
+    public PredefinedExaminationResponse createPredefinedExamination(@RequestBody CreateExaminationRequest examinationRequest) throws Exception {
         return _examinationRequestService.createPredefinedExaminationRequest(examinationRequest);
     }
 
@@ -46,5 +48,15 @@ public class ExaminationRequestController {
     @GetMapping("/search")
     public List<ExaminationRequestResponse> searchExaminations(SearchExaminationRequest request) throws Exception {
         return _examinationRequestService.searchExaminationRequest(request);
+    }
+
+    @PostMapping("/available-examinations")
+    public ExaminationRequestResponse createAvailableExaminations(@RequestBody CreateAvailableExaminationsRequest examinationRequest) throws Exception {
+        return _examinationRequestService.createAvailableExaminations(examinationRequest);
+    }
+
+    @GetMapping("/{id}/clinic")
+    public List<ExaminationRequestResponse> getAllByClinic(@PathVariable Long id) {
+        return _examinationRequestService.getAllByClinic(id);
     }
 }

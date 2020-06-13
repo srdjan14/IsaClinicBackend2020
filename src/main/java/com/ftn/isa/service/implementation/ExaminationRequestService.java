@@ -1,15 +1,17 @@
 package com.ftn.isa.service.implementation;
 
+import com.ftn.isa.dto.request.CreateAvailableExaminationsRequest;
 import com.ftn.isa.dto.request.CreateExaminationRequest;
-import com.ftn.isa.dto.request.SearchDoctorForExaminationRequest;
 import com.ftn.isa.dto.request.SearchExaminationRequest;
 import com.ftn.isa.dto.response.ExaminationRequestResponse;
+import com.ftn.isa.dto.response.PredefinedExaminationResponse;
 import com.ftn.isa.entity.*;
 import com.ftn.isa.repository.*;
 import com.ftn.isa.service.IEmailService;
 import com.ftn.isa.service.IExaminationRequestService;
 import com.ftn.isa.utils.enums.RequestStatus;
 import com.querydsl.jpa.impl.JPAQuery;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Lock;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -36,8 +38,10 @@ public class ExaminationRequestService implements IExaminationRequestService {
 
     private final IEmailService _emailService;
 
+    private final VacationRequestRepository _vacationRequestRepository;
 
-    public ExaminationRequestService(ClinicRepository clinicRepository, MedicalStaffRepository medicalStaffRepository, ExaminationRequestRepository examinationRequestRepository, ExaminationTypeRepository examinationTypeRepository, PatientRepository patientRepository, OperationRoomRepository operationRoomRepository, IEmailService emailService) {
+
+    public ExaminationRequestService(ClinicRepository clinicRepository, MedicalStaffRepository medicalStaffRepository, ExaminationRequestRepository examinationRequestRepository, ExaminationTypeRepository examinationTypeRepository, PatientRepository patientRepository, OperationRoomRepository operationRoomRepository, IEmailService emailService, VacationRequestRepository vacationRequestRepository) {
         _clinicRepository = clinicRepository;
         _medicalStaffRepository = medicalStaffRepository;
         _examinationRequestRepository = examinationRequestRepository;
@@ -45,6 +49,7 @@ public class ExaminationRequestService implements IExaminationRequestService {
         _patientRepository = patientRepository;
         _operationRoomRepository = operationRoomRepository;
         _emailService = emailService;
+        _vacationRequestRepository = vacationRequestRepository;
     }
 
     @Override
@@ -59,11 +64,9 @@ public class ExaminationRequestService implements IExaminationRequestService {
 
     @Transactional(readOnly = false, propagation = Propagation.REQUIRED)
     @Override
-    public ExaminationRequestResponse createPredefinedExaminationRequest(CreateExaminationRequest request) {
+    public PredefinedExaminationResponse createPredefinedExaminationRequest(CreateExaminationRequest request) throws Exception {
         ExaminationRequest examinationRequest = new ExaminationRequest();
-        examinationRequest.setStartAt(request.getStartAt());
-        examinationRequest.setEndAt(request.getStartAt().plusHours(1));
-        examinationRequest.setStatus(RequestStatus.APPROVED);
+        examinationRequest.setStatus(RequestStatus.PENDING);
         examinationRequest.setExaminationDate(request.getExaminationDate());
 
         Clinic clinic = _clinicRepository.findOneById(request.getClinicId());
@@ -71,6 +74,43 @@ public class ExaminationRequestService implements IExaminationRequestService {
 
         MedicalStaff doctor = _medicalStaffRepository.findOneById(request.getDoctorId());
         examinationRequest.setMedicalStaff(doctor);
+
+        if(doctor.getStartWorkAt().isBefore(request.getStartAt()) && doctor.getStartWorkAt().plusHours(1).isAfter(doctor.getEndWorkAt())) {
+            throw new Exception("Doctor doesn't work at that hours");
+        }
+
+        QMedicalStaff qMedicalStaff = QMedicalStaff.medicalStaff;
+        QVacationRequest qVacationRequest = QVacationRequest.vacationRequest;
+
+        JPAQuery query = _medicalStaffRepository.getQuery();
+
+        query.select(qMedicalStaff).where(qMedicalStaff.id.eq(request.getDoctorId()));
+        query.leftJoin(qVacationRequest).on(qMedicalStaff.id.eq(qVacationRequest.medicalStaff.id));
+        query.where(qVacationRequest.startAt.before(request.getExaminationDate()));
+        query.where(qVacationRequest.endAt.after(request.getExaminationDate()));
+        query.where(qVacationRequest.requestStatus.eq(RequestStatus.APPROVED));
+
+        List<VacationRequest> list = query.fetch();
+        if(!list.isEmpty()) {
+            throw new Exception("Doctor is on vacation");
+        }
+
+        QExaminationRequest qExaminationRequest = QExaminationRequest.examinationRequest;
+        JPAQuery query1 = _medicalStaffRepository.getQuery();
+
+        query1.select(qMedicalStaff).where(qMedicalStaff.id.eq(request.getDoctorId()));
+        query1.leftJoin(qExaminationRequest).on(qMedicalStaff.id.eq(qExaminationRequest.medicalStaff.id));
+        query1.where(qExaminationRequest.patient.id.isNotNull());
+        query1.where(qExaminationRequest.startAt.before(request.getStartAt()));
+        query1.where(qExaminationRequest.endAt.after(request.getStartAt().plusHours(1)));
+
+        List<ExaminationRequest> list1 = query1.fetch();
+        if(!list1.isEmpty()) {
+            throw new Exception("Doctor already has examination at that time");
+        }
+
+        examinationRequest.setStartAt(request.getStartAt());
+        examinationRequest.setEndAt(request.getStartAt().plusHours(1));
 
         ExaminationType examinationType = _examinationTypeRepository.findOneById(request.getExaminationTypeId());
         examinationRequest.setExaminationType(examinationType);
@@ -81,7 +121,7 @@ public class ExaminationRequestService implements IExaminationRequestService {
 
         ExaminationRequest savedExaminationRequest = _examinationRequestRepository.save(examinationRequest);
 
-        return mapExaminationRequestToExaminationResponse(savedExaminationRequest);
+        return mapPredefinedRequestToExaminationResponse(savedExaminationRequest);
     }
 
     @Transactional(readOnly = false)
@@ -148,6 +188,77 @@ public class ExaminationRequestService implements IExaminationRequestService {
                 .collect(Collectors.toList());
     }
 
+    @Override
+    public ExaminationRequestResponse createAvailableExaminations(CreateAvailableExaminationsRequest request) throws Exception {
+        ExaminationRequest examinationRequest = new ExaminationRequest();
+        examinationRequest.setStatus(RequestStatus.PENDING);
+        examinationRequest.setExaminationDate(request.getExaminationDate());
+
+        Clinic clinic = _clinicRepository.findOneById(request.getClinicId());
+        examinationRequest.setClinic(clinic);
+
+        MedicalStaff doctor = _medicalStaffRepository.findOneById(request.getDoctorId());
+        examinationRequest.setMedicalStaff(doctor);
+
+        if(doctor.getStartWorkAt().isBefore(request.getStartAt()) && doctor.getStartWorkAt().plusHours(1).isAfter(doctor.getEndWorkAt())) {
+            throw new Exception("Doctor doesn't work at that hours");
+        }
+
+        QMedicalStaff qMedicalStaff = QMedicalStaff.medicalStaff;
+        QVacationRequest qVacationRequest = QVacationRequest.vacationRequest;
+
+        JPAQuery query = _medicalStaffRepository.getQuery();
+
+        query.select(qMedicalStaff).where(qMedicalStaff.id.eq(request.getDoctorId()));
+        query.leftJoin(qVacationRequest).on(qMedicalStaff.id.eq(qVacationRequest.medicalStaff.id));
+        query.where(qVacationRequest.startAt.before(request.getExaminationDate()));
+        query.where(qVacationRequest.endAt.after(request.getExaminationDate()));
+        query.where(qVacationRequest.requestStatus.eq(RequestStatus.APPROVED));
+
+        List<VacationRequest> list = query.fetch();
+        if(!list.isEmpty()) {
+            throw new Exception("Doctor is on vacation");
+        }
+
+        QExaminationRequest qExaminationRequest = QExaminationRequest.examinationRequest;
+        JPAQuery query1 = _medicalStaffRepository.getQuery();
+
+        query1.select(qMedicalStaff).where(qMedicalStaff.id.eq(request.getDoctorId()));
+        query1.leftJoin(qExaminationRequest).on(qMedicalStaff.id.eq(qExaminationRequest.medicalStaff.id));
+        query1.where(qExaminationRequest.patient.id.isNotNull());
+        query1.where(qExaminationRequest.startAt.before(request.getStartAt()));
+        query1.where(qExaminationRequest.endAt.after(request.getStartAt().plusHours(1)));
+
+        List<ExaminationRequest> list1 = query1.fetch();
+        if(!list1.isEmpty()) {
+            throw new Exception("Doctor already has examination at that time");
+        }
+
+        examinationRequest.setStartAt(request.getStartAt());
+        examinationRequest.setEndAt(request.getStartAt().plusHours(1));
+
+        ExaminationType examinationType = _examinationTypeRepository.findOneById(request.getExaminationTypeId());
+        examinationRequest.setExaminationType(examinationType);
+        examinationRequest.setPrice(examinationType.getPrice());
+
+        ExaminationRequest savedExaminationRequest = _examinationRequestRepository.save(examinationRequest);
+
+        return mapExaminationRequestToExaminationResponse(savedExaminationRequest);
+    }
+
+    @Override
+    public List<ExaminationRequestResponse> getAllByClinic(Long id) {
+        QExaminationRequest qExaminationRequest = QExaminationRequest.examinationRequest;
+        JPAQuery query = _examinationRequestRepository.getQuery();
+
+        query.select(qExaminationRequest).where(qExaminationRequest.status.eq(RequestStatus.PENDING));
+        List<ExaminationRequest> list = query.fetch();
+
+        return list
+                .stream()
+                .map(examinationRequest -> mapExaminationRequestToExaminationResponse(examinationRequest))
+                .collect(Collectors.toList());
+    }
 
     private ExaminationRequestResponse mapExaminationRequestToExaminationResponse(ExaminationRequest examinationRequest) {
         ExaminationRequestResponse examinationRequestResponse = new ExaminationRequestResponse();
@@ -160,5 +271,19 @@ public class ExaminationRequestService implements IExaminationRequestService {
         examinationRequestResponse.setId(examinationRequest.getId());
         examinationRequestResponse.setPrice(examinationRequest.getExaminationType().getPrice());
         return examinationRequestResponse;
+    }
+
+    private PredefinedExaminationResponse mapPredefinedRequestToExaminationResponse(ExaminationRequest examinationRequest) {
+        PredefinedExaminationResponse predefinedExaminationResponse = new PredefinedExaminationResponse();
+        predefinedExaminationResponse.setStartAt(examinationRequest.getStartAt());
+        predefinedExaminationResponse.setEndAt(examinationRequest.getEndAt());
+        predefinedExaminationResponse.setExaminationDate(examinationRequest.getExaminationDate());
+        predefinedExaminationResponse.setExaminationTypeId(examinationRequest.getExaminationType().getId());
+        predefinedExaminationResponse.setExaminationTypeName(examinationRequest.getExaminationType().getName());
+        predefinedExaminationResponse.setRequestStatus(examinationRequest.getStatus());
+        predefinedExaminationResponse.setId(examinationRequest.getId());
+        predefinedExaminationResponse.setPrice(examinationRequest.getExaminationType().getPrice());
+        predefinedExaminationResponse.setOperationRoomId(examinationRequest.getOperationRoom().getId());
+        return predefinedExaminationResponse;
     }
 }
