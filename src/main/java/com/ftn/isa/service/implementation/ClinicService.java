@@ -121,7 +121,7 @@ public class ClinicService implements IClinicService {
         query.select(qClinic).leftJoin(qMedicalStaff).on(qClinic.id.eq(qMedicalStaff.clinic.id)).where(qMedicalStaff.clinic.id.isNotNull());
         query.leftJoin(qExaminationRequest).on(qMedicalStaff.id.eq(qExaminationRequest.medicalStaff.id)).where(qExaminationRequest.operationRoom.isNull());
         query.where(qExaminationRequest.examinationDate.eq(request.getExaminationDate()));
-        query.where(qExaminationRequest.examinationType.eq(request.getExaminationType()));
+        query.where(qExaminationRequest.examinationType.eq(request.getExaminationType())).distinct();
 
         List<Clinic> list = query.fetch();
         if(list.isEmpty()) {

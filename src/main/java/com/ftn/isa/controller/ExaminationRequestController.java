@@ -61,7 +61,7 @@ public class ExaminationRequestController {
         return _examinationRequestService.getAllByClinic(id);
     }
 
-    @GetMapping("/available/{id}/doctor")
+    @PostMapping("/available/{id}/doctor")
     public List<ExaminationRequestResponse> getAvailableExaminationsOfDoctor(@RequestBody SearchDoctorForExaminationRequest request, @PathVariable Long id) {
         return _examinationRequestService.getAvailableExaminationsOfDoctor(request, id);
     }

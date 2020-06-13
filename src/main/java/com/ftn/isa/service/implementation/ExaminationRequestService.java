@@ -269,7 +269,7 @@ public class ExaminationRequestService implements IExaminationRequestService {
 
         query.select(qExaminationRequest).where(qExaminationRequest.medicalStaff.id.eq(id)).where(qExaminationRequest.status.eq(RequestStatus.PENDING));
         query.where(qExaminationRequest.examinationDate.eq(request.getExaminationDate()));
-        query.where(qExaminationRequest.examinationType.eq(request.getExaminationType()));
+        query.where(qExaminationRequest.examinationType.eq(request.getExaminationType())).distinct();
 
         List<ExaminationRequest> list = query.fetch();
 
