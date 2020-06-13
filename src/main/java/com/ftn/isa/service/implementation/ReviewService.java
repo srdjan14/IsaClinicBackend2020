@@ -96,7 +96,7 @@ public class ReviewService implements IReviewService {
     }
 
     @Override
-    public DoctorReviewResponse averageDoctorRating(Long id) {
+    public Double averageDoctorRating(Long id) {
         QDoctorReview qDoctorReview = QDoctorReview.doctorReview;
         JPAQuery query = _doctorReviewRepository.getQuery();
 
@@ -115,11 +115,11 @@ public class ReviewService implements IReviewService {
 
         DoctorReview savedDoctorReview = _doctorReviewRepository.save(doctorReview);
 
-        return mapReviewToDoctorReviewResponse(savedDoctorReview);
+        return savedDoctorReview.getAverageReview();
     }
 
     @Override
-    public ClinicReviewResponse averageClinicRating(Long id) {
+    public Double averageClinicRating(Long id) {
         QClinicReview qClinicReview = QClinicReview.clinicReview;
         JPAQuery query = _clinicReviewRepository.getQuery();
 
@@ -138,7 +138,7 @@ public class ReviewService implements IReviewService {
 
         ClinicReview savedClinicReview =_clinicReviewRepository.save(clinicReview);
 
-        return mapReviewToClinicReviewResponse(savedClinicReview);
+        return savedClinicReview.getAverageReview();
     }
 
     private DoctorReviewResponse mapReviewToDoctorReviewResponse(DoctorReview doctorReview) {

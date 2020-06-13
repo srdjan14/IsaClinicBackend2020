@@ -11,7 +11,7 @@ public interface IReviewService {
 
     ClinicReviewResponse reviewingClinic(ClinicReviewRequest request);
 
-    DoctorReviewResponse averageDoctorRating(Long id);
+    Double averageDoctorRating(Long id);
 
-    ClinicReviewResponse averageClinicRating(Long id);
+    Double averageClinicRating(Long id);
 }

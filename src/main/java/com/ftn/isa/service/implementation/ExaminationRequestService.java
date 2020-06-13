@@ -292,6 +292,8 @@ public class ExaminationRequestService implements IExaminationRequestService {
         _examinationRequestRepository.save(examinationRequest);
     }
 
+    public void declineExaminationRequest(Long clinicId, )
+
     private ExaminationRequestResponse mapExaminationRequestToExaminationResponse(ExaminationRequest examinationRequest) {
         ExaminationRequestResponse examinationRequestResponse = new ExaminationRequestResponse();
         examinationRequestResponse.setStartAt(examinationRequest.getStartAt());
