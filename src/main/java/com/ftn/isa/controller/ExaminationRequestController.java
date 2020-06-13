@@ -5,7 +5,6 @@ import com.ftn.isa.dto.request.CreateExaminationRequest;
 import com.ftn.isa.dto.request.SearchExaminationRequest;
 import com.ftn.isa.dto.response.ExaminationRequestResponse;
 import com.ftn.isa.dto.response.PredefinedExaminationResponse;
-import com.ftn.isa.entity.ExaminationRequest;
 import com.ftn.isa.service.IExaminationRequestService;
 import org.springframework.web.bind.annotation.*;
 

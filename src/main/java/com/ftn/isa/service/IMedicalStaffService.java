@@ -1,6 +1,7 @@
 package com.ftn.isa.service;
 
 import com.ftn.isa.dto.request.CreateMedicalStaffRequest;
+import com.ftn.isa.dto.request.SearchDoctorForExaminationRequest;
 import com.ftn.isa.dto.request.SearchMedicalStaffRequest;
 import com.ftn.isa.dto.request.UpdateMedicalStaffRequest;
 import com.ftn.isa.dto.response.MedicalStaffResponse;
@@ -25,5 +26,5 @@ public interface IMedicalStaffService {
 
     List<MedicalStaffResponse> searchMedicalByExaminationType(Long id, Long clinicId);
 
-    List<MedicalStaffResponse> getDoctorsWithAvailableExaminations(Long id);
+    List<MedicalStaffResponse> getDoctorsWithAvailableExaminations(SearchDoctorForExaminationRequest request, Long id);
 }

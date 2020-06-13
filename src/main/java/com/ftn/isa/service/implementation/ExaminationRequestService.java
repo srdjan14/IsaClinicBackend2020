@@ -2,6 +2,7 @@ package com.ftn.isa.service.implementation;
 
 import com.ftn.isa.dto.request.CreateAvailableExaminationsRequest;
 import com.ftn.isa.dto.request.CreateExaminationRequest;
+import com.ftn.isa.dto.request.SearchDoctorForExaminationRequest;
 import com.ftn.isa.dto.request.SearchExaminationRequest;
 import com.ftn.isa.dto.response.ExaminationRequestResponse;
 import com.ftn.isa.dto.response.MedicalStaffResponse;
@@ -262,11 +263,13 @@ public class ExaminationRequestService implements IExaminationRequestService {
     }
 
     @Override
-    public List<ExaminationRequestResponse> getAvailableExaminationsOfDoctor(Long id) {
+    public List<ExaminationRequestResponse> getAvailableExaminationsOfDoctor(SearchDoctorForExaminationRequest request, Long id) {
         QExaminationRequest qExaminationRequest = QExaminationRequest.examinationRequest;
         JPAQuery query = _examinationRequestRepository.getQuery();
 
         query.select(qExaminationRequest).where(qExaminationRequest.medicalStaff.id.eq(id)).where(qExaminationRequest.status.eq(RequestStatus.PENDING));
+        query.where(qExaminationRequest.examinationDate.eq(request.getExaminationDate()));
+        query.where(qExaminationRequest.examinationType.eq(request.getExaminationType()));
 
         List<ExaminationRequest> list = query.fetch();
 

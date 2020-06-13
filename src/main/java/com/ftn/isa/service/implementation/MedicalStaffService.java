@@ -1,9 +1,6 @@
 package com.ftn.isa.service.implementation;
 
-import com.ftn.isa.dto.request.CreateMedicalStaffRequest;
-import com.ftn.isa.dto.request.CreateUserRequest;
-import com.ftn.isa.dto.request.SearchMedicalStaffRequest;
-import com.ftn.isa.dto.request.UpdateMedicalStaffRequest;
+import com.ftn.isa.dto.request.*;
 import com.ftn.isa.dto.response.MedicalStaffResponse;
 import com.ftn.isa.dto.response.UserResponse;
 import com.ftn.isa.entity.*;
@@ -212,7 +209,7 @@ public class MedicalStaffService implements IMedicalStaffService {
     }
 
     @Override
-    public List<MedicalStaffResponse> getDoctorsWithAvailableExaminations(Long id) {
+    public List<MedicalStaffResponse> getDoctorsWithAvailableExaminations(SearchDoctorForExaminationRequest request, Long id) {
         QMedicalStaff qMedicalStaff = QMedicalStaff.medicalStaff;
         QExaminationRequest qExaminationRequest = QExaminationRequest.examinationRequest;
         JPAQuery query = _medicalStaffRepository.getQuery();
@@ -220,6 +217,8 @@ public class MedicalStaffService implements IMedicalStaffService {
         query.select(qMedicalStaff).where(qMedicalStaff.clinic.id.eq(id));
         query.leftJoin(qExaminationRequest).on(qMedicalStaff.id.eq(qExaminationRequest.medicalStaff.id))
                 .where(qExaminationRequest.status.eq(RequestStatus.PENDING));
+        query.where(qExaminationRequest.examinationDate.eq(request.getExaminationDate()));
+        query.where(qExaminationRequest.examinationType.eq(request.getExaminationType()));
 
         List<MedicalStaff> list = query.fetch();
         return list
