@@ -1,6 +1,7 @@
 package com.ftn.isa.controller;
 
 import com.ftn.isa.dto.request.ClinicRequest;
+import com.ftn.isa.dto.request.SearchDoctorForExaminationRequest;
 import com.ftn.isa.dto.response.ClinicResponse;
 import com.ftn.isa.dto.response.MedicalStaffResponse;
 import com.ftn.isa.service.IClinicService;
@@ -63,5 +64,10 @@ public class ClinicController {
     @GetMapping("/search")
     public List<ClinicResponse> searchClinic(ClinicRequest request) {
         return _clinicService.searchClinic(request);
+    }
+
+    @GetMapping("/search-doctor")
+    public List<ClinicResponse> searchFreeDoctorInClinic(SearchDoctorForExaminationRequest request) throws Exception {
+        return _clinicService.searchFreeDoctorInClinic(request);
     }
 }
