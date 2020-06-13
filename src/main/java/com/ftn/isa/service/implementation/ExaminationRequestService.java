@@ -135,9 +135,9 @@ public class ExaminationRequestService implements IExaminationRequestService {
         Patient patient = _patientRepository.findOneById(patientId);
         examinationRequest.setPatient(patient);
 
-      _examinationRequestRepository.save(examinationRequest);
+        _examinationRequestRepository.save(examinationRequest);
 
-      _emailService.sendConfirmedExamination(patient.getUser());
+        _emailService.sendConfirmedExamination(patient.getUser());
     }
 
     @Override
@@ -253,7 +253,9 @@ public class ExaminationRequestService implements IExaminationRequestService {
         QExaminationRequest qExaminationRequest = QExaminationRequest.examinationRequest;
         JPAQuery query = _examinationRequestRepository.getQuery();
 
-        query.select(qExaminationRequest).where(qExaminationRequest.status.eq(RequestStatus.PENDING));
+        query.select(qExaminationRequest).where(qExaminationRequest.clinic.id.eq(id));
+        query.where(qExaminationRequest.status.eq(RequestStatus.PENDING));
+        query.where(qExaminationRequest.patient.id.isNotNull());
         List<ExaminationRequest> list = query.fetch();
 
         return list
@@ -277,6 +279,16 @@ public class ExaminationRequestService implements IExaminationRequestService {
                 .stream()
                 .map(examinationRequest -> mapExaminationRequestToExaminationResponse(examinationRequest))
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public void bookingAvailableExamination(Long patientId, Long examinationRequestId) {
+        ExaminationRequest examinationRequest = _examinationRequestRepository.findOneById(examinationRequestId);
+
+        Patient patient = _patientRepository.findOneById(patientId);
+        examinationRequest.setPatient(patient);
+
+        _examinationRequestRepository.save(examinationRequest);
     }
 
     private ExaminationRequestResponse mapExaminationRequestToExaminationResponse(ExaminationRequest examinationRequest) {

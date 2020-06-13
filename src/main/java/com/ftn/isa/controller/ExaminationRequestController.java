@@ -65,4 +65,9 @@ public class ExaminationRequestController {
     public List<ExaminationRequestResponse> getAvailableExaminationsOfDoctor(@RequestBody SearchDoctorForExaminationRequest request, @PathVariable Long id) {
         return _examinationRequestService.getAvailableExaminationsOfDoctor(request, id);
     }
+
+    @PostMapping("/available-examination/{patientId}/{examinationRequestId}")
+    public void bookingAvailableExamination(@PathVariable Long patientId, @PathVariable Long examinationRequestId) {
+        _examinationRequestService.bookingAvailableExamination(patientId, examinationRequestId);
+    }
 }
