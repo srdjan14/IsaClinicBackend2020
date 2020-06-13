@@ -21,11 +21,13 @@ public class ClinicReview extends BaseEntity {
     @JoinColumn(name = "patient_id")
     private Patient patient;
 
-    private int review;
+    private Double review;
 
     private String description;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "clinic_id")
     private Clinic clinic;
+
+    private Double averageReview;
 }

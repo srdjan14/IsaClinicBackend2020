@@ -15,7 +15,7 @@ public class DoctorReviewResponse {
 
     private Long patientId;
 
-    private int review;
+    private Double review;
 
     private String description;
 }

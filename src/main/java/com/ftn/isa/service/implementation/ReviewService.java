@@ -7,12 +7,19 @@ import com.ftn.isa.dto.response.DoctorReviewResponse;
 import com.ftn.isa.entity.*;
 import com.ftn.isa.repository.*;
 import com.ftn.isa.service.IReviewService;
+import com.querydsl.core.util.MathUtils;
+import com.querydsl.jpa.impl.JPAQuery;
 import org.springframework.stereotype.Service;
+
+import javax.print.Doc;
+import java.lang.reflect.Array;
+import java.util.Arrays;
+import java.util.List;
 
 @Service
 public class ReviewService implements IReviewService {
 
-    private final DoctorReviewRepository _doctor_reviewRepository;
+    private final DoctorReviewRepository _doctorReviewRepository;
 
     private final MedicalStaffRepository _medicalStaffRepository;
 
@@ -23,7 +30,7 @@ public class ReviewService implements IReviewService {
     private final ClinicReviewRepository _clinicReviewRepository;
 
     public ReviewService(DoctorReviewRepository doctorReviewRepository, MedicalStaffRepository medicalStaffRepository, PatientRepository patientRepository, ClinicRepository clinicRepository, ClinicReviewRepository clinicReviewRepository) {
-        _doctor_reviewRepository = doctorReviewRepository;
+        _doctorReviewRepository = doctorReviewRepository;
         _medicalStaffRepository = medicalStaffRepository;
         _patientRepository = patientRepository;
         _clinicRepository = clinicRepository;
@@ -54,7 +61,8 @@ public class ReviewService implements IReviewService {
 
         doctorReview.setMedicalStaff(medicalStaff);
 
-        DoctorReview savedDoctorReview = _doctor_reviewRepository.save(doctorReview);
+        DoctorReview savedDoctorReview = _doctorReviewRepository.save(doctorReview);
+
         return mapReviewToDoctorReviewResponse(savedDoctorReview);
     }
 
@@ -83,7 +91,54 @@ public class ReviewService implements IReviewService {
         clinicReview.setClinic(clinic);
 
         ClinicReview savedClinicReview = _clinicReviewRepository.save(clinicReview);
-        return mapReviewToDoctorReviewResponse(savedClinicReview);
+
+        return mapReviewToClinicReviewResponse(savedClinicReview);
+    }
+
+    @Override
+    public DoctorReviewResponse averageDoctorRating(Long id) {
+        QDoctorReview qDoctorReview = QDoctorReview.doctorReview;
+        JPAQuery query = _doctorReviewRepository.getQuery();
+
+        query.select(qDoctorReview.review).where(qDoctorReview.medicalStaff.id.eq(id));
+
+        List<Double> list = query.fetch();
+
+        Double sum = list
+                    .stream().mapToDouble(Double::doubleValue)
+                    .sum();
+
+        Integer size = list.size();
+        DoctorReview doctorReview = _doctorReviewRepository.findOneById(id);
+
+        doctorReview.setAverageReview(sum/size);
+
+        DoctorReview savedDoctorReview = _doctorReviewRepository.save(doctorReview);
+
+        return mapReviewToDoctorReviewResponse(savedDoctorReview);
+    }
+
+    @Override
+    public ClinicReviewResponse averageClinicRating(Long id) {
+        QClinicReview qClinicReview = QClinicReview.clinicReview;
+        JPAQuery query = _clinicReviewRepository.getQuery();
+
+        query.select(qClinicReview.review).where(qClinicReview.clinic.id.eq(id));
+
+        List<Double> list = query.fetch();
+
+        Double sum = list
+                    .stream().mapToDouble(Double::doubleValue)
+                    .sum();
+
+        Integer size = list.size();
+        ClinicReview clinicReview = _clinicReviewRepository.findOneById(id);
+
+        clinicReview.setAverageReview(sum/size);
+
+        ClinicReview savedClinicReview =_clinicReviewRepository.save(clinicReview);
+
+        return mapReviewToClinicReviewResponse(savedClinicReview);
     }
 
     private DoctorReviewResponse mapReviewToDoctorReviewResponse(DoctorReview doctorReview) {
@@ -96,7 +151,7 @@ public class ReviewService implements IReviewService {
         return doctorReviewResponse;
     }
 
-    private ClinicReviewResponse mapReviewToDoctorReviewResponse(ClinicReview clinicReview) {
+    private ClinicReviewResponse mapReviewToClinicReviewResponse(ClinicReview clinicReview) {
         ClinicReviewResponse clinicReviewResponse = new ClinicReviewResponse();
         clinicReviewResponse.setDescription(clinicReview.getDescription());
         clinicReviewResponse.setReview(clinicReview.getReview());

@@ -26,7 +26,9 @@ public class DoctorReview extends BaseEntity {
     @JoinColumn(name = "medicalStaff_id")
     private MedicalStaff medicalStaff;
 
-    private int review;
+    private Double review;
 
     private String description;
+
+    private Double averageReview;
 }

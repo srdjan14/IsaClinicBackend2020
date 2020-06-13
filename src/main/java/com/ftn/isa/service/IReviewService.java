@@ -10,4 +10,8 @@ public interface IReviewService {
     DoctorReviewResponse reviewingDoctor(DoctorReviewRequest request);
 
     ClinicReviewResponse reviewingClinic(ClinicReviewRequest request);
+
+    DoctorReviewResponse averageDoctorRating(Long id);
+
+    ClinicReviewResponse averageClinicRating(Long id);
 }
