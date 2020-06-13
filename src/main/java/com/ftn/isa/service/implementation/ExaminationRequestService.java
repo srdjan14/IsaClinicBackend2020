@@ -66,7 +66,7 @@ public class ExaminationRequestService implements IExaminationRequestService {
     @Override
     public PredefinedExaminationResponse createPredefinedExaminationRequest(CreateExaminationRequest request) throws Exception {
         ExaminationRequest examinationRequest = new ExaminationRequest();
-        examinationRequest.setStatus(RequestStatus.PENDING);
+        examinationRequest.setStatus(RequestStatus.APPROVED);
         examinationRequest.setExaminationDate(request.getExaminationDate());
 
         Clinic clinic = _clinicRepository.findOneById(request.getClinicId());
@@ -75,7 +75,7 @@ public class ExaminationRequestService implements IExaminationRequestService {
         MedicalStaff doctor = _medicalStaffRepository.findOneById(request.getDoctorId());
         examinationRequest.setMedicalStaff(doctor);
 
-        if(doctor.getStartWorkAt().isBefore(request.getStartAt()) && doctor.getEndWorkAt().isAfter(request.getStartAt().plusHours(1))) {
+        if(!doctor.getStartWorkAt().isBefore(request.getStartAt()) && doctor.getEndWorkAt().isAfter(request.getStartAt().plusHours(1))) {
             throw new Exception("Doctor doesn't work at that hours");
         }
 
@@ -101,8 +101,8 @@ public class ExaminationRequestService implements IExaminationRequestService {
         query1.select(qMedicalStaff).where(qMedicalStaff.id.eq(request.getDoctorId()));
         query1.leftJoin(qExaminationRequest).on(qMedicalStaff.id.eq(qExaminationRequest.medicalStaff.id));
         query1.where(qExaminationRequest.patient.id.isNotNull());
-        query1.where(qExaminationRequest.startAt.before(request.getStartAt()));
-        query1.where(qExaminationRequest.endAt.after(request.getStartAt().plusHours(1)));
+        query1.where(qExaminationRequest.startAt.after(request.getStartAt()));
+        query1.where(qExaminationRequest.endAt.before(request.getStartAt().plusHours(1)));
 
         List<ExaminationRequest> list1 = query1.fetch();
         if(!list1.isEmpty()) {
@@ -200,7 +200,7 @@ public class ExaminationRequestService implements IExaminationRequestService {
         MedicalStaff doctor = _medicalStaffRepository.findOneById(request.getDoctorId());
         examinationRequest.setMedicalStaff(doctor);
 
-        if(doctor.getStartWorkAt().isBefore(request.getStartAt()) && doctor.getEndWorkAt().isAfter(request.getStartAt().plusHours(1))) {
+        if(!doctor.getStartWorkAt().isBefore(request.getStartAt()) && doctor.getEndWorkAt().isAfter(request.getStartAt().plusHours(1))) {
             throw new Exception("Doctor doesn't work at that hours");
         }
 
@@ -211,8 +211,8 @@ public class ExaminationRequestService implements IExaminationRequestService {
 
         query.select(qMedicalStaff).where(qMedicalStaff.id.eq(request.getDoctorId()));
         query.leftJoin(qVacationRequest).on(qMedicalStaff.id.eq(qVacationRequest.medicalStaff.id));
-        query.where(qVacationRequest.startAt.before(request.getExaminationDate()));
-        query.where(qVacationRequest.endAt.after(request.getExaminationDate()));
+        query.where(qVacationRequest.startAt.after(request.getExaminationDate()));
+        query.where(qVacationRequest.endAt.before(request.getExaminationDate()));
         query.where(qVacationRequest.requestStatus.eq(RequestStatus.APPROVED));
 
         List<VacationRequest> list = query.fetch();

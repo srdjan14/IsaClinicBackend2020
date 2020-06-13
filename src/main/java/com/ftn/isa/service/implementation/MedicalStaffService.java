@@ -198,12 +198,10 @@ public class MedicalStaffService implements IMedicalStaffService {
     @Override
     public List<MedicalStaffResponse> searchMedicalByExaminationType(Long id, Long clinicId) {
         QMedicalStaff qMedicalStaff = QMedicalStaff.medicalStaff;
-        QExaminationType qExaminationType = QExaminationType.examinationType;
-        QClinic qClinic = QClinic.clinic;
         JPAQuery query = _medicalStaffRepository.getQuery();
 
         query.select(qMedicalStaff).where(qMedicalStaff.clinic.id.eq(clinicId));
-        query.leftJoin(qExaminationType).on(qMedicalStaff.examinationType.id.eq(id)).where(qMedicalStaff.id.isNotNull()).distinct();
+        query.where(qMedicalStaff.examinationType.id.eq(id));
 
         List<MedicalStaff> list = query.fetch();
         return list
