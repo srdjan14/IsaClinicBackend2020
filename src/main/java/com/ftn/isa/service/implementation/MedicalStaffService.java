@@ -150,7 +150,8 @@ public class MedicalStaffService implements IMedicalStaffService {
         QExaminationRequest qExaminationRequest = QExaminationRequest.examinationRequest;
         JPAQuery query = _medicalStaffRepository.getQuery();
 
-        query.select(qMedicalStaff).leftJoin(qExaminationRequest).on(qMedicalStaff.id.eq(qExaminationRequest.medicalStaff.id)).where(qExaminationRequest.medicalStaff.id.isNotNull());
+        query.select(qMedicalStaff).leftJoin(qExaminationRequest).on(qMedicalStaff.id.eq(qExaminationRequest.medicalStaff.id))
+                .where(qExaminationRequest.medicalStaff.id.isNotNull());
         query.where(qExaminationRequest.patient.id.isNotNull());
         query.where(qExaminationRequest.medicalStaff.id.eq(id));
 

@@ -282,6 +282,8 @@ public class ExaminationRequestService implements IExaminationRequestService {
                 .collect(Collectors.toList());
     }
 
+    @Transactional(readOnly = false)
+    @Lock(LockModeType.PESSIMISTIC_WRITE)
     @Override
     public void bookingAvailableExamination(Long patientId, Long examinationRequestId) {
         ExaminationRequest examinationRequest = _examinationRequestRepository.findOneById(examinationRequestId);
