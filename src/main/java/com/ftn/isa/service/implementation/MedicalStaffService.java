@@ -194,6 +194,37 @@ public class MedicalStaffService implements IMedicalStaffService {
     }
 
     @Override
+    public List<MedicalStaffResponse> searchMedicalExaminationType(SearchMedicalStaffRequest request, Long clinicId, Long examinationTypeId) throws Exception {
+        QMedicalStaff qMedicalStaff = QMedicalStaff.medicalStaff;
+        JPAQuery query = _medicalStaffRepository.getQuery();
+
+        query.select(qMedicalStaff).where(qMedicalStaff.clinic.id.eq(clinicId));
+        query.where(qMedicalStaff.examinationType.id.eq(examinationTypeId));
+
+        if(request.getFirstName() != null) {
+            query.where(qMedicalStaff.user.firstName.containsIgnoreCase(request.getFirstName()));
+        }
+
+        if(request.getLastName() != null) {
+            query.where(qMedicalStaff.user.lastName.containsIgnoreCase(request.getLastName()));
+        }
+
+        if(request.getExaminationType() != null) {
+            query.where(qMedicalStaff.examinationType.name.containsIgnoreCase(request.getExaminationType()));
+        }
+
+        List<MedicalStaff> list = query.fetch();
+        if(list.isEmpty()) {
+            throw new Exception("Doctor isn't in this clinic");
+        }
+
+        return list
+                .stream()
+                .map(medicalStaff -> mapMedicalToMedicalResponse(medicalStaff))
+                .collect(Collectors.toList());
+    }
+
+    @Override
     public List<MedicalStaffResponse> searchMedicalByExaminationType(Long id, Long clinicId) {
         QMedicalStaff qMedicalStaff = QMedicalStaff.medicalStaff;
         JPAQuery query = _medicalStaffRepository.getQuery();
