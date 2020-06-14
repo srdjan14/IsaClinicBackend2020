@@ -294,6 +294,7 @@ public class ExaminationRequestService implements IExaminationRequestService {
         _examinationRequestRepository.save(examinationRequest);
     }
 
+    @Transactional(readOnly = false)
     @Override
     public void approveExaminationRequest(Long id, Long operationRoomId) {
         ExaminationRequest examinationRequest = _examinationRequestRepository.findOneById(id);
@@ -311,6 +312,7 @@ public class ExaminationRequestService implements IExaminationRequestService {
         _emailService.sendConfirmedExamination(medicalStaff.getUser());
     }
 
+    @Transactional(readOnly = false)
     @Override
     public void declineExaminationRequest(Long id) {
         ExaminationRequest examinationRequest = _examinationRequestRepository.findOneById(id);
