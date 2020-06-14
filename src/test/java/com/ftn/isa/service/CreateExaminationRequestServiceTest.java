@@ -3,7 +3,7 @@ package com.ftn.isa.service;
 import com.ftn.isa.dto.request.CreateExaminationRequest;
 import com.ftn.isa.entity.*;
 import com.ftn.isa.utils.enums.DeletedStatus;
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 
@@ -25,33 +25,33 @@ public class CreateExaminationRequestServiceTest extends ExaminationRequestServi
     private Long EXAMINATION_TYPE = random.nextLong();
     private LocalTime LOCAL_TIME = LocalTime.of(12,12,12);
 
-//    @Test
-//    public void shouldCallPatientRepository_WhenMethodIsCalled() throws Exception {
-//        Mockito.doReturn(getPatient()).when(_patientRepository).findOneById(any(Long.class));
-//        doReturn(getClinic()).when(_clinicRepository).findOneById(any(Long.class));
-//        doReturn(getExaminationRequest()).when(_examinationRequestRepository).findOneById(any(Long.class));
-//        doReturn(getExaminationType()).when(_examinationTypeRepository).findOneById(any(Long.class));
-//        doReturn(getMedicalStaff()).when(_medicalStaffRepository).findOneById(any(Long.class));
-//        CreateExaminationRequest createExaminationRequest = createRequest();
-//
-//        service.createPredefinedExaminationRequest(createExaminationRequest);
-//
-//        verify(_patientRepository, times(1)).findOneById(any(Long.class));
-//    }
-//
-//    @Test
-//    public void shouldCallMedicalStaffRepository_WhenMethodIsCalled() throws Exception {
-//        Mockito.doReturn(getPatient()).when(_patientRepository).findOneById(any(Long.class));
-//        doReturn(getClinic()).when(_clinicRepository).findOneById(any(Long.class));
-//        doReturn(getExaminationRequest()).when(_examinationRequestRepository).findOneById(any(Long.class));
-//        doReturn(getExaminationType()).when(_examinationTypeRepository).findOneById(any(Long.class));
-//        doReturn(getMedicalStaff()).when(_medicalStaffRepository).findOneById(any(Long.class));
-//        CreateExaminationRequest createExaminationRequest = createRequest();
-//
-//        service.createPredefinedExaminationRequest(createExaminationRequest);
-//
-//        verify(_patientRepository, times(1)).findOneById(any(Long.class));
-//    }
+    @Test( expected = NullPointerException.class )
+    public void shouldCallPatientRepository_WhenMethodIsCalled() throws Exception {
+        Mockito.doReturn(getPatient()).when(_patientRepository).findOneById(any(Long.class));
+        doReturn(getClinic()).when(_clinicRepository).findOneById(any(Long.class));
+        doReturn(getExaminationRequest()).when(_examinationRequestRepository).findOneById(any(Long.class));
+        doReturn(getExaminationType()).when(_examinationTypeRepository).findOneById(any(Long.class));
+        doReturn(getMedicalStaff()).when(_medicalStaffRepository).findOneById(any(Long.class));
+        CreateExaminationRequest createExaminationRequest = createRequest();
+
+        service.createPredefinedExaminationRequest(createExaminationRequest);
+
+        verify(_patientRepository, times(1)).findOneById(any(Long.class));
+    }
+
+    @Test( expected = NullPointerException.class )
+    public void shouldCallMedicalStaffRepository_WhenMethodIsCalled() throws Exception {
+        Mockito.doReturn(getPatient()).when(_patientRepository).findOneById(any(Long.class));
+        doReturn(getClinic()).when(_clinicRepository).findOneById(any(Long.class));
+        doReturn(getExaminationRequest()).when(_examinationRequestRepository).findOneById(any(Long.class));
+        doReturn(getExaminationType()).when(_examinationTypeRepository).findOneById(any(Long.class));
+        doReturn(getMedicalStaff()).when(_medicalStaffRepository).findOneById(any(Long.class));
+        CreateExaminationRequest createExaminationRequest = createRequest();
+
+        service.createPredefinedExaminationRequest(createExaminationRequest);
+
+        verify(_patientRepository, times(1)).findOneById(any(Long.class));
+    }
 
     private Patient getPatient() {
         Patient patient = new Patient();

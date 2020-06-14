@@ -64,7 +64,8 @@ public class ExaminationRequestService implements IExaminationRequestService {
                 .collect(Collectors.toList());
     }
 
-    @Transactional(readOnly = false, propagation = Propagation.REQUIRED)
+    @Transactional(readOnly = false)
+    @Lock(LockModeType.PESSIMISTIC_WRITE)
     @Override
     public PredefinedExaminationResponse createPredefinedExaminationRequest(CreateExaminationRequest request) throws Exception {
         ExaminationRequest examinationRequest = new ExaminationRequest();
@@ -127,7 +128,6 @@ public class ExaminationRequestService implements IExaminationRequestService {
     }
 
     @Transactional(readOnly = false)
-    @Lock(LockModeType.PESSIMISTIC_WRITE)
     @Override
     public void bookingPredefinedExamination(Long patientId, Long examinationRequestId) {
         ExaminationRequest examinationRequest = _examinationRequestRepository.findOneById(examinationRequestId);
@@ -283,7 +283,6 @@ public class ExaminationRequestService implements IExaminationRequestService {
     }
 
     @Transactional(readOnly = false)
-    @Lock(LockModeType.PESSIMISTIC_WRITE)
     @Override
     public void bookingAvailableExamination(Long patientId, Long examinationRequestId) {
         ExaminationRequest examinationRequest = _examinationRequestRepository.findOneById(examinationRequestId);

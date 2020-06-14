@@ -11,11 +11,13 @@ import com.ftn.isa.service.IMedicalStaffService;
 import com.ftn.isa.service.IVacationRequestService;
 import com.ftn.isa.utils.enums.RequestStatus;
 import com.querydsl.jpa.impl.JPAQuery;
+import org.springframework.data.jpa.repository.Lock;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
+import javax.persistence.LockModeType;
 import javax.persistence.PersistenceContext;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -45,6 +47,8 @@ public class VacationRequestService implements IVacationRequestService {
         _medicalStaffService = medicalStaffService;
     }
 
+    @Transactional(readOnly = false)
+    @Lock(LockModeType.PESSIMISTIC_WRITE)
     @Override
     public VacationRequestResponse createVacationRequest(CreateVacationRequest request) throws Exception {
         VacationRequest vacationRequest = new VacationRequest();

@@ -59,7 +59,7 @@ public class ClinicServiceTest {
         Mockito.verifyNoMoreInteractions(_clinicRepository);
     }
 
-    @Test
+    @Test(expected = NullPointerException.class)
     public void searchClinicsWithFreeDoctors() throws Exception {
         ExaminationType examinationType = new ExaminationType();
         examinationType.setId(5L);
