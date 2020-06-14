@@ -1,6 +1,7 @@
 package com.ftn.isa.controller;
 
 import com.ftn.isa.dto.request.OperationRoomRequest;
+import com.ftn.isa.dto.request.SearchOperationRoomRequest;
 import com.ftn.isa.dto.response.OperationRoomResponse;
 import com.ftn.isa.service.IOperationRoomService;
 import org.springframework.web.bind.annotation.*;
@@ -45,5 +46,10 @@ public class OperationRoomController {
     @PutMapping("/delete/{id}")
     public void deleteOperationRoom(@PathVariable Long id) throws Exception {
         _operationRoomService.deleteOperationRoom(id);
+    }
+
+    @GetMapping("/{clinicId}/{examinationId}/search")
+    public List<OperationRoomResponse> searchOperationRooms(@RequestBody SearchOperationRoomRequest request, @PathVariable Long clinicId, @PathVariable Long examinationId) throws Exception {
+        return _operationRoomService.searchOperationRoom(request, clinicId, examinationId);
     }
 }

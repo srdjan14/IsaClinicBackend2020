@@ -2,6 +2,7 @@ package com.ftn.isa.service.implementation;
 
 import com.ftn.isa.dto.request.CreatePatientRequest;
 import com.ftn.isa.dto.request.CreateUserRequest;
+import com.ftn.isa.dto.request.SearchPatientRequest;
 import com.ftn.isa.dto.request.UpdatePatientRequest;
 import com.ftn.isa.dto.response.PatientResponse;
 import com.ftn.isa.dto.response.UserResponse;
@@ -138,6 +139,11 @@ public class PatientService implements IPatientService {
                 .stream()
                 .map(patient -> mapPatientToPatientResponse(patient))
                 .collect(Collectors.toList());
+    }
+
+    public List<PatientResponse> searchPatients(SearchPatientRequest request, Long clinicId) {
+        QPatient qPatient = QPatient.patient;
+
     }
 
     private PatientResponse mapPatientToPatientResponse(Patient patient) {
