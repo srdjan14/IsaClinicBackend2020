@@ -21,7 +21,7 @@ public interface IExaminationRequestService {
 
     List<ExaminationRequestResponse> getAllExaminationsByMedical(Long id);
 
-    List<ExaminationRequestResponse> searchExaminationRequest(SearchExaminationRequest request) throws Exception;
+    List<ExaminationRequestResponse> searchExaminationRequest(SearchExaminationRequest request, Long patientId) throws Exception;
 
     ExaminationRequestResponse createAvailableExaminations(CreateAvailableExaminationsRequest request) throws Exception;
 
@@ -30,6 +30,8 @@ public interface IExaminationRequestService {
     List<ExaminationRequestResponse> getAvailableExaminationsOfDoctor(SearchDoctorForExaminationRequest request, Long id);
 
     void bookingAvailableExamination(Long patientId, Long examinationRequestId);
+
+    void approveExaminationRequest(Long id, Long operationRoomId);
 
     void declineExaminationRequest(Long clinicId);
 }

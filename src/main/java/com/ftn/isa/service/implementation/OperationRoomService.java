@@ -1,9 +1,11 @@
 package com.ftn.isa.service.implementation;
 
 import com.ftn.isa.dto.request.OperationRoomRequest;
+import com.ftn.isa.dto.request.SearchOperationRoomRequest;
 import com.ftn.isa.dto.response.OperationRoomResponse;
 import com.ftn.isa.entity.*;
 import com.ftn.isa.repository.ClinicRepository;
+import com.ftn.isa.repository.ExaminationRequestRepository;
 import com.ftn.isa.repository.OperationRoomRepository;
 import com.ftn.isa.service.IOperationRoomService;
 import com.ftn.isa.utils.enums.DeletedStatus;
@@ -20,9 +22,12 @@ public class OperationRoomService implements IOperationRoomService {
 
     private final OperationRoomRepository _operationRoomRepository;
 
-    public OperationRoomService(ClinicRepository clinicRepository, OperationRoomRepository operationRoomRepository) {
+    private final ExaminationRequestRepository _examinationRequestRepository;
+
+    public OperationRoomService(ClinicRepository clinicRepository, OperationRoomRepository operationRoomRepository, ExaminationRequestRepository examinationRequestRepository) {
         _clinicRepository = clinicRepository;
         _operationRoomRepository = operationRoomRepository;
+        _examinationRequestRepository = examinationRequestRepository;
     }
 
     @Override
@@ -105,6 +110,42 @@ public class OperationRoomService implements IOperationRoomService {
 
         operationRoom.setDeletedStatus(DeletedStatus.IS_DELETED);
         _operationRoomRepository.save(operationRoom);
+    }
+
+    @Override
+    public List<OperationRoomResponse> searchOperationRoom(SearchOperationRoomRequest request, Long clinicId, Long examinationRequestId) throws Exception {
+        ExaminationRequest examinationRequest = _examinationRequestRepository.findOneById(examinationRequestId);
+
+        QOperationRoom qOperationRoom = QOperationRoom.operationRoom;
+        QExaminationRequest qExaminationRequest = QExaminationRequest.examinationRequest;
+        JPAQuery query = _operationRoomRepository.getQuery();
+
+        query.select(qOperationRoom).where(qOperationRoom.clinic.id.eq(clinicId)).distinct();
+        query.leftJoin(qExaminationRequest).on(qOperationRoom.id.eq(qExaminationRequest.operationRoom.id)).where(qExaminationRequest.operationRoom.id.isNotNull());
+        query.where(qExaminationRequest.examinationDate.eq(examinationRequest.getExaminationDate()));
+        query.where(qExaminationRequest.startAt.after(examinationRequest.getStartAt()));
+        query.where(qExaminationRequest.endAt.before(examinationRequest.getEndAt()));
+
+        List<OperationRoom> list = query.fetch();
+
+        if(!list.isEmpty()) {
+            throw new Exception("There are no available examination rooms for that time, choose different time");
+        }
+
+        if(request.getName() != null) {
+            query.where(qOperationRoom.name.containsIgnoreCase(request.getName()));
+        }
+
+        if(request.getNumber() != 0) {
+            query.where(qOperationRoom.number.in(request.getNumber()));
+        }
+
+        List<OperationRoom> list1 = query.fetch();
+        return list1
+                .stream()
+                .map(operationRoom -> mapOperationRoomToOperationRoomResponse(operationRoom))
+                .collect(Collectors.toList());
+
     }
 
     public OperationRoomResponse mapOperationRoomToOperationRoomResponse(OperationRoom operationRoom) {

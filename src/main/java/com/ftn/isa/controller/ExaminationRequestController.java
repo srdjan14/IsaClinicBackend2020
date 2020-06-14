@@ -46,9 +46,9 @@ public class ExaminationRequestController {
         return _examinationRequestService.getAllExaminationsByMedical(medicalStaffId);
     }
 
-    @GetMapping("/search")
-    public List<ExaminationRequestResponse> searchExaminations(SearchExaminationRequest request) throws Exception {
-        return _examinationRequestService.searchExaminationRequest(request);
+    @GetMapping("/search/{id}")
+    public List<ExaminationRequestResponse> searchExaminations(SearchExaminationRequest request, @PathVariable Long id) throws Exception {
+        return _examinationRequestService.searchExaminationRequest(request, id);
     }
 
     @PostMapping("/available-examinations")
@@ -69,6 +69,11 @@ public class ExaminationRequestController {
     @PostMapping("/available-examination/{patientId}/{examinationRequestId}")
     public void bookingAvailableExamination(@PathVariable Long patientId, @PathVariable Long examinationRequestId) {
         _examinationRequestService.bookingAvailableExamination(patientId, examinationRequestId);
+    }
+
+    @PutMapping("{id}/approve/{operationRoomId}")
+    public void approveExaminationRequest(@PathVariable Long id, @PathVariable Long operationRoomId) {
+        _examinationRequestService.approveExaminationRequest(id, operationRoomId);
     }
 
     @PutMapping("/{id}/decline")

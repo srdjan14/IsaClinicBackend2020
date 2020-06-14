@@ -1,6 +1,7 @@
 package com.ftn.isa.service;
 
 import com.ftn.isa.dto.request.OperationRoomRequest;
+import com.ftn.isa.dto.request.SearchOperationRoomRequest;
 import com.ftn.isa.dto.response.OperationRoomResponse;
 import org.springframework.stereotype.Service;
 
@@ -21,4 +22,6 @@ public interface IOperationRoomService {
     List<OperationRoomResponse> getAllOperationRoomsByClinic(Long id) throws Exception;
 
     void deleteOperationRoom(Long id) throws Exception;
+
+    List<OperationRoomResponse> searchOperationRoom(SearchOperationRoomRequest request, Long clinicId, Long examinationRequestId) throws Exception;
 }

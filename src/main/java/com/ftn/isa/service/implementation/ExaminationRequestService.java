@@ -161,12 +161,12 @@ public class ExaminationRequestService implements IExaminationRequestService {
     }
 
     @Override
-    public List<ExaminationRequestResponse> searchExaminationRequest(SearchExaminationRequest request) throws Exception {
+    public List<ExaminationRequestResponse> searchExaminationRequest(SearchExaminationRequest request, Long patientId) throws Exception {
        QExaminationRequest qExaminationRequest = QExaminationRequest.examinationRequest;
        QClinic qClinic = QClinic.clinic;
         JPAQuery query = _examinationRequestRepository.getQuery();
 
-        query.select(qExaminationRequest).leftJoin(qClinic).on(qExaminationRequest.clinic.id.eq(qClinic.id)).where(qClinic.id.isNotNull());
+        query.select(qExaminationRequest).where(qExaminationRequest.patient.id.eq(patientId));
 
         if(request.getExaminationTypeName() != null) {
             query.where(qExaminationRequest.examinationType.name.containsIgnoreCase(request.getExaminationTypeName()));
@@ -177,7 +177,7 @@ public class ExaminationRequestService implements IExaminationRequestService {
         }
 
         if(request.getExaminationDate() != null) {
-            query.where(qExaminationRequest.examinationDate.eq(request.getExaminationDate()));
+            query.where(qExaminationRequest.examinationDate.in(request.getExaminationDate()));
         }
 
         List<ExaminationRequest> list = query.fetch();
@@ -293,8 +293,25 @@ public class ExaminationRequestService implements IExaminationRequestService {
     }
 
     @Override
-    public void declineExaminationRequest(Long clinicId) {
-        ExaminationRequest examinationRequest = _examinationRequestRepository.findOneById(clinicId);
+    public void approveExaminationRequest(Long id, Long operationRoomId) {
+        ExaminationRequest examinationRequest = _examinationRequestRepository.findOneById(id);
+
+        OperationRoom operationRoom = _operationRoomRepository.findOneById(operationRoomId);
+
+        examinationRequest.setOperationRoom(operationRoom);
+        examinationRequest.setStatus(RequestStatus.CONFIRMED);
+        _examinationRequestRepository.save(examinationRequest);
+
+        Patient patient = _patientRepository.findOneById(examinationRequest.getPatient().getId());
+        _emailService.sendConfirmedExamination(patient.getUser());
+
+        MedicalStaff medicalStaff = _medicalStaffRepository.findOneById(examinationRequest.getMedicalStaff().getId());
+        _emailService.sendConfirmedExamination(medicalStaff.getUser());
+    }
+
+    @Override
+    public void declineExaminationRequest(Long id) {
+        ExaminationRequest examinationRequest = _examinationRequestRepository.findOneById(id);
 
         examinationRequest.setStatus(RequestStatus.DENIED);
         _examinationRequestRepository.save(examinationRequest);
