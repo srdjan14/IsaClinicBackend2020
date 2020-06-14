@@ -56,6 +56,8 @@ public class ClinicService implements IClinicService {
         clinic.setAddress(request.getAddress());
         clinic.setDescription(request.getDescription());
         clinic.setName(request.getName());
+        clinic.setX(request.getX());
+        clinic.setY(request.getY());
 
         Clinic savedClinic = _clinicRepository.save(clinic);
         return mapClinicToClinicResponse(savedClinic);

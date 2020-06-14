@@ -47,7 +47,7 @@ public class ClinicController {
         }
     }
 
-    @PutMapping("/{id}")
+    @PatchMapping("/{id}")
     public ClinicResponse updateClinic(@PathVariable Long id, @RequestBody ClinicRequest request) {
         try {
             return _clinicService.updateClinic(id, request);

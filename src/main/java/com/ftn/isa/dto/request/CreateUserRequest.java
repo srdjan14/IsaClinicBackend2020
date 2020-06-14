@@ -32,4 +32,6 @@ public class CreateUserRequest {
     private String rePassword;
 
     private UserType userType;
+
+    private DeletedStatus deletedStatus;
 }
