@@ -137,14 +137,14 @@ public class VacationRequestService implements IVacationRequestService {
 
     @Override
     public List<VacationRequestResponse> getAllVacationRequestsByClinic(Long id) throws Exception {
-        Clinic clinic = _clinicRepository.findOneById(id);
-        if (clinic == null) {
-            throw new Exception(String.format("Clinic with % id not found", id.toString()));
-        }
+        QVacationRequest qVacationRequest = QVacationRequest.vacationRequest;
+        JPAQuery query = _vacationRequestRepository.getQuery();
 
-        List<VacationRequest> vacationRequests = _vacationRequestRepository.findAllByClinic(clinic);
+        query.select(qVacationRequest).where(qVacationRequest.clinic.id.eq(id));
+        query.where(qVacationRequest.requestStatus.eq(RequestStatus.PENDING));
+        List<VacationRequest> list = query.fetch();
 
-        return vacationRequests
+        return list
                 .stream()
                 .map(vacationRequest -> mapVacationRequestToVacationRequestResponse(vacationRequest))
                 .collect(Collectors.toList());

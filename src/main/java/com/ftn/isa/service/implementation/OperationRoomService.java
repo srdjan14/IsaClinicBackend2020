@@ -83,7 +83,8 @@ public class OperationRoomService implements IOperationRoomService {
         QOperationRoom qOperationRoom = QOperationRoom.operationRoom;
         JPAQuery query = _operationRoomRepository.getQuery();
 
-        query.select(qOperationRoom).where(qOperationRoom.clinic.id.eq(id)).where(qOperationRoom.deletedStatus.eq(DeletedStatus.NOT_DELETED));
+        query.select(qOperationRoom).where(qOperationRoom.clinic.id.eq(id)).distinct();
+        query.where(qOperationRoom.deletedStatus.eq(DeletedStatus.NOT_DELETED));
 
         List<OperationRoom> list = query.fetch();
 
