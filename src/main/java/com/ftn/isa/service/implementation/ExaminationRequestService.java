@@ -330,6 +330,7 @@ public class ExaminationRequestService implements IExaminationRequestService {
         examinationRequestResponse.setRequestStatus(examinationRequest.getStatus());
         examinationRequestResponse.setId(examinationRequest.getId());
         examinationRequestResponse.setPrice(examinationRequest.getExaminationType().getPrice());
+        examinationRequestResponse.setMedicalStaffId(examinationRequest.getMedicalStaff().getId());
         return examinationRequestResponse;
     }
 
@@ -344,6 +345,7 @@ public class ExaminationRequestService implements IExaminationRequestService {
         predefinedExaminationResponse.setId(examinationRequest.getId());
         predefinedExaminationResponse.setPrice(examinationRequest.getExaminationType().getPrice());
         predefinedExaminationResponse.setOperationRoomId(examinationRequest.getOperationRoom().getId());
+        predefinedExaminationResponse.setMedicalStaffId(examinationRequest.getMedicalStaff().getId());
         return predefinedExaminationResponse;
     }
 }

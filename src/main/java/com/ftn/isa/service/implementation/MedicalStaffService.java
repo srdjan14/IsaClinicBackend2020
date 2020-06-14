@@ -152,6 +152,7 @@ public class MedicalStaffService implements IMedicalStaffService {
 
         query.select(qMedicalStaff).leftJoin(qExaminationRequest).on(qMedicalStaff.id.eq(qExaminationRequest.medicalStaff.id)).where(qExaminationRequest.medicalStaff.id.isNotNull());
         query.where(qExaminationRequest.patient.id.isNotNull());
+        query.where(qExaminationRequest.medicalStaff.id.eq(id));
 
         List<MedicalStaff> list = query.fetch();
         if(!list.isEmpty()) {

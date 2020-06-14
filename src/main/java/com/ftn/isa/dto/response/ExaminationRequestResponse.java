@@ -32,5 +32,7 @@ public class ExaminationRequestResponse {
 
     private Long examinationTypeId;
 
+    private Long medicalStaffId;
+
     private float price;
 }

@@ -35,4 +35,5 @@ public class PredefinedExaminationResponse {
 
     private Long operationRoomId;
 
+    private Long medicalStaffId;
 }
