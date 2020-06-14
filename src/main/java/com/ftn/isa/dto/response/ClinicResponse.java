@@ -21,4 +21,6 @@ public class ClinicResponse {
 
     private float y;
 
+    public ClinicResponse(Long clinicId) {
+    }
 }

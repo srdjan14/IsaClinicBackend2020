@@ -35,4 +35,12 @@ public class ExaminationRequestResponse {
     private Long medicalStaffId;
 
     private float price;
+
+    public ExaminationRequestResponse(Long doctor_id) {
+
+    }
+
+    public ExaminationRequestResponse(Long doctor_id, Date examination_date, String examination_type) {
+
+    }
 }

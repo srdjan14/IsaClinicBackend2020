@@ -49,4 +49,8 @@ public class Clinic extends BaseEntity {
 
     @Version
     private Long version;
+
+    public Clinic(String name, String address, String description) {
+        super();
+    }
 }

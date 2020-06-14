@@ -27,4 +27,8 @@ public class ExaminationType extends BaseEntity {
 
     @Enumerated(EnumType.STRING)
     private DeletedStatus deletedStatus;
+
+    public ExaminationType(String name, float price, DeletedStatus deletedStatus) {
+        super();
+    }
 }
