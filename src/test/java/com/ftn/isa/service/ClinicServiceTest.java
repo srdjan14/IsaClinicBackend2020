@@ -18,6 +18,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
+import static org.junit.Assert.assertThat;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -117,29 +118,4 @@ public class ClinicServiceTest {
         assertNotEquals(clinics.size(), 0);
     }
 
-    @Test
-    public void searchClinics() {
-        ClinicRequest request = new ClinicRequest();
-        request.setName(CLINIC_NAME);
-        request.setAddress("Adresa");
-        request.setDescription("Opis");
-        request.setX(1f);
-        request.setY(2f);
-
-        List<ClinicResponse> clinicResponses = _clinicService.searchClinic(request);
-
-        assertEquals(clinicResponses, null);
-    }
-
-    @Test
-    public void createClinic() {
-        Clinic clinic = new Clinic();
-        clinic.setId(CLINIC_ID);
-        clinic.setName(CLINIC_NAME);
-        clinic.setAddress(CLINIC_ADDRESS);
-        clinic.setDescription("Opis");
-        clinic.setX(1f);
-        clinic.setY(2f);
-
-    }
 }

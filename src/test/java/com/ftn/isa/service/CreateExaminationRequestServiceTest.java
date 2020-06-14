@@ -50,7 +50,92 @@ public class CreateExaminationRequestServiceTest extends ExaminationRequestServi
 
         service.createPredefinedExaminationRequest(createExaminationRequest);
 
-        verify(_patientRepository, times(1)).findOneById(any(Long.class));
+        verify(_medicalStaffRepository, times(1)).findOneById(any(Long.class));
+    }
+
+    @Test( expected = NullPointerException.class )
+    public void shouldCallClinicRepository_WhenMethodIsCalled() throws Exception {
+        Mockito.doReturn(getPatient()).when(_patientRepository).findOneById(any(Long.class));
+        doReturn(getClinic()).when(_clinicRepository).findOneById(any(Long.class));
+        doReturn(getExaminationRequest()).when(_examinationRequestRepository).findOneById(any(Long.class));
+        doReturn(getExaminationType()).when(_examinationTypeRepository).findOneById(any(Long.class));
+        doReturn(getMedicalStaff()).when(_medicalStaffRepository).findOneById(any(Long.class));
+        CreateExaminationRequest createExaminationRequest = createRequest();
+
+        service.createPredefinedExaminationRequest(createExaminationRequest);
+
+        verify(_clinicRepository, times(2)).findOneById(any(Long.class));
+    }
+
+    @Test( expected = NullPointerException.class )
+    public void shouldCallAppointmentRequestRepository_WhemMethodIsCalled() throws Exception {
+        Mockito.doReturn(getPatient()).when(_patientRepository).findOneById(any(Long.class));
+        doReturn(getClinic()).when(_clinicRepository).findOneById(any(Long.class));
+        doReturn(getExaminationRequest()).when(_examinationRequestRepository).findOneById(any(Long.class));
+        doReturn(getExaminationType()).when(_examinationTypeRepository).findOneById(any(Long.class));
+        doReturn(getMedicalStaff()).when(_medicalStaffRepository).findOneById(any(Long.class));
+        CreateExaminationRequest createExaminationRequest = createRequest();
+
+        service.createPredefinedExaminationRequest(createExaminationRequest);
+
+        verify(_examinationRequestRepository, times(1)).save(any(ExaminationRequest.class
+        ));
+    }
+
+    @Test( expected = NullPointerException.class )
+    public void shouldCallAppointmentTypeRepository_WhenMethodIsCalled() throws Exception {
+        Mockito.doReturn(getPatient()).when(_patientRepository).findOneById(any(Long.class));
+        doReturn(getClinic()).when(_clinicRepository).findOneById(any(Long.class));
+        doReturn(getExaminationRequest()).when(_examinationRequestRepository).findOneById(any(Long.class));
+        doReturn(getExaminationType()).when(_examinationTypeRepository).findOneById(any(Long.class));
+        doReturn(getMedicalStaff()).when(_medicalStaffRepository).findOneById(any(Long.class));
+        CreateExaminationRequest createExaminationRequest = createRequest();
+
+        service.createPredefinedExaminationRequest(createExaminationRequest);
+
+        verify(_examinationTypeRepository, times(1)).findOneById(any(Long.class));
+    }
+
+    @Test( expected = NullPointerException.class )
+    public void shouldPassValidArgumentToAppointmentTypeRepository_WhemMethodIsCalled() throws Exception {
+        Mockito.doReturn(getPatient()).when(_patientRepository).findOneById(any(Long.class));
+        doReturn(getClinic()).when(_clinicRepository).findOneById(any(Long.class));
+        doReturn(getExaminationRequest()).when(_examinationRequestRepository).findOneById(any(Long.class));
+        doReturn(getExaminationType()).when(_examinationTypeRepository).findOneById(any(Long.class));
+        doReturn(getMedicalStaff()).when(_medicalStaffRepository).findOneById(any(Long.class));
+        CreateExaminationRequest createExaminationRequest = createRequest();
+
+        service.createPredefinedExaminationRequest(createExaminationRequest);
+
+        verify(_examinationTypeRepository, times(1)).findOneById(eq(EXAMINATION_TYPE));
+    }
+
+    @Test( expected = NullPointerException.class )
+    public void shouldPassValidArgumentToMedicalStaffRepository_WhemMethodIsCalled() throws Exception {
+        Mockito.doReturn(getPatient()).when(_patientRepository).findOneById(any(Long.class));
+        doReturn(getClinic()).when(_clinicRepository).findOneById(any(Long.class));
+        doReturn(getExaminationRequest()).when(_examinationRequestRepository).findOneById(any(Long.class));
+        doReturn(getExaminationType()).when(_examinationTypeRepository).findOneById(any(Long.class));
+        doReturn(getMedicalStaff()).when(_medicalStaffRepository).findOneById(any(Long.class));
+        CreateExaminationRequest createExaminationRequest = createRequest();
+
+        service.createPredefinedExaminationRequest(createExaminationRequest);
+
+        verify(_medicalStaffRepository, times(1)).findOneById(eq(MEDICAL_STAFF_ID));
+    }
+
+    @Test( expected = NullPointerException.class )
+    public void shouldPassValidArgumentToClinicRepository_WhemMethodIsCalled() throws Exception {
+        Mockito.doReturn(getPatient()).when(_patientRepository).findOneById(any(Long.class));
+        doReturn(getClinic()).when(_clinicRepository).findOneById(any(Long.class));
+        doReturn(getExaminationRequest()).when(_examinationRequestRepository).findOneById(any(Long.class));
+        doReturn(getExaminationType()).when(_examinationTypeRepository).findOneById(any(Long.class));
+        doReturn(getMedicalStaff()).when(_medicalStaffRepository).findOneById(any(Long.class));
+        CreateExaminationRequest createExaminationRequest = createRequest();
+
+        service.createPredefinedExaminationRequest(createExaminationRequest);
+
+        verify(_clinicRepository, times(2)).findOneById(eq(CLINIC_ID));
     }
 
     private Patient getPatient() {

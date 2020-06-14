@@ -26,12 +26,12 @@ insert into examination_type(id, name, price, deleted_status) values
 (45, 'Urolog', 2500, 'NOT_DELETED');
 
 insert into medical_staff(id, medical_type, clinic_id, examination_type_id, start_work_at, end_work_at) values
-( 14 , 'DOCTOR', 30, 40, "08:00:00", "20:00"),
-( 15 , 'DOCTOR', 30, 41,  "08:00:00", "20:00"),
-( 16 , 'DOCTOR', 31, 42, "08:00:00", "20:00"),
-( 17 , 'DOCTOR', 31, 43, "08:00:00", "20:00"),
-( 18 , 'DOCTOR', 32, 44, "08:00:00", "20:00"),
-( 19 , 'DOCTOR', 32, 45, "08:00:00", "20:00");
+( 14 , 'DOCTOR', 30, 40, "08:00", "20:00"),
+( 15 , 'DOCTOR', 30, 41,  "08:00", "20:00"),
+( 16 , 'DOCTOR', 31, 42, "08:00", "20:00"),
+( 17 , 'DOCTOR', 31, 43, "08:00", "20:00"),
+( 18 , 'DOCTOR', 32, 44, "08:00", "20:00"),
+( 19 , 'DOCTOR', 32, 45, "08:00", "20:00");
 
 insert into patient(id, active) values
 ( 8 , true),
@@ -41,16 +41,6 @@ insert into patient(id, active) values
 ( 12 , true),
 ( 13 , true);
 
-
---insert into clinic_patient (clinic_id, patient_id) VALUES
---(unhex(replace('43c2bc08-4816-4b13-ac72-fe191c3db9c0', '-', '')), unhex(replace('fad43848-ca08-4d7d-99b7-9f9d3dc0fda1', '-', ''))),
---(unhex(replace('43c2bc08-4816-4b13-ac72-fe191c3db9c0', '-', '')), unhex(replace('43635fa3-0234-4d7e-b0a9-41ccc0ade559', '-', ''))),
---(unhex(replace('f72679e2-2ad0-40b0-b4fc-3edc77038f21', '-', '')), unhex(replace('b860f105-c0be-4a02-8537-f2e6c976c349', '-', ''))),
---(unhex(replace('d5d06733-a9bd-43ed-ad39-1e0c52e916ff', '-', '')), unhex(replace('377b6586-743c-443e-9e59-32c2ac097286', '-', '')));
-
---insert into medical_patient (medical_id, patient_id) VALUES
---(unhex(replace('dc4a387b-61f0-47fc-848e-4be08aecb002', '-', '')), unhex(replace('fad43848-ca08-4d7d-99b7-9f9d3dc0fda1', '-', '')));
-
 insert into operation_room(id, number, name, clinic_id, deleted_status, version) values
 ( 50, '1', 'soba1', 30, 'NOT_DELETED', null),
 ( 51, '2', 'soba2', 30, 'NOT_DELETED', null),
@@ -59,6 +49,6 @@ insert into operation_room(id, number, name, clinic_id, deleted_status, version)
 ( 54, '5', 'soba5', 32, 'NOT_DELETED', null),
 ( 55, '6', 'soba6', 32, 'NOT_DELETED', null);
 
-insert into registration_request (id, address, city, country, email, first_name, last_name, password, phone, ssn, status) values
-( 60, 'adresa', 'city', 'country', 'email1@test.com', 'firstName', 'lastName', 'password', '1241241', '2141241', 'PENDING'),
-( 61, 'adresa1', 'city1', 'country1', 'email2@test.com', 'firstName2', 'lastName2', 'password2', '1212441241', '2141241124', 'PENDING');
+--insert into registration_request (id, address, city, country, email, first_name, last_name, password, phone, ssn, status) values
+--( 60, 'adresa', 'city', 'country', 'email1@test.com', 'firstName', 'lastName', 'password', '1241241', '2141241', 'PENDING'),
+--( 61, 'adresa1', 'city1', 'country1', 'email2@test.com', 'firstName2', 'lastName2', 'password2', '1212441241', '2141241124', 'PENDING');
