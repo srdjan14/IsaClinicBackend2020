@@ -50,7 +50,7 @@ public class ReviewService implements IReviewService {
             }
         });
 
-        if(flag.equals(true)) {
+        if(flag.get() == true) {
             throw new Exception("Doctor is already rated!");
         }
 
@@ -84,7 +84,7 @@ public class ReviewService implements IReviewService {
             }
         });
 
-        if(flag.equals(true)) {
+        if(flag.get() == true)  {
             throw new Exception("Clinic is already rated!");
         }
 
