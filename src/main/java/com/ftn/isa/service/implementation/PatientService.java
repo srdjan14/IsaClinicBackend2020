@@ -122,6 +122,7 @@ public class PatientService implements IPatientService {
 
     @Override
     public List<PatientResponse> getPatientsByClinic(Long clinicId) throws Exception {
+
         QPatient qPatient = QPatient.patient;
         QExaminationRequest qExaminationRequest = QExaminationRequest.examinationRequest;
         JPAQuery query = _patientRepository.getQuery();

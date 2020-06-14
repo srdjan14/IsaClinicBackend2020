@@ -109,13 +109,10 @@ public class ReviewService implements IReviewService {
                     .sum();
 
         Integer size = list.size();
-        DoctorReview doctorReview = _doctorReviewRepository.findOneById(id);
 
-        doctorReview.setAverageReview(sum/size);
+        Double average = sum/size;
 
-        DoctorReview savedDoctorReview = _doctorReviewRepository.save(doctorReview);
-
-        return savedDoctorReview.getAverageReview();
+        return average;
     }
 
     @Override
@@ -132,13 +129,10 @@ public class ReviewService implements IReviewService {
                     .sum();
 
         Integer size = list.size();
-        ClinicReview clinicReview = _clinicReviewRepository.findOneById(id);
 
-        clinicReview.setAverageReview(sum/size);
+        Double average = sum/size;
 
-        ClinicReview savedClinicReview =_clinicReviewRepository.save(clinicReview);
-
-        return savedClinicReview.getAverageReview();
+        return average;
     }
 
     private DoctorReviewResponse mapReviewToDoctorReviewResponse(DoctorReview doctorReview) {

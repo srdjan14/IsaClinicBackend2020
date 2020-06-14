@@ -121,16 +121,16 @@ public class OperationRoomService implements IOperationRoomService {
         JPAQuery query = _operationRoomRepository.getQuery();
 
         query.select(qOperationRoom).where(qOperationRoom.clinic.id.eq(clinicId)).distinct();
-        query.leftJoin(qExaminationRequest).on(qOperationRoom.id.eq(qExaminationRequest.operationRoom.id)).where(qExaminationRequest.operationRoom.id.isNotNull());
-        query.where(qExaminationRequest.examinationDate.eq(examinationRequest.getExaminationDate()));
-        query.where(qExaminationRequest.startAt.after(examinationRequest.getStartAt()));
-        query.where(qExaminationRequest.endAt.before(examinationRequest.getEndAt()));
+//        query.leftJoin(qExaminationRequest).on(qOperationRoom.id.eq(qExaminationRequest.operationRoom.id)).where(qExaminationRequest.operationRoom.id.isNotNull());
+//        query.where(qExaminationRequest.examinationDate.eq(examinationRequest.getExaminationDate()));
+//        query.where(qExaminationRequest.startAt.after(examinationRequest.getStartAt()));
+//        query.where(qExaminationRequest.endAt.before(examinationRequest.getEndAt()));
 
-        List<OperationRoom> list = query.fetch();
-
-        if(!list.isEmpty()) {
-            throw new Exception("There are no available examination rooms for that time, choose different time");
-        }
+//        List<OperationRoom> list = query.fetch();
+//
+//        if(!list.isEmpty()) {
+//            throw new Exception("There are no available examination rooms for that time, choose different time");
+//        }
 
         if(request.getName() != null) {
             query.where(qOperationRoom.name.containsIgnoreCase(request.getName()));

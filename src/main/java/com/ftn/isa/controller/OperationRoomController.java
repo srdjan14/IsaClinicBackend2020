@@ -49,7 +49,7 @@ public class OperationRoomController {
     }
 
     @GetMapping("/{clinicId}/{examinationId}/search")
-    public List<OperationRoomResponse> searchOperationRooms(@RequestBody SearchOperationRoomRequest request, @PathVariable Long clinicId, @PathVariable Long examinationId) throws Exception {
+    public List<OperationRoomResponse> searchOperationRooms(SearchOperationRoomRequest request, @PathVariable Long clinicId, @PathVariable Long examinationId) throws Exception {
         return _operationRoomService.searchOperationRoom(request, clinicId, examinationId);
     }
 }
