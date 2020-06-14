@@ -122,6 +122,7 @@ public class OperationRoomService implements IOperationRoomService {
         JPAQuery query = _operationRoomRepository.getQuery();
 
         query.select(qOperationRoom).where(qOperationRoom.clinic.id.eq(clinicId)).distinct();
+        query.where(qOperationRoom.deletedStatus.eq(DeletedStatus.NOT_DELETED));
 //        query.leftJoin(qExaminationRequest).on(qOperationRoom.id.eq(qExaminationRequest.operationRoom.id)).where(qExaminationRequest.operationRoom.id.isNotNull());
 //        query.where(qExaminationRequest.examinationDate.eq(examinationRequest.getExaminationDate()));
 //        query.where(qExaminationRequest.startAt.after(examinationRequest.getStartAt()));
@@ -147,6 +148,30 @@ public class OperationRoomService implements IOperationRoomService {
                 .map(operationRoom -> mapOperationRoomToOperationRoomResponse(operationRoom))
                 .collect(Collectors.toList());
 
+    }
+
+    @Override
+    public List<OperationRoomResponse> searchOperationRoomsByAdmin(SearchOperationRoomRequest request, Long clinicId) {
+
+        QOperationRoom qOperationRoom = QOperationRoom.operationRoom;
+        JPAQuery query = _operationRoomRepository.getQuery();
+        query.select(qOperationRoom).where(qOperationRoom.clinic.id.eq(clinicId)).distinct();
+        query.where(qOperationRoom.deletedStatus.eq(DeletedStatus.NOT_DELETED));
+
+
+        if(request.getName() != null) {
+            query.where(qOperationRoom.name.containsIgnoreCase(request.getName()));
+        }
+
+        if(request.getNumber() != 0) {
+            query.where(qOperationRoom.number.in(request.getNumber()));
+        }
+
+        List<OperationRoom> list1 = query.fetch();
+        return list1
+                .stream()
+                .map(operationRoom -> mapOperationRoomToOperationRoomResponse(operationRoom))
+                .collect(Collectors.toList());
     }
 
     public OperationRoomResponse mapOperationRoomToOperationRoomResponse(OperationRoom operationRoom) {

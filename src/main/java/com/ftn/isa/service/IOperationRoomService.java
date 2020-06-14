@@ -24,4 +24,6 @@ public interface IOperationRoomService {
     void deleteOperationRoom(Long id) throws Exception;
 
     List<OperationRoomResponse> searchOperationRoom(SearchOperationRoomRequest request, Long clinicId, Long examinationRequestId) throws Exception;
+
+    List<OperationRoomResponse> searchOperationRoomsByAdmin(SearchOperationRoomRequest request, Long clinicId);
 }

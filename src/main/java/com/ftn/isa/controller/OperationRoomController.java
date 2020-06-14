@@ -52,4 +52,9 @@ public class OperationRoomController {
     public List<OperationRoomResponse> searchOperationRooms(SearchOperationRoomRequest request, @PathVariable Long clinicId, @PathVariable Long examinationId) throws Exception {
         return _operationRoomService.searchOperationRoom(request, clinicId, examinationId);
     }
+
+    @GetMapping("/{clinicId}/search")
+    public List<OperationRoomResponse> searchOperationRoomsByAdmin(SearchOperationRoomRequest request, @PathVariable Long clinicId) throws Exception {
+        return _operationRoomService.searchOperationRoomsByAdmin(request, clinicId);
+    }
 }
