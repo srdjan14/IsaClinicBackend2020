@@ -1,8 +1,10 @@
 package com.ftn.isa.controller;
 
 import com.ftn.isa.dto.request.CreatePatientRequest;
+import com.ftn.isa.dto.request.SearchPatientRequest;
 import com.ftn.isa.dto.request.UpdatePatientRequest;
 import com.ftn.isa.dto.response.PatientResponse;
+import com.ftn.isa.entity.Patient;
 import com.ftn.isa.service.IPatientService;
 import org.springframework.web.bind.annotation.*;
 
@@ -49,5 +51,10 @@ public class PatientController {
     @GetMapping("/{id}/clinic")
     public List<PatientResponse> getAllMedicalByClinic(@PathVariable Long id) throws Exception {
         return _patientService.getPatientsByClinic(id);
+    }
+
+    @GetMapping("/{id}/search")
+    public List<PatientResponse> searchPatients(SearchPatientRequest request, Long id) throws Exception {
+        return _patientService.searchPatients(request, id);
     }
 }

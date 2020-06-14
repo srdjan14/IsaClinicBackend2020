@@ -166,10 +166,9 @@ public class MedicalStaffService implements IMedicalStaffService {
     @Override
     public List<MedicalStaffResponse> searchMedicalStaff(SearchMedicalStaffRequest searchMedicalStaffRequest, Long clinicId) throws Exception {
         QMedicalStaff qMedicalStaff = QMedicalStaff.medicalStaff;
-        QClinic qClinic = QClinic.clinic;
         JPAQuery query = _medicalStaffRepository.getQuery();
 
-        query.select(qMedicalStaff).leftJoin(qClinic).on(qMedicalStaff.clinic.id.eq(clinicId)).where(qClinic.id.isNotNull()).distinct();
+        query.select(qMedicalStaff).where(qMedicalStaff.clinic.id.eq(clinicId));
 
         if(searchMedicalStaffRequest.getFirstName() != null) {
             query.where(qMedicalStaff.user.firstName.containsIgnoreCase(searchMedicalStaffRequest.getFirstName()));
@@ -187,6 +186,7 @@ public class MedicalStaffService implements IMedicalStaffService {
         if(list.isEmpty()) {
             throw new Exception("Doctor isn't in this clinic");
         }
+
         return list
                 .stream()
                 .map(medicalStaff -> mapMedicalToMedicalResponse(medicalStaff))
@@ -202,6 +202,7 @@ public class MedicalStaffService implements IMedicalStaffService {
         query.where(qMedicalStaff.examinationType.id.eq(id));
 
         List<MedicalStaff> list = query.fetch();
+
         return list
                 .stream()
                 .map(medicalStaff -> mapMedicalToMedicalResponse(medicalStaff))
@@ -222,6 +223,7 @@ public class MedicalStaffService implements IMedicalStaffService {
         query.where(qExaminationRequest.examinationType.eq(request.getExaminationType())).distinct();
 
         List<MedicalStaff> list = query.fetch();
+
         return list
                 .stream()
                 .map(medicalStaff -> mapMedicalToMedicalResponse(medicalStaff))

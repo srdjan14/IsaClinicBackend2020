@@ -122,7 +122,6 @@ public class PatientService implements IPatientService {
 
     @Override
     public List<PatientResponse> getPatientsByClinic(Long clinicId) throws Exception {
-
         QPatient qPatient = QPatient.patient;
         QExaminationRequest qExaminationRequest = QExaminationRequest.examinationRequest;
         JPAQuery query = _patientRepository.getQuery();
@@ -141,9 +140,36 @@ public class PatientService implements IPatientService {
                 .collect(Collectors.toList());
     }
 
-    public List<PatientResponse> searchPatients(SearchPatientRequest request, Long clinicId) {
+    @Override
+    public List<PatientResponse> searchPatients(SearchPatientRequest request, Long clinicId) throws Exception {
         QPatient qPatient = QPatient.patient;
+        QExaminationRequest qExaminationRequest = QExaminationRequest.examinationRequest;
+        JPAQuery query = _patientRepository.getQuery();
 
+        query.select(qPatient).leftJoin(qExaminationRequest).on(qPatient.id.eq(qExaminationRequest.patient.id)).where(qExaminationRequest.patient.id.isNotNull()).distinct();
+        query.where(qExaminationRequest.clinic.id.eq(clinicId));
+
+        if(request.getFirstName() != null) {
+            query.where(qPatient.user.firstName.containsIgnoreCase(request.getFirstName()));
+        }
+
+        if(request.getLastName() != null) {
+            query.where(qPatient.user.lastName.containsIgnoreCase(request.getLastName()));
+        }
+
+        if(request.getSsn() != null) {
+            query.where(qPatient.user.ssn.containsIgnoreCase(request.getSsn()));
+        }
+
+        List<Patient> list = query.fetch();
+        if(list.isEmpty()) {
+            throw new Exception("Patient isn't in this clinic");
+        }
+
+        return list
+                .stream()
+                .map(patient -> mapPatientToPatientResponse(patient))
+                .collect(Collectors.toList());
     }
 
     private PatientResponse mapPatientToPatientResponse(Patient patient) {
