@@ -7,14 +7,11 @@ import com.ftn.isa.dto.response.DoctorReviewResponse;
 import com.ftn.isa.entity.*;
 import com.ftn.isa.repository.*;
 import com.ftn.isa.service.IReviewService;
-import com.querydsl.core.util.MathUtils;
 import com.querydsl.jpa.impl.JPAQuery;
 import org.springframework.stereotype.Service;
 
-import javax.print.Doc;
-import java.lang.reflect.Array;
-import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 @Service
 public class ReviewService implements IReviewService {
@@ -38,21 +35,24 @@ public class ReviewService implements IReviewService {
     }
 
     @Override
-    public DoctorReviewResponse reviewingDoctor(DoctorReviewRequest request) {
+    public DoctorReviewResponse reviewingDoctor(DoctorReviewRequest request) throws Exception {
         Patient patient = _patientRepository.findOneById(request.getPatientId());
+
+        AtomicBoolean flag = new AtomicBoolean(false);
+
         patient.getDoctorReviewList().forEach(doctorReview -> {
             if (doctorReview.getMedicalStaff() != null) {
                 if(request.getMedicalStaffId().equals(doctorReview.getMedicalStaff().getId())) {
                     if(request.getPatientId().equals(doctorReview.getPatient().getId())) {
-                        try {
-                            throw new Exception("Doctor is already rated");
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
+                       flag.set(true);
                     }
                 }
             }
         });
+
+        if(flag.equals(true)) {
+            throw new Exception("Doctor is already rated!");
+        }
 
         DoctorReview doctorReview = new DoctorReview();
         doctorReview.setReview(request.getReview());
@@ -69,22 +69,24 @@ public class ReviewService implements IReviewService {
     }
 
     @Override
-    public ClinicReviewResponse reviewingClinic(ClinicReviewRequest request) {
+    public ClinicReviewResponse reviewingClinic(ClinicReviewRequest request) throws Exception {
         Patient patient = _patientRepository.findOneById(request.getPatientId());
+
+        AtomicBoolean flag = new AtomicBoolean(false);
 
         patient.getClinicReviewList().forEach(clinicReview -> {
             if (clinicReview.getClinic() != null) {
                 if(request.getClinicId().equals(clinicReview.getClinic().getId())) {
                     if(request.getPatientId().equals(clinicReview.getPatient().getId())) {
-                        try {
-                            throw new Exception("Clinic is already rated");
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
+                        flag.set(true);
                     }
                 }
             }
         });
+
+        if(flag.equals(true)) {
+            throw new Exception("Clinic is already rated!");
+        }
 
         ClinicReview clinicReview = new ClinicReview();
         clinicReview.setReview(request.getReview());

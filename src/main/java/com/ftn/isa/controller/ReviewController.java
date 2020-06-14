@@ -18,12 +18,12 @@ public class ReviewController {
     }
 
     @PostMapping("/doctor")
-    public DoctorReviewResponse reviewDoctor(@RequestBody DoctorReviewRequest request) {
+    public DoctorReviewResponse reviewDoctor(@RequestBody DoctorReviewRequest request) throws Exception {
         return _reviewService.reviewingDoctor(request);
     }
 
     @PostMapping("/clinic")
-    public ClinicReviewResponse reviewClinic(@RequestBody ClinicReviewRequest request) {
+    public ClinicReviewResponse reviewClinic(@RequestBody ClinicReviewRequest request) throws Exception {
         return _reviewService.reviewingClinic(request);
     }
 

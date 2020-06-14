@@ -7,9 +7,9 @@ import com.ftn.isa.dto.response.DoctorReviewResponse;
 
 public interface IReviewService {
 
-    DoctorReviewResponse reviewingDoctor(DoctorReviewRequest request);
+    DoctorReviewResponse reviewingDoctor(DoctorReviewRequest request) throws Exception;
 
-    ClinicReviewResponse reviewingClinic(ClinicReviewRequest request);
+    ClinicReviewResponse reviewingClinic(ClinicReviewRequest request) throws Exception;
 
     Double averageDoctorRating(Long id);
 
