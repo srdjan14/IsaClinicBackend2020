@@ -54,7 +54,7 @@ public class PatientController {
     }
 
     @GetMapping("/{id}/search")
-    public List<PatientResponse> searchPatients(SearchPatientRequest request, Long id) throws Exception {
+    public List<PatientResponse> searchPatients(SearchPatientRequest request,@PathVariable Long id) throws Exception {
         return _patientService.searchPatients(request, id);
     }
 }

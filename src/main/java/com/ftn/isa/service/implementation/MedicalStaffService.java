@@ -225,7 +225,7 @@ public class MedicalStaffService implements IMedicalStaffService {
     }
 
     @Override
-    public List<MedicalStaffResponse> searchMedicalByExaminationType(Long id, Long clinicId) {
+    public List<MedicalStaffResponse> getMedicalByExaminationType(Long id, Long clinicId) {
         QMedicalStaff qMedicalStaff = QMedicalStaff.medicalStaff;
         JPAQuery query = _medicalStaffRepository.getQuery();
 

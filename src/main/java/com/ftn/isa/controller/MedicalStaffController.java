@@ -59,7 +59,7 @@ public class MedicalStaffController {
     }
 
     @GetMapping("/search/{id}")
-    public List<MedicalStaffResponse> searchMedicallStaff(SearchMedicalStaffRequest request,@PathVariable Long id) throws Exception {
+    public List<MedicalStaffResponse> searchMedicalStaff(SearchMedicalStaffRequest request,@PathVariable Long id) throws Exception {
         return _medicalStaffService.searchMedicalStaff(request, id);
     }
 
@@ -69,8 +69,8 @@ public class MedicalStaffController {
     }
 
     @GetMapping("/list/examination-type/{id}/{clinicId}")
-    public List<MedicalStaffResponse> searchMedicalByExaminationType(@PathVariable Long id, @PathVariable Long clinicId) {
-        return _medicalStaffService.searchMedicalByExaminationType(id, clinicId);
+    public List<MedicalStaffResponse> getMedicalByExaminationType(@PathVariable Long id, @PathVariable Long clinicId) {
+        return _medicalStaffService.getMedicalByExaminationType(id, clinicId);
     }
 
     @PostMapping("/available-examination/{id}/clinic")
